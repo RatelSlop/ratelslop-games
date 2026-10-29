@@ -1,0 +1,517 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-29T20:01:04.797625+00:00",
+  "title": "Design System: De Achterkamers",
+  "extensions": {
+    "colorMeta": {
+      "room-dark": {
+        "role": "neutral",
+        "displayName": "Room Dark",
+        "tonalRamp": [
+          "oklch(15% 0.0116 115.11)",
+          "oklch(26% 0.0116 115.11)",
+          "oklch(38% 0.0116 115.11)",
+          "oklch(49% 0.0116 115.11)",
+          "oklch(61% 0.0116 115.11)",
+          "oklch(72% 0.0116 115.11)",
+          "oklch(84% 0.0116 115.11)",
+          "oklch(95% 0.0116 115.11)"
+        ]
+      },
+      "text-main": {
+        "role": "neutral",
+        "displayName": "Text Main",
+        "tonalRamp": [
+          "oklch(15% 0.0270 95.35)",
+          "oklch(26% 0.0270 95.35)",
+          "oklch(38% 0.0270 95.35)",
+          "oklch(49% 0.0270 95.35)",
+          "oklch(61% 0.0270 95.35)",
+          "oklch(72% 0.0270 95.35)",
+          "oklch(84% 0.0270 95.35)",
+          "oklch(95% 0.0270 95.35)"
+        ]
+      },
+      "amber": {
+        "role": "primary",
+        "displayName": "Amber",
+        "tonalRamp": [
+          "oklch(15% 0.1054 80.83)",
+          "oklch(26% 0.1054 80.83)",
+          "oklch(38% 0.1054 80.83)",
+          "oklch(49% 0.1054 80.83)",
+          "oklch(61% 0.1054 80.83)",
+          "oklch(72% 0.1054 80.83)",
+          "oklch(84% 0.1054 80.83)",
+          "oklch(95% 0.1054 80.83)"
+        ]
+      },
+      "amber-hover": {
+        "role": "primary",
+        "displayName": "Amber Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0929 82.09)",
+          "oklch(26% 0.0929 82.09)",
+          "oklch(38% 0.0929 82.09)",
+          "oklch(49% 0.0929 82.09)",
+          "oklch(61% 0.0929 82.09)",
+          "oklch(72% 0.0929 82.09)",
+          "oklch(84% 0.0929 82.09)",
+          "oklch(95% 0.0929 82.09)"
+        ]
+      },
+      "amber-ink": {
+        "role": "primary",
+        "displayName": "Amber Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0286 119.78)",
+          "oklch(26% 0.0286 119.78)",
+          "oklch(38% 0.0286 119.78)",
+          "oklch(49% 0.0286 119.78)",
+          "oklch(61% 0.0286 119.78)",
+          "oklch(72% 0.0286 119.78)",
+          "oklch(84% 0.0286 119.78)",
+          "oklch(95% 0.0286 119.78)"
+        ]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Focus",
+        "tonalRamp": [
+          "oklch(15% 0.1094 82.83)",
+          "oklch(26% 0.1094 82.83)",
+          "oklch(38% 0.1094 82.83)",
+          "oklch(49% 0.1094 82.83)",
+          "oklch(61% 0.1094 82.83)",
+          "oklch(72% 0.1094 82.83)",
+          "oklch(84% 0.1094 82.83)",
+          "oklch(95% 0.1094 82.83)"
+        ]
+      },
+      "link": {
+        "role": "primary",
+        "displayName": "Link",
+        "tonalRamp": [
+          "oklch(15% 0.1005 83.55)",
+          "oklch(26% 0.1005 83.55)",
+          "oklch(38% 0.1005 83.55)",
+          "oklch(49% 0.1005 83.55)",
+          "oklch(61% 0.1005 83.55)",
+          "oklch(72% 0.1005 83.55)",
+          "oklch(84% 0.1005 83.55)",
+          "oklch(95% 0.1005 83.55)"
+        ]
+      },
+      "text-muted": {
+        "role": "neutral",
+        "displayName": "Text Muted",
+        "tonalRamp": [
+          "oklch(15% 0.0206 109.94)",
+          "oklch(26% 0.0206 109.94)",
+          "oklch(38% 0.0206 109.94)",
+          "oklch(49% 0.0206 109.94)",
+          "oklch(61% 0.0206 109.94)",
+          "oklch(72% 0.0206 109.94)",
+          "oklch(84% 0.0206 109.94)",
+          "oklch(95% 0.0206 109.94)"
+        ]
+      },
+      "control-bg": {
+        "role": "neutral",
+        "displayName": "Control Bg",
+        "tonalRamp": [
+          "oklch(15% 0.0271 129.70)",
+          "oklch(26% 0.0271 129.70)",
+          "oklch(38% 0.0271 129.70)",
+          "oklch(49% 0.0271 129.70)",
+          "oklch(61% 0.0271 129.70)",
+          "oklch(72% 0.0271 129.70)",
+          "oklch(84% 0.0271 129.70)",
+          "oklch(95% 0.0271 129.70)"
+        ]
+      },
+      "control-text": {
+        "role": "neutral",
+        "displayName": "Control Text",
+        "tonalRamp": [
+          "oklch(15% 0.0202 97.54)",
+          "oklch(26% 0.0202 97.54)",
+          "oklch(38% 0.0202 97.54)",
+          "oklch(49% 0.0202 97.54)",
+          "oklch(61% 0.0202 97.54)",
+          "oklch(72% 0.0202 97.54)",
+          "oklch(84% 0.0202 97.54)",
+          "oklch(95% 0.0202 97.54)"
+        ]
+      },
+      "control-border": {
+        "role": "neutral",
+        "displayName": "Control Border",
+        "tonalRamp": [
+          "oklch(15% 0.0402 114.55)",
+          "oklch(26% 0.0402 114.55)",
+          "oklch(38% 0.0402 114.55)",
+          "oklch(49% 0.0402 114.55)",
+          "oklch(61% 0.0402 114.55)",
+          "oklch(72% 0.0402 114.55)",
+          "oklch(84% 0.0402 114.55)",
+          "oklch(95% 0.0402 114.55)"
+        ]
+      },
+      "secondary-bg": {
+        "role": "neutral",
+        "displayName": "Secondary Bg",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "secondary-hover": {
+        "role": "neutral",
+        "displayName": "Secondary Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "secondary-text": {
+        "role": "neutral",
+        "displayName": "Secondary Text",
+        "tonalRamp": [
+          "oklch(15% 0.0230 112.31)",
+          "oklch(26% 0.0230 112.31)",
+          "oklch(38% 0.0230 112.31)",
+          "oklch(49% 0.0230 112.31)",
+          "oklch(61% 0.0230 112.31)",
+          "oklch(72% 0.0230 112.31)",
+          "oklch(84% 0.0230 112.31)",
+          "oklch(95% 0.0230 112.31)"
+        ]
+      },
+      "secondary-border": {
+        "role": "neutral",
+        "displayName": "Secondary Border",
+        "tonalRamp": [
+          "oklch(15% 0.0478 114.81)",
+          "oklch(26% 0.0478 114.81)",
+          "oklch(38% 0.0478 114.81)",
+          "oklch(49% 0.0478 114.81)",
+          "oklch(61% 0.0478 114.81)",
+          "oklch(72% 0.0478 114.81)",
+          "oklch(84% 0.0478 114.81)",
+          "oklch(95% 0.0478 114.81)"
+        ]
+      },
+      "disabled-bg": {
+        "role": "neutral",
+        "displayName": "Disabled Bg",
+        "tonalRamp": [
+          "oklch(15% 0.0369 115.44)",
+          "oklch(26% 0.0369 115.44)",
+          "oklch(38% 0.0369 115.44)",
+          "oklch(49% 0.0369 115.44)",
+          "oklch(61% 0.0369 115.44)",
+          "oklch(72% 0.0369 115.44)",
+          "oklch(84% 0.0369 115.44)",
+          "oklch(95% 0.0369 115.44)"
+        ]
+      },
+      "disabled-text": {
+        "role": "neutral",
+        "displayName": "Disabled Text",
+        "tonalRamp": [
+          "oklch(15% 0.0242 99.12)",
+          "oklch(26% 0.0242 99.12)",
+          "oklch(38% 0.0242 99.12)",
+          "oklch(49% 0.0242 99.12)",
+          "oklch(61% 0.0242 99.12)",
+          "oklch(72% 0.0242 99.12)",
+          "oklch(84% 0.0242 99.12)",
+          "oklch(95% 0.0242 99.12)"
+        ]
+      },
+      "hud-icon-bg": {
+        "role": "neutral",
+        "displayName": "Hud Icon Bg",
+        "tonalRamp": [
+          "oklch(15% 0.0190 141.55)",
+          "oklch(26% 0.0190 141.55)",
+          "oklch(38% 0.0190 141.55)",
+          "oklch(49% 0.0190 141.55)",
+          "oklch(61% 0.0190 141.55)",
+          "oklch(72% 0.0190 141.55)",
+          "oklch(84% 0.0190 141.55)",
+          "oklch(95% 0.0190 141.55)"
+        ]
+      },
+      "hud-icon-text": {
+        "role": "neutral",
+        "displayName": "Hud Icon Text",
+        "tonalRamp": [
+          "oklch(15% 0.0420 93.67)",
+          "oklch(26% 0.0420 93.67)",
+          "oklch(38% 0.0420 93.67)",
+          "oklch(49% 0.0420 93.67)",
+          "oklch(61% 0.0420 93.67)",
+          "oklch(72% 0.0420 93.67)",
+          "oklch(84% 0.0420 93.67)",
+          "oklch(95% 0.0420 93.67)"
+        ]
+      },
+      "hud-icon-border": {
+        "role": "neutral",
+        "displayName": "Hud Icon Border",
+        "tonalRamp": [
+          "oklch(15% 0.0545 110.20)",
+          "oklch(26% 0.0545 110.20)",
+          "oklch(38% 0.0545 110.20)",
+          "oklch(49% 0.0545 110.20)",
+          "oklch(61% 0.0545 110.20)",
+          "oklch(72% 0.0545 110.20)",
+          "oklch(84% 0.0545 110.20)",
+          "oklch(95% 0.0545 110.20)"
+        ]
+      },
+      "wall": {
+        "role": "neutral",
+        "displayName": "Wall",
+        "tonalRamp": [
+          "oklch(15% 0.0820 99.37)",
+          "oklch(26% 0.0820 99.37)",
+          "oklch(38% 0.0820 99.37)",
+          "oklch(49% 0.0820 99.37)",
+          "oklch(61% 0.0820 99.37)",
+          "oklch(72% 0.0820 99.37)",
+          "oklch(84% 0.0820 99.37)",
+          "oklch(95% 0.0820 99.37)"
+        ]
+      },
+      "carpet": {
+        "role": "neutral",
+        "displayName": "Carpet",
+        "tonalRamp": [
+          "oklch(15% 0.0489 97.60)",
+          "oklch(26% 0.0489 97.60)",
+          "oklch(38% 0.0489 97.60)",
+          "oklch(49% 0.0489 97.60)",
+          "oklch(61% 0.0489 97.60)",
+          "oklch(72% 0.0489 97.60)",
+          "oklch(84% 0.0489 97.60)",
+          "oklch(95% 0.0489 97.60)"
+        ]
+      },
+      "ceiling": {
+        "role": "neutral",
+        "displayName": "Ceiling",
+        "tonalRamp": [
+          "oklch(15% 0.0411 101.01)",
+          "oklch(26% 0.0411 101.01)",
+          "oklch(38% 0.0411 101.01)",
+          "oklch(49% 0.0411 101.01)",
+          "oklch(61% 0.0411 101.01)",
+          "oklch(72% 0.0411 101.01)",
+          "oklch(84% 0.0411 101.01)",
+          "oklch(95% 0.0411 101.01)"
+        ]
+      },
+      "scene-bg": {
+        "role": "neutral",
+        "displayName": "Scene Bg",
+        "tonalRamp": [
+          "oklch(15% 0.0553 100.33)",
+          "oklch(26% 0.0553 100.33)",
+          "oklch(38% 0.0553 100.33)",
+          "oklch(49% 0.0553 100.33)",
+          "oklch(61% 0.0553 100.33)",
+          "oklch(72% 0.0553 100.33)",
+          "oklch(84% 0.0553 100.33)",
+          "oklch(95% 0.0553 100.33)"
+        ]
+      },
+      "fog": {
+        "role": "neutral",
+        "displayName": "Fog",
+        "tonalRamp": [
+          "oklch(15% 0.0667 97.65)",
+          "oklch(26% 0.0667 97.65)",
+          "oklch(38% 0.0667 97.65)",
+          "oklch(49% 0.0667 97.65)",
+          "oklch(61% 0.0667 97.65)",
+          "oklch(72% 0.0667 97.65)",
+          "oklch(84% 0.0667 97.65)",
+          "oklch(95% 0.0667 97.65)"
+        ]
+      },
+      "fluorescent": {
+        "role": "neutral",
+        "displayName": "Fluorescent",
+        "tonalRamp": [
+          "oklch(15% 0.0641 96.86)",
+          "oklch(26% 0.0641 96.86)",
+          "oklch(38% 0.0641 96.86)",
+          "oklch(49% 0.0641 96.86)",
+          "oklch(61% 0.0641 96.86)",
+          "oklch(72% 0.0641 96.86)",
+          "oklch(84% 0.0641 96.86)",
+          "oklch(95% 0.0641 96.86)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Condensed display",
+        "purpose": "Two-line menu title."
+      },
+      "headline": {
+        "displayName": "Overlay headline",
+        "purpose": "Pause and result headings."
+      },
+      "body": {
+        "displayName": "Quiet supporting text",
+        "purpose": "Premise and concise instructions."
+      }
+    },
+    "shadows": [
+      {
+        "name": "title-atmosphere",
+        "value": "0 4px 30px #0003",
+        "purpose": "Title legibility."
+      },
+      {
+        "name": "hud-legibility",
+        "value": "0 2px 6px #000",
+        "purpose": "Status over rendered geometry."
+      },
+      {
+        "name": "head-lineup",
+        "value": "drop-shadow(0 5px 12px #0008)",
+        "purpose": "Photographic silhouette separation."
+      },
+      {
+        "name": "danger",
+        "value": "inset 0 0 120px #9c391c",
+        "purpose": "Threat feedback via opacity."
+      }
+    ],
+    "motion": [
+      {
+        "name": "notice-danger",
+        "value": "opacity .25s",
+        "purpose": "Notice and danger state changes."
+      },
+      {
+        "name": "stamina",
+        "value": "width .05s linear",
+        "purpose": "Stamina meter."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media(prefers-reduced-motion:reduce){*{transition:none!important}}",
+        "purpose": "Remove CSS transitions."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-menu",
+        "value": "800px"
+      },
+      {
+        "name": "stacked-menu",
+        "value": "580px"
+      },
+      {
+        "name": "touch-input",
+        "value": "(pointer:coarse)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Enter, resume or retry. Start may distribute label and arrow.",
+      "html": "<button class=\"ds-primary\">Verder lopen</button>",
+      "css": ".ds-primary{display:flex;align-items:center;justify-content:center;gap:18px;width:100%;min-height:50px;padding:13px 22px;border:0;border-radius:5px;font:800 13px Manrope,sans-serif;cursor:pointer;touch-action:manipulation;background:#e0b66b;color:#242818}.ds-primary:hover{background:#f2ce8c}.ds-primary:disabled{background:#62664e;color:#e8e5d3;cursor:wait}.ds-primary:focus-visible{outline:3px solid #e4bb6b;outline-offset:5px}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Return to menu beneath the primary action.",
+      "html": "<button class=\"ds-secondary\">Terug naar het menu</button>",
+      "css": ".ds-secondary{display:flex;align-items:center;justify-content:center;gap:18px;width:100%;min-height:50px;padding:13px 22px;border:0;border-radius:5px;font:800 13px Manrope,sans-serif;cursor:pointer;touch-action:manipulation;background:#ffffff0c;color:#d8dac9;border:1px solid #858a6944;margin-top:10px}.ds-secondary:hover{background:#ffffff16}.ds-secondary:focus-visible{outline:3px solid #e4bb6b;outline-offset:5px}"
+    },
+    {
+      "name": "Room code field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Compact native numeric setting.",
+      "html": "<label class=\"ds-label\">Kamercode<input class=\"ds-field\" type=\"number\" min=\"1\" max=\"999999\" value=\"42971\" inputmode=\"numeric\"></label>",
+      "css": ".ds-label{display:flex;flex-direction:column;gap:7px;font:10px Manrope,sans-serif;color:#c4c7b4}.ds-field{width:105px;padding:9px 10px;border:1px solid #74785d77;background:#202719;color:#eae7d8;font:11px Manrope,sans-serif;border-radius:4px}.ds-field:focus-visible{outline:3px solid #e4bb6b;outline-offset:5px}"
+    },
+    {
+      "name": "Pause icon",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "Compact interactive control over the room.",
+      "html": "<button class=\"ds-icon\" aria-label=\"Pauzeren\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M8 5v14M16 5v14\"/></svg></button>",
+      "css": ".ds-icon{background:#10170fc9;border:1px solid #9b9d7644;color:#eee5c6;width:38px;height:38px;display:grid;place-items:center;border-radius:5px;cursor:pointer;touch-action:manipulation}.ds-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.ds-icon:focus-visible{outline:3px solid #e4bb6b;outline-offset:5px}"
+    },
+    {
+      "name": "Pickup hint",
+      "kind": "custom",
+      "description": "Contextual keyboard hint; hidden for coarse-pointer input.",
+      "html": "<div class=\"ds-hint\"><kbd class=\"ds-key\">E</kbd><span>Pak toegangspas</span></div>",
+      "css": ".ds-hint{display:inline-flex;align-items:center;padding:11px 16px;background:#12180ee8;border:1px solid #a4a67a55;border-radius:5px;font:12px Manrope,sans-serif;color:#f1ecd8;white-space:nowrap}.ds-key{display:inline-grid;place-items:center;font:700 11px Manrope,sans-serif;width:23px;height:23px;background:#e7c67b;color:#212816;border-radius:3px;margin-right:10px}@media(pointer:coarse){.ds-hint{display:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Fluorescent Waiting Room",
+    "overview": "A real rendered maze supplies the atmosphere: yellowed wallpaper, worn olive carpet, suspended ceiling tiles and warm fluorescent fixtures. The interface sits quietly over that space, with condensed titles, restrained supporting text and a clear amber invitation to enter.\n\nThe photographic heads are the signature imagery. Mijke, Marola, Jaap and Thomas remain isolated heads, including in the 3D world; the official Ratel Slop Studios mark anchors the interface. Dutch copy is concise and playful within the tense environment.",
+    "keyCharacteristics": [
+      "Worn yellow and olive architecture with warm fluorescent light.",
+      "Amber actions, cream text and dark translucent overlays.",
+      "Condensed display type paired with quiet Manrope text.",
+      "Photographic heads and the official studio identity.",
+      "Sparse gameplay information around an unobstructed center."
+    ],
+    "rules": [
+      {
+        "name": "The Amber Action Rule",
+        "body": "Use amber for actionable controls and small emphasis; keep the architecture and supporting interface muted.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Reserve Barlow Condensed for major headings; use Manrope for controls, descriptions and game state.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "**Do** keep the actual rendered room visible beneath the menu and HUD.",
+      "**Do** preserve the four photographic heads as isolated cutouts and use the official studio mark.",
+      "**Do** use amber for primary actions and Barlow Condensed for major headings.",
+      "**Do** preserve the stacked mobile menu, coarse-pointer controls and visible keyboard focus.",
+      "**Do** respect calm-camera and reduced-motion behavior."
+    ],
+    "donts": [
+      "**Don't** add bodies to the photographic enemies.",
+      "**Don't** replace the muted olive/yellow world with bright dashboard panels.",
+      "**Don't** add card shadows or large rounded containers to the sparse gameplay HUD.",
+      "**Don't** obscure the center of the first-person view with persistent interface blocks."
+    ]
+  }
+}

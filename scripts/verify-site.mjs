@@ -2,7 +2,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
-const files = ['index.html', 'app.js', 'style.css', 'games/bouncykoen/index.html', 'games/conciergedienst/index.html', 'games/uavpilot/index.html'];
+const files = ['index.html', 'app.js', 'style.css', 'games/bouncykoen/index.html', 'games/conciergedienst/index.html', 'games/uavpilot/index.html', 'games/de-achterkamers/index.html'];
 let checked = 0;
 for (const name of files) {
   const path = resolve(root, name);

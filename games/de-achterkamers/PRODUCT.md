@@ -1,0 +1,2 @@
+# De Achterkamers
+Dutch-language first-person Backrooms face-chase game for the RatelSlop hub. The user chose this exact name. Four photographic heads only, with Thomas extracted from the attached photograph. No bodies. Collect access cards and return to the initial exit while wall-aware enemies pursue. Defaults: normal mode, five cards, map seed 42971. Static browser-only game, local fonts and assets, WebGL, optional pointer lock and touch controls. Preserve the existing SchoolControl source project; face reuse is for this new game.

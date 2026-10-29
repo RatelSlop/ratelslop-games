@@ -35,6 +35,15 @@ try {
     await readFile(join(target, 'index.html'));
     console.log(`Packaged ${game.repo} at ${revisions[game.repo]}`);
   }
+  const localGame = join(root, 'games', 'de-achterkamers');
+  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  for (const args of [['ci', '--no-audit', '--no-fund'], ['test'], ['run', 'build']]) {
+    execFileSync(npm, args, { cwd: localGame, stdio: 'inherit', shell: process.platform === 'win32' });
+  }
+  const localTarget = join(root, 'dist', 'games', 'de-achterkamers');
+  await mkdir(localTarget, { recursive: true });
+  await cp(join(localGame, 'dist'), localTarget, { recursive: true });
+  revisions['De Achterkamers'] = 'bundled with launcher';
   await writeFile(join(root, 'dist', 'build-info.json'), JSON.stringify({ builtAt: new Date().toISOString(), revisions }, null, 2) + '\n');
 } finally {
   // scratch is a newly created directory under the OS temporary directory.

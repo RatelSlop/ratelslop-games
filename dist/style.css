@@ -90,3 +90,6 @@
   #game-stage{height:calc(100dvh - 72px);min-height:300px;border-radius:8px}.player-help{font-size:10px}
 }
 @media(max-width:450px){.brand{font-size:16px}.header-tools{gap:3px}.searchbox input{width:75px}.hero-content{padding-left:5%}.hero h1{font-size:64px}.poster-title{font-size:27px!important}.poster-bouncy .poster-title{font-size:30px!important}.poster{aspect-ratio:16/11}.badge{font-size:7px}.poster>.poster-studio{width:21px;height:24px}.game-cover-section{height:650px;min-height:0}#game-name{font-size:68px}.game-cover-actions{gap:9px}.game-cover-actions .primary,.game-cover-actions .secondary{font-size:11px;padding:11px 15px;min-height:44px}.game-cover-copy{bottom:50px}.game-page-meta{max-width:260px;line-height:1.8}.game-studio-seal{width:44px;height:51px}.game-information p{font-size:12px}.footer-brand .footer-wordmark{font-size:11px}}
+
+@media(min-width:1101px){#game-grid{grid-template-columns:repeat(5,minmax(0,1fr))}#game-related{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.hero.feature-achterkamers h1{font-size:clamp(42px,6.5vw,84px)}.hero.feature-achterkamers h1 span{letter-spacing:0}#game-page[data-game="de-achterkamers"] #game-name{font-size:clamp(48px,7vw,86px)}.poster-achterkamers .poster-title{font-size:clamp(24px,2vw,32px)!important}
