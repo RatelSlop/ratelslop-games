@@ -1,0 +1,9 @@
+node_modules/
+.wrangler/
+.dev.vars
+.env
+.env.*
+
+# Game builds are assembled by GitHub Actions.
+dist/games/
+dist/build-info.json

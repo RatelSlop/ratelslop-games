@@ -1,0 +1,19 @@
+# Copy this into .github/workflows/notify-hub.yml in EACH game repository.
+# HUB_DISPATCH_TOKEN: fine-grained token scoped to delanohooijmaijers/ratelslop-games,
+# with Contents: write (required by GitHub's repository_dispatch API).
+name: Update RatelSlop game hub
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions: {}
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger hub rebuild
+        env:
+          GH_TOKEN: ${{ secrets.HUB_DISPATCH_TOKEN }}
+        run: |
+          gh api --method POST repos/delanohooijmaijers/ratelslop-games/dispatches \
+            -f event_type=game-updated

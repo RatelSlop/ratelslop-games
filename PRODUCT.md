@@ -1,0 +1,2 @@
+# RatelSlop Games
+Browser game launcher for RatelSlop's BouncyKoen, ConciergeDienst, UAVPilot and Schoolcontrol. Games play inside the launcher. Dark theme is default; a persisted light theme is available. Public builds are bundled; Schoolcontrol is unavailable and must remain clearly labeled until the user supplies access or a playable build. Search, genre filters, favorites, recently played games, restart and fullscreen are browser-local features. No account or server is required.
