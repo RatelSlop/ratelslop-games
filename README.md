@@ -10,5 +10,4 @@ GitHub Pages is the selected host. See `GITHUB-PAGES.md` for setup and automatic
 
 All game sources: https://github.com/RatelSlop. Local game progress belongs to this launcher's origin and is separate from progress on the games' existing domains. BouncyKoen bundles Three.js locally with an optional CDN fallback; fonts load from Google Fonts. On the selected host, game assets are served by GitHub Pages. Playing does not require GitHub REST API requests.
 
-Artwork provenance: concierge.jpg is Concierge-dienst/assets/cameras/cam1_lockers.jpg; school.jpg is a collection placeholder from Concierge-dienst/assets/cameras/cam3_hallway.jpg, not a Schoolcontrol screenshot; bouncy.jpg and uav.jpg are browser captures of the corresponding bundled games. No private source is included.
-
+Artwork: four original promotional cover illustrations in `dist/art/covers/`, with exact generation prompts and provenance. Official Ratel Slop Studios logo files are in `dist/brand/`. See `ARTWORK.md`. Each game has a shareable cover page at `#game/<id>`, and a large player at `#play/<id>`.

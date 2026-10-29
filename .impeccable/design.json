@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-29T19:01:48.3272523Z",
+  "title": "Design System: RatelSlop Games",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Play Red",
+        "canonical": "#d92c40"
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Coral Accent",
+        "canonical": "#f04a56"
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Charcoal Canvas",
+        "canonical": "#111214"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Raised Charcoal",
+        "canonical": "#1c1d21"
+      },
+      "light-bg": {
+        "role": "neutral",
+        "displayName": "Pale Gray Canvas",
+        "canonical": "#f5f5f7"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Condensed Game Title",
+        "purpose": "Hero, cover-page and poster titles."
+      },
+      "body": {
+        "displayName": "Interface Body",
+        "purpose": "Descriptions, navigation and controls."
+      },
+      "section": {
+        "displayName": "Section Heading",
+        "purpose": "Library section headings."
+      }
+    },
+    "shadows": [
+      {
+        "name": "poster-title",
+        "value": "0 3px 15px #0009",
+        "purpose": "Legibility over thumbnail illustrations."
+      },
+      {
+        "name": "cover-title",
+        "value": "0 3px 24px #0005",
+        "purpose": "Legibility over full-size game covers."
+      },
+      {
+        "name": "poster-logo",
+        "value": "drop-shadow(0 2px 4px #0008)",
+        "purpose": "Official white mark over artwork; CSS filter."
+      }
+    ],
+    "motion": [
+      {
+        "name": "poster-image",
+        "value": "transform .25s",
+        "purpose": "Cover image scales to 1.04 on hover; the official logo stays still."
+      },
+      {
+        "name": "overlay-and-toast",
+        "value": ".2s",
+        "purpose": "Hover overlay opacity and toast transitions."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "Disable transitions under prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1600px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1100px"
+      },
+      {
+        "name": "mobile-layout",
+        "value": "800px"
+      },
+      {
+        "name": "small-phone",
+        "value": "450px"
+      }
+    ],
+    "focus": {
+      "outline": "3px solid var(--accent)",
+      "outlineOffset": "4px"
+    },
+    "player": {
+      "desktopHeight": "calc(100dvh - 84px)",
+      "desktopMinHeight": "350px",
+      "mobileHeight": "calc(100dvh - 72px)",
+      "mobileMinHeight": "300px",
+      "fullscreenHeight": "100dvh"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Play Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary launch action on feature and game covers.",
+      "html": "<button class=\"ds-primary\">Play now</button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:11px 22px;border:0;border-radius:6px;background:#d92c40;color:#fff;font:800 12px Manrope,sans-serif;cursor:pointer}.ds-primary:hover{background:#bd2032}.ds-primary:focus-visible{outline:3px solid var(--accent,#f04a56);outline-offset:4px}.ds-primary:disabled{background:var(--chip,#24252b);color:var(--muted,#a6a8b1);cursor:not-allowed}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Theme-aware secondary interface action.",
+      "html": "<button class=\"ds-secondary\">Back to game</button>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:11px 22px;border:0;border-radius:6px;background:var(--chip,#24252b);color:var(--text,#f5f5f6);font:800 12px Manrope,sans-serif;cursor:pointer}.ds-secondary:hover{filter:brightness(1.2)}.ds-secondary:focus-visible{outline:3px solid var(--accent,#f04a56);outline-offset:4px}"
+    },
+    {
+      "name": "Game Search",
+      "kind": "input",
+      "description": "Quiet bordered field in the main header.",
+      "html": "<label class=\"ds-search\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"10.5\" cy=\"10.5\" r=\"6.5\"/><path d=\"m16 16 5 5\"/></svg><input type=\"search\" placeholder=\"Find your next game\" aria-label=\"Search games\"></label>",
+      "css": ".ds-search{display:inline-flex;align-items:center;gap:10px;background:var(--surface,#1c1d21);border:1px solid var(--line,#303137);padding:9px 12px;border-radius:7px;color:var(--muted,#a6a8b1)}.ds-search svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7}.ds-search input{width:165px;background:none;border:0;color:var(--text,#f5f5f6);font:11px Manrope,sans-serif}.ds-search input::placeholder{color:var(--muted,#a6a8b1)}.ds-search input:focus-visible{outline:3px solid var(--accent,#f04a56);outline-offset:4px}"
+    },
+    {
+      "name": "Main Navigation",
+      "kind": "nav",
+      "description": "Quiet tabs with a coral underline for the active destination.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><button class=\"ds-active\" aria-current=\"page\">Discover</button><button>All games</button><button>My list</button></nav>",
+      "css": ".ds-nav{display:flex;gap:29px;height:60px;background:var(--bg,#111214)}.ds-nav button{position:relative;border:0;padding:0;background:none;color:var(--muted,#a6a8b1);font:600 13px Manrope,sans-serif;cursor:pointer}.ds-nav .ds-active{color:var(--text,#f5f5f6)}.ds-nav .ds-active:after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--accent,#f04a56)}.ds-nav button:focus-visible{outline:3px solid var(--accent,#f04a56);outline-offset:4px}"
+    },
+    {
+      "name": "Genre Filter",
+      "kind": "chip",
+      "description": "Compact bordered filter, inverted when selected.",
+      "html": "<div class=\"ds-filters\"><button class=\"ds-selected\" aria-pressed=\"true\">All games</button><button aria-pressed=\"false\">Adventure</button></div>",
+      "css": ".ds-filters{display:flex;gap:8px}.ds-filters button{background:none;border:1px solid var(--line,#303137);color:var(--muted,#a6a8b1);border-radius:6px;padding:7px 16px;font:11px Manrope,sans-serif;cursor:pointer}.ds-filters .ds-selected{background:var(--text,#f5f5f6);color:var(--bg,#111214);border-color:var(--text,#f5f5f6);font-weight:800}.ds-filters button:focus-visible{outline:3px solid var(--accent,#f04a56);outline-offset:4px}"
+    },
+    {
+      "name": "Landscape Poster Frame",
+      "kind": "card",
+      "refersTo": "poster",
+      "description": "Shape and type specimen; shipping cards use their distinct generated illustration and official logo assets.",
+      "html": "<a class=\"ds-poster\" href=\"#game/bouncykoen\" aria-label=\"View BouncyKoen\"><span class=\"ds-badge\">Arcade</span><span class=\"ds-title\">BOUNCY<br>KOEN</span></a>",
+      "css": ".ds-poster{display:block;width:280px;aspect-ratio:16/10;position:relative;overflow:hidden;border-radius:12px;background:#364239;color:#fff;text-decoration:none}.ds-poster:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#08090be8,transparent 72%)}.ds-title{position:absolute;bottom:17px;left:17px;z-index:1;font:800 38px/.95 'Barlow Condensed',sans-serif;letter-spacing:-.3px;text-shadow:0 3px 15px #0009}.ds-badge{position:absolute;top:12px;left:12px;z-index:2;border-radius:4px;padding:3px 7px;font:800 9px Manrope,sans-serif;background:#101114c9;color:#fff}.ds-poster:focus-visible{outline:3px solid var(--accent,#f04a56);outline-offset:4px}"
+    }
+  ],
+  "narrative": {
+    "overview": "The browser hub keeps its cinematic feature, charcoal surfaces, coral actions and four landscape game posters. Interface text stays quiet around the game artwork. This is an extension of the established visual system.\n\nEach game now has a distinct generated cover illustration and an image-led game page. The player takes over the page when a game launches. The official Ratel Slop Studios identity anchors the header, studio section, footer, game covers and thumbnails.",
+    "keyCharacteristics": [
+      "Large artwork with compressed, confident game titles.",
+      "Quiet controls, strong play actions and legible image overlays.",
+      "Default dark theme with a persisted light alternative."
+    ],
+    "rules": [],
+    "dos": [
+      "**Do** retain the established charcoal, coral, condensed-title and light-theme system.",
+      "**Do** use the official studio artwork unchanged and keep each game's cover visually distinct.",
+      "**Do** preserve legible overlays, named controls, visible focus and accurate availability."
+    ],
+    "donts": [
+      "**Don't** present generated covers as gameplay screenshots.",
+      "**Don't** enable SchoolControl's play action until a playable build is connected."
+    ]
+  }
+}

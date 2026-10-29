@@ -1,0 +1,30 @@
+[
+  {
+    "game": "bouncykoen",
+    "file": "art/covers/bouncykoen.webp",
+    "source": "OpenAI built-in image generation",
+    "prompt": "Use case: stylized-concept. Asset type: wide landscape 16:9 game cover artwork for BouncyKoen, a Dutch-themed voxel road-crossing browser game. Create a polished charming low-poly 3D editorial game key art: a youthful blocky male character with brown quiff, black short sleeve shirt with tiny colorful confetti pattern, blue trousers, hopping toward viewer over a Dutch canal on a little wooden raft. Behind him a red Dutch bicycle path with cargo bicycle, colorful compact cars, tulips, clipped blocky trees, a yellow and blue Dutch passenger train. A playful white seagull circles overhead. Bright spring daylight, mint green grass, turquoise canal, warm sunny yellow accents. Strong single focal character, crisp voxel shapes, cinematic depth, playful movement. Whole landscape composed for a thumbnail and large game page, key action in center-right leaving left quarter calmer for real HTML title. No text, no UI, no borders, no logos, no watermark. This is promotional concept art, not a gameplay screenshot.",
+    "kind": "Promotional cover illustration, not a gameplay screenshot"
+  },
+  {
+    "game": "conciergedienst",
+    "file": "art/covers/conciergedienst.webp",
+    "source": "OpenAI built-in image generation",
+    "prompt": "Use case: stylized-concept. Asset type: landscape 16:9 horror game cover key art for ConciergeDienst, school night surveillance observation game. Cinematic photorealistic abandoned Dutch secondary school at midnight, orange and sage green lockers on left, empty staircase and long institutional corridor at right, a small ceiling-mounted security camera prominent in upper right foreground with tiny red recording light, one distant ambiguous human silhouette beyond the far doorway. Fluorescent ceiling lights, one light flickering, cold blue green shadows with a narrow warm yellow light beyond far door. Unsettling restraint, no gore. Photographic architectural realism, film still quality, deep perspective. Key camera and far door in right two thirds, left quarter dark enough to overlay real HTML title. Rich readable details at thumbnail size, no black blank regions. No text, no UI, no logos, no watermark. Promotional cover art, not a gameplay screenshot.",
+    "kind": "Promotional cover illustration, not a gameplay screenshot"
+  },
+  {
+    "game": "uavpilot",
+    "file": "art/covers/uavpilot.webp",
+    "source": "OpenAI built-in image generation",
+    "prompt": "Use case: stylized-concept. Asset type: landscape 16:9 browser game cover artwork for UAVPilot. Polished low-poly 3D game key art of a compact fixed-wing unmanned aircraft banking high above a stylized green countryside and small town, industrial buildings, fields and roads, a communications tower and distant mountains. Drone in right foreground with clearly visible angular swept wings, dark graphite fuselage, subtle orange accent panels, dynamic diagonal banking silhouette, landscape stretching into atmospheric distance. Late afternoon warm amber rim light against slate teal sky, emerald and olive fields, softly modeled cloud forms. Adventurous cinematic flight sandbox mood, rendered geometry, artistic but believable aircraft, strong thumbnail readability. Keep left quarter mainly sky and distant landscape for HTML title overlay. No weapons closeups, no people, no gore, no text, no labels, no HUD, no logos, no watermark. Concept cover artwork not a gameplay screenshot.",
+    "kind": "Promotional cover illustration, not a gameplay screenshot"
+  },
+  {
+    "game": "schoolcontrol",
+    "file": "art/covers/schoolcontrol.webp",
+    "source": "OpenAI built-in image generation",
+    "prompt": "Use case: stylized-concept. Asset type: wide landscape 16:9 browser game cover artwork for School Control \u2014 De laatste bel, a quirky Dutch school adventure. Polished stylized low-poly 3D key art, two teenage schoolboy adventurers at foreground right entering an imposing contemporary Dutch school campus, one brown-haired boy holding an oversized yellow pencil with a friendly small brown dog, the other short-haired boy holding two chopsticks with a small white chicken companion. No real faces or photographs, original simplified modeled characters. Glass school facade, central staircase glimpsed through entrance, school clock, brick exterior, mathematics and chemistry rooms hinted in windows. A stern director silhouette stands behind distant reception desk. Warm gold afternoon light, cobalt blue school windows, coral backpack accents, playful adventure story mood. Characters large enough to read as thumbnail, distinct companions. Left quarter relatively calm school architecture for real HTML title. No text, no logos, no UI, no watermark. Promotional concept illustration not actual gameplay screenshot.",
+    "kind": "Promotional cover illustration, not a gameplay screenshot"
+  }
+]
