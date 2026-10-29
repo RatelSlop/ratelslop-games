@@ -1,11 +1,11 @@
 # GitHub Pages
 
-Target repository: `delanohooijmaijers/ratelslop-games`.
+Target repository: `RatelSlop/ratelslop-games`.
 
 1. Push this project to `main` in that repository.
 2. In the repository's **Settings → Pages → Build and deployment**, select **GitHub Actions**.
 3. The **Build and deploy game hub** workflow refreshes the three public game repositories, builds UAVPilot, validates relative paths, and publishes only `dist/`.
-4. Use the URL returned by the successful deployment. The usual project URL is `https://delanohooijmaijers.github.io/ratelslop-games/`, unless repository or organization domain settings override it. This expected URL is not evidence of an active deployment.
+4. Use the URL returned by the successful deployment. The usual project URL is `https://ratelslop.github.io/ratelslop-games/`, unless repository or organization domain settings override it. This expected URL is not evidence of an active deployment.
 
 ## Update on every game push
 
