@@ -38,6 +38,8 @@ The maze uses near-black fog and minimal ambient light. Ceiling fixtures glow fa
 
 The user-supplied **Charlie's Inferno** MP3 is bundled at `public/audio/charlies-inferno.mp3`; its checksum and provenance are in the adjacent JSON file. It starts and loops during matches, pauses without losing position, resumes with play, and stops/resets on win, capture, quit or retry. It never autoplays in the initial menu. The existing volume control adjusts the music and game effects together; the music mix leaves room for footsteps and chase sounds.
 
+Mijke has a separate proximity clip: the user-supplied **Mijn Meubilair** MP3 at `public/audio/mijke-meubilair.mp3`. Her clip loops within 10 metres, grows louder as she approaches, pans left/right with her position, and stops beyond 12 metres. The small distance margin prevents repeated starts at the threshold. This cue tracks Mijke specifically, even when another chaser is closer. Pause, capture, win and quit stop it immediately. The shared volume control applies to it.
+
 ## Character artwork
 
 Thomas uses the user's supplied photograph. Mijke, Marola and Jaap originate from the existing SchoolControl portrait assets. Head extraction was performed with the built-in image-generation tool; exact edit prompts are recorded in `public/faces/provenance.json` and WebP metadata. These are fictional game chasers; no real voices are used. The map license does not grant rights over these portraits. See the SchoolControl reference notes for the original portrait provenance: https://github.com/RatelSlop/SchoolControl/blob/main/references/sources.md.

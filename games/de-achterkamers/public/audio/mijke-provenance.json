@@ -1,0 +1,7 @@
+{
+  "file": "mijke-meubilair.mp3",
+  "title": "Mijn Meubilair",
+  "source": "User-supplied MP3",
+  "sha256": "8ba2ffc83e45dc13d378e0e422798f900d36291d54f427dc6ea208c694cfc940",
+  "usage": "Looping proximity sound for active Mijke within 10 metres; fades with distance and stops beyond 12 metres or on pause/end."
+}
