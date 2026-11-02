@@ -1,0 +1,7 @@
+{
+  "file": "charlies-inferno.mp3",
+  "title": "Charlie's Inferno",
+  "source": "User-supplied MP3",
+  "sha256": "70678164c3de8bff2c76894c4575ae36d14470dffac170807d4d897da88df016",
+  "usage": "Looping music during an active match only; pause/resume preserves position; new matches restart the track."
+}

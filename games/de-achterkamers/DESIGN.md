@@ -25,9 +25,9 @@ colors:
   wall: "#c7bc7e"
   carpet: "#756e4d"
   ceiling: "#c1bd9f"
-  scene-bg: "#76704a"
-  fog: "#817748"
-  fluorescent: "#fff4c3"
+  scene-bg: "#020302"
+  fog: "#040504"
+  fluorescent: "#b9b583"
 typography:
   display:
     fontFamily: "'Barlow Condensed', sans-serif"
@@ -131,7 +131,7 @@ The palette borrows its muted warmth from aged wallpaper and carpet; amber signa
 - **Ghost Surface** (`secondary-bg`, `secondary-hover`, `secondary-text`, `secondary-border`): secondary actions remain translucent over the room.
 - **Waiting Olive** (`disabled-bg`, `disabled-text`): the start button while assets load.
 - **HUD Glass** (`hud-icon-bg`, `hud-icon-text`, `hud-icon-border`): pause control.
-- **Wallpaper, Carpet and Ceiling** (`wall`, `carpet`, `ceiling`): procedural material base colors. `scene-bg` and `fog` blend distant architecture; `fluorescent` is the luminous panel material.
+- **Wallpaper, Carpet and Ceiling** (`wall`, `carpet`, `ceiling`): reference palette; the packed Sketchfab model now supplies the actual embedded textures and separate architectural meshes. `scene-bg` and `fog` blend distant architecture; `fluorescent` colors the original luminous fixtures.
 
 **The Amber Action Rule.** Use amber for actionable controls and small emphasis; keep the architecture and supporting interface muted.
 
@@ -170,7 +170,7 @@ Depth comes from the rendered world, atmospheric fog, a radial vignette and tran
 - **Isolated heads:** lineup `drop-shadow(0 5px 12px #0008)`; result `drop-shadow(0 5px 15px #0007)`.
 - **Danger:** `inset 0 0 120px #9c391c`, revealed through opacity.
 
-The scene uses ACES filmic tone mapping, exposure 1.1, exponential fog density .036 and roughness 1 on the main room materials. Keep photographic enemy sprites unlit (`toneMapped:false`) and transparent, with alpha test .08. Camera calm mode removes walking bob and enemy/card bob; reduced-motion CSS removes transitions. Notice and danger opacity transition over .25s; stamina width uses .05s linear.
+The scene uses ACES filmic tone mapping, exposure .95, near-black exponential fog with density .075 and a minimum roughness of .8 on the original model materials. It preserves the supplied GLB's UVs and textures while assembling its separate meshes into a 105.6 m square maze, with a 3.15 m ceiling, nine larger rooms and branching corridors. Instanced walls, pillars and ceiling sections keep draw calls low. Light positions come from the original fixtures, now dimmed to faint glows. A narrow, warm flashlight casts shadows from the instanced walls and pillars; ambient intensity is .035. Keep photographic enemy sprites unlit (`toneMapped:false`) and transparent, with alpha test .08, but modulate their brightness with flashlight alignment and close-range proximity so they emerge from the dark. Camera calm mode removes walking bob and enemy/card bob; reduced-motion CSS removes transitions. Notice and danger opacity transition over .25s; stamina width uses .05s linear.
 
 ## Shapes
 

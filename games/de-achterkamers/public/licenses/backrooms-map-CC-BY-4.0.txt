@@ -1,0 +1,35 @@
+Backrooms Map Packed_Blender 3.2.0
+
+Author: ultramirage10 (as embedded in the supplied GLB), also credited as
+Speed12 on the source Sketchfab page retrieved for this project.
+https://sketchfab.com/ultramirage10
+https://sketchfab.com/Speed12
+
+Source:
+https://sketchfab.com/3d-models/backrooms-map-packed-blender-320-cccf027acc214c4e9370f1fefebda4bf
+
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+The supplied GLB is bundled unchanged at models/backrooms.glb and includes
+the original wallpaper, carpet and ceiling textures. The source description
+credits the Backrooms texture style to Kane Pixels.
+
+Adaptations in De Achterkamers:
+- The source is treated as a modular kit: individual wall/baseboard, pillar,
+  floor, ceiling and light meshes are extracted with their materials and UVs.
+- Modules are normalized to a 3.15 metre ceiling and rearranged into a
+  105.6 by 105.6 metre maze with nine rooms and branching passages.
+- Instancing reuses wall, ceiling, carpet and light geometry efficiently.
+- Original materials use the game's lighting, fog and roughness adjustments.
+- Collision is derived per wall/pillar instance, with connected navigation
+  and reachable access passes. The original demo hallway and vent are omitted.
+- Added game exit, access passes and photographic chasers.
+
+CC BY 4.0 allows sharing and adaptation, including commercially, provided
+appropriate credit, a license link and an indication of changes are given.
+No endorsement by the model's creator is implied.
+
+This attribution covers the map asset. Character portraits, game code,
+fonts and studio identity have their own provenance and licenses.

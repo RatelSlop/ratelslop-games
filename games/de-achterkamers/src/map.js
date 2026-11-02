@@ -1,24 +1,77 @@
-import { MazeGenerator } from './vendor/backedges/generator.ts';
-export const DIRS=[[0,-1,'north'],[1,0,'east'],[0,1,'south'],[-1,0,'west']];
-export const CELL=4.4, HEIGHT=3.15;
-export function generateMap(seed=42971,size=14){
- const generator=new MazeGenerator({seed,cellSize:CELL,passageDensity:.31,minConnections:2,roomFrequency:.12,hallFrequency:.002,atriumFrequency:0,cacheLimit:4096});
- const cells=Array.from({length:size*size},(_,i)=>({x:i%size,z:Math.floor(i/size),open:[],kind:'corridor'}));
- const index=(x,z)=>x<0||z<0||x>=size||z>=size?-1:z*size+x;
- for(const c of cells){c.kind=generator.getCell(c.x,c.z).kind;c.open=DIRS.map(([dx,dz,dir])=>index(c.x+dx,c.z+dz)>=0&&generator.isPassable(c.x,c.z,dir));}
- const connect=(a,b)=>{const c=cells[a],d=cells[b];const dir=DIRS.findIndex(([dx,dz])=>c.x+dx===d.x&&c.z+dz===d.z);if(dir>=0){c.open[dir]=true;d.open[(dir+2)%4]=true;}};
- const neighbors=i=>cells[i].open.flatMap((open,d)=>open?[index(cells[i].x+DIRS[d][0],cells[i].z+DIRS[d][1])]:[]);
- const distances=start=>{const dist=Array(cells.length).fill(Infinity);dist[start]=0;const queue=[start];for(let q=0;q<queue.length;q++)for(const next of neighbors(queue[q]))if(dist[next]===Infinity){dist[next]=dist[queue[q]]+1;queue.push(next);}return dist;};
- // Finite extraction can cut paths in the infinite source map; join every island.
- let dist=distances(0);while(dist.includes(Infinity)){let joined=false;for(let a=0;a<cells.length&&!joined;a++)if(dist[a]<Infinity)for(const [dx,dz]of DIRS){const b=index(cells[a].x+dx,cells[a].z+dz);if(b>=0&&dist[b]===Infinity){connect(a,b);joined=true;break;}}dist=distances(0);}
- const start=index(1,1);connect(start,index(2,1));connect(index(2,1),index(3,1));
- const center=i=>({x:(cells[i].x+.5)*CELL,z:(cells[i].z+.5)*CELL});
- const walls=[];
- for(let i=0;i<cells.length;i++){const c=cells[i];for(let d=0;d<4;d++){if(c.open[d]||((d===0&&c.z>0)||(d===3&&c.x>0)))continue;let x=(c.x+.5)*CELL,z=(c.z+.5)*CELL;const vertical=d===1||d===3;if(d===0)z-=CELL/2;if(d===2)z+=CELL/2;if(d===1)x+=CELL/2;if(d===3)x-=CELL/2;walls.push({x,z,w:vertical?.24:CELL+.24,d:vertical?CELL+.24:.24});}}
- const cellAt=(x,z)=>index(Math.floor(x/CELL),Math.floor(z/CELL));
- const blocked=(x,z,r=.27)=>x<r||z<r||x>size*CELL-r||z>size*CELL-r||walls.some(w=>x>w.x-w.w/2-r&&x<w.x+w.w/2+r&&z>w.z-w.d/2-r&&z<w.z+w.d/2+r);
- function move(body,dx,dz,r=.27){const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.12));for(let i=0;i<steps;i++){if(!blocked(body.x+dx/steps,body.z,r))body.x+=dx/steps;if(!blocked(body.x,body.z+dz/steps,r))body.z+=dz/steps;}}
- function path(from,to){if(from<0||to<0)return[];const prev=Array(cells.length).fill(-1),queue=[from];prev[from]=from;for(let q=0;q<queue.length&&prev[to]===-1;q++)for(const n of neighbors(queue[q]))if(prev[n]===-1){prev[n]=queue[q];queue.push(n);}if(prev[to]===-1)return[];const result=[to];while(result[0]!==from)result.unshift(prev[result[0]]);return result;}
- const selected=[start];for(let n=0;n<9;n++){const all=selected.map(distances);let best=-1,score=-1;for(let i=0;i<cells.length;i++){const s=Math.min(...all.map(a=>a[i]));if(s>score&&!selected.includes(i)){score=s;best=i;}}selected.push(best);}
- return{seed,size,cells,walls,start,center,cellAt,neighbors,distances,path,move,blocked,objectives:selected.slice(1,8),spawns:selected.slice(5,9)};
+import model from './model-data.js';
+import {LAYOUT,GRID,DIRECTIONS} from './layout.js';
+
+export const DIRS=DIRECTIONS.map(([dx,dz],i)=>[dx,dz,['north','east','south','west'][i]]);
+export const CELL=model.cellSize,HEIGHT=model.height;
+export const MODEL=model;
+const bucketSize=CELL,buckets=new Map();
+const key=(x,z)=>`${x},${z}`;
+for(const rectangle of [...model.walls,...model.pillars]){
+ const {x,z,w,d}=rectangle;
+ for(let bx=Math.floor((x-w/2)/bucketSize);bx<=Math.floor((x+w/2)/bucketSize);bx++)
+  for(let bz=Math.floor((z-d/2)/bucketSize);bz<=Math.floor((z+d/2)/bucketSize);bz++){
+   const id=key(bx,bz);if(!buckets.has(id))buckets.set(id,[]);buckets.get(id).push(rectangle);
+  }
+}
+function blocked(x,z,r=.27){
+ if(!Number.isFinite(x)||!Number.isFinite(z)||x<r||z<r||x>model.length-r||z>model.length-r)return true;
+ for(let bx=Math.floor((x-r)/bucketSize);bx<=Math.floor((x+r)/bucketSize);bx++)
+  for(let bz=Math.floor((z-r)/bucketSize);bz<=Math.floor((z+r)/bucketSize);bz++)
+   if(buckets.get(key(bx,bz))?.some(w=>x>w.x-w.w/2-r&&x<w.x+w.w/2+r&&z>w.z-w.d/2-r&&z<w.z+w.d/2+r))return true;
+ return false;
+}
+function clearSegment(a,b,r=.34){
+ const steps=Math.max(1,Math.ceil(Math.hypot(b.x-a.x,b.z-a.z)/.08));
+ for(let i=0;i<=steps;i++)if(blocked(a.x+(b.x-a.x)*i/steps,a.z+(b.z-a.z)*i/steps,r))return false;
+ return true;
+}
+function move(body,dx,dz,r=.27){
+ const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.08));
+ for(let i=0;i<steps;i++){
+  if(!blocked(body.x+dx/steps,body.z,r))body.x+=dx/steps;
+  if(!blocked(body.x,body.z+dz/steps,r))body.z+=dz/steps;
+ }
+}
+
+let navigation;
+function buildNavigation(){
+ const cells=LAYOUT.cells,centers=cells.map(c=>({x:(c.x+.5)*CELL,z:(c.z+.5)*CELL}));
+ const edges=cells.map(c=>c.open.flatMap((open,d)=>open?[(c.z+DIRS[d][1])*GRID+c.x+DIRS[d][0]]:[]));
+ return{size:GRID,cells,centers,edges,start:LAYOUT.start,exit:LAYOUT.exit};
+}
+
+export function generateMap(seed=42971){
+ navigation??=buildNavigation();
+ const {size,cells,centers,edges,start,exit}=navigation;
+ const center=i=>centers[i];
+ const neighbors=i=>edges[i]||[];
+ function cellAt(x,z){
+  const cx=Math.floor(x/CELL),cz=Math.floor(z/CELL);
+  return cx<0||cz<0||cx>=size||cz>=size?-1:cz*size+cx;
+ }
+ function distances(from){
+  const dist=Array(cells.length).fill(Infinity);if(!centers[from])return dist;
+  dist[from]=0;const queue=[from];
+  for(let q=0;q<queue.length;q++)for(const n of edges[queue[q]])if(dist[n]===Infinity){dist[n]=dist[queue[q]]+1;queue.push(n);}
+  return dist;
+ }
+ function path(from,to){
+  if(!centers[from]||!centers[to])return[];
+  const previous=new Int32Array(cells.length).fill(-1),queue=[from];previous[from]=from;
+  for(let q=0;q<queue.length&&previous[to]===-1;q++)for(const n of edges[queue[q]])if(previous[n]===-1){previous[n]=queue[q];queue.push(n);}
+  if(previous[to]===-1)return[];
+  const result=[to];while(result[result.length-1]!==from)result.push(previous[result[result.length-1]]);
+  return result.reverse();
+ }
+ // Room codes change placements; the large assembled maze keeps its architecture.
+ let state=seed>>>0;const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
+ const jitter=cells.map(()=>random()),safe=centers.map((p,i)=>!blocked(p.x,p.z,.7)?i:-1).filter(i=>i>=0);
+ const selected=[start],nearest=distances(start);
+ for(let n=0;n<11;n++){
+  let best=-1,score=-1;
+  for(const i of safe){const value=nearest[i]*(.8+jitter[i]*.4);if(!selected.includes(i)&&Number.isFinite(value)&&value>score){best=i;score=value;}}
+  if(best<0)throw new Error('Not enough safe objective locations in model.');
+  selected.push(best);const dist=distances(best);dist.forEach((d,i)=>nearest[i]=Math.min(nearest[i],d));
+ }
+ return{seed,size,cells,start,exit,center,cellAt,neighbors,distances,path,move,blocked,clearSegment,objectives:selected.slice(1,8),spawns:selected.slice(8,12),walls:model.walls,pillars:model.pillars,length:model.length};
 }
