@@ -25,7 +25,7 @@ export async function createScene(canvas,map){
  scene.add(environment);
  const positions=MODEL.lights.map(([x,y,z])=>new THREE.Vector3(x,y-.12,z));
  const pool=Array.from({length:4},()=>{const l=new THREE.PointLight('#b9b583',.12,3.6,2);scene.add(l);return l;});
- const flashlight=new THREE.SpotLight('#fff5d7',65,22,.38,.72,1.5);
+ const flashlight=new THREE.SpotLight('#fff5d7',65,22,.50,.72,1.5);
  flashlight.castShadow=true;flashlight.shadow.mapSize.set(1024,1024);flashlight.shadow.camera.near=.1;flashlight.shadow.camera.far=22;flashlight.shadow.bias=-.0002;flashlight.shadow.normalBias=.025;
  scene.add(flashlight,flashlight.target);
  function label(text,bg='#254b39',fg='#f7f2d3'){const c=document.createElement('canvas');c.width=512;c.height=192;const x=c.getContext('2d');x.fillStyle=bg;x.fillRect(0,0,512,192);x.strokeStyle=fg;x.lineWidth=7;x.strokeRect(8,8,496,176);x.fillStyle=fg;x.textAlign='center';x.font='bold 64px sans-serif';x.fillText(text,256,119);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return new THREE.MeshBasicMaterial({map:t,side:THREE.DoubleSide});}
@@ -50,7 +50,7 @@ export async function createScene(canvas,map){
    // close-range reveal so a face emerging from the dark reads as a scare.
    toEnemy.copy(sprite.position).sub(camera.position);const distance=toEnemy.length();
    const alignment=toEnemy.normalize().dot(lookTarget);
-   const beam=run.torch?THREE.MathUtils.smoothstep(alignment,Math.cos(.52),Math.cos(.26))*Math.max(0,1-distance/22):0;
+   const beam=run.torch?THREE.MathUtils.smoothstep(alignment,Math.cos(.66),Math.cos(.36))*Math.max(0,1-distance/22):0;
    const close=1-THREE.MathUtils.smoothstep(distance,.85,2.8);
    sprite.material.color.setScalar(Math.max(.012,beam,close));
   });
