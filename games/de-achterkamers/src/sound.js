@@ -1,7 +1,7 @@
 export class Sound {
  constructor(){this.context=null;this.volume=.45;this.enabled=true;this.nextStep=0;this.music=null;this.matchActive=false;this.mijkeBuffer=null;this.mijkeVoice=null;this.mijkeNear=false;}
  init(){if(this.context){this.context.resume();return;}const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const c=this.context=new Audio();this.master=c.createGain();this.master.gain.value=this.volume;this.master.connect(c.destination);this.hum=c.createOscillator();this.hum.type='sine';this.hum.frequency.value=58;this.humGain=c.createGain();this.humGain.gain.value=0;this.hum.connect(this.humGain).connect(this.master);this.hum.start();this.chase=c.createOscillator();this.chase.type='sine';this.chase.frequency.value=41;this.chaseGain=c.createGain();this.chaseGain.gain.value=0;this.chase.connect(this.chaseGain).connect(this.master);this.chase.start();}
- setVolume(value){this.volume=Math.max(0,Math.min(1,value));if(this.master)this.master.gain.setTargetAtTime(this.enabled?this.volume:0,this.context.currentTime,.08);if(this.music)this.music.volume=this.enabled?this.volume*.55:0;}
+ setVolume(value){this.volume=Math.max(0,Math.min(1,value));if(this.master)this.master.gain.setTargetAtTime(this.enabled?this.volume:0,this.context.currentTime,.08);if(this.music)this.music.volume=this.enabled?this.volume*.2:0;}
  startMatch(){
   this.matchActive=true;
   if(this.context&&!this.mijkeLoad){
@@ -40,7 +40,7 @@ export class Sound {
    source.start();this.mijkeVoice={source,gain,pan};
   }
   const voice=this.mijkeVoice;
-  voice.gain.gain.setTargetAtTime(.18+.62*Math.max(0,1-distance/12),t,.08);
+  voice.gain.gain.setTargetAtTime(.35+.85*Math.max(0,1-distance/12),t,.08);
   const dx=mijke.x-p.x,dz=mijke.z-p.z;
   voice.pan.pan.setTargetAtTime(Math.max(-1,Math.min(1,(dx*Math.cos(p.yaw)-dz*Math.sin(p.yaw))/Math.max(.01,distance))),t,.08);
  }

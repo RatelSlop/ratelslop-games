@@ -17,13 +17,13 @@ test('match music is lazy, loops, pauses and resumes, and restarts after leaving
  sound.setVolume(.6);sound.startMatch();
  const music=created[0];
  assert.equal(music.src,'https://example.test/hub/games/de-achterkamers/audio/charlies-inferno.mp3');
- assert.equal(music.loop,true);assert.equal(music.paused,false);assert.equal(music.volume,.6*.55);
+ assert.equal(music.loop,true);assert.equal(music.paused,false);assert.equal(music.volume,.6*.2);
  music.currentTime=42;sound.pause();
  assert.equal(music.paused,true);assert.equal(music.currentTime,42);
  sound.startMatch();assert.equal(music.paused,false);assert.equal(music.currentTime,42);
  assert.equal(created.length,1,'resume reuses the track');
  sound.toggle();assert.equal(music.volume,0);
- sound.toggle();assert.equal(music.volume,.6*.55);
+ sound.toggle();assert.equal(music.volume,.6*.2);
  sound.stopMatch();assert.equal(music.paused,true);assert.equal(music.currentTime,0);
  sound.startMatch();assert.equal(music.currentTime,0);assert.equal(music.plays,3);
 });
