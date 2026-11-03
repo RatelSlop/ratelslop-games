@@ -36,6 +36,8 @@ Normal play has bright warm ceiling lighting, visible rooms and the original cei
 
 Thomas moves at 5.8 m/s, Jaap at 4.75, Marola at 4.0 and Mijke at 3.2 before difficulty multipliers. Walking is 4.1 m/s and sprinting is 7.15 m/s.
 
+Each match shuffles the chasers' arrival order. Any of the four can pursue first after the difficulty's grace period; the others join in that shuffled order as passes are collected. Portrait and proximity-audio identities stay attached to their characters.
+
 The user-supplied **Charlie's Inferno** MP3 is bundled at `public/audio/charlies-inferno.mp3`; its checksum and provenance are in the adjacent JSON file. It loops during matches, pauses without losing position, resumes with play, and stops/resets on win, capture, quit or retry. It never autoplays in the initial menu. The existing volume control adjusts the music and effects together; the music stays at the quieter mix requested by the user.
 
 Mijke's **Mijn Meubilair** proximity clip at `public/audio/mijke-meubilair.mp3` loops within 10 metres, gets louder as she approaches, pans with her position and stops beyond 12 metres. Pause, capture, win and quit stop it immediately. The shared volume control applies to it.

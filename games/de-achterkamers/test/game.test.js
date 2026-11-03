@@ -79,7 +79,29 @@ test('the separate source pillar modules block movement inside the large rooms',
 });
 test('collected cards cannot be claimed twice and exit requires all cards',()=>{const r=makeRun(11,'rustig');assert.equal(interact(r),false);for(const key of r.keys){Object.assign(r.player,{x:key.x,z:key.z});assert.equal(interact(r),true);assert.equal(interact(r),false);}Object.assign(r.player,r.map.center(r.map.start));assert.equal(interact(r),true);assert.equal(r.status,'won');});
 test('pause freezes simulation and enemy grace prevents spawn catches',()=>{const r=makeRun(8);r.status='paused';const before={...r.player};tick(r,{forward:1},1);assert.deepEqual(r.player,before);assert.equal(r.time,0);r.status='playing';tick(r,{forward:1},.04);assert.equal(r.enemies.some(e=>e.active),false);});
-test('enemy paths use walkable cell edges and catch triggers terminal state',()=>{const r=makeRun(4);r.time=20;const p=r.player;Object.assign(r.enemies[0],{x:p.x+.1,z:p.z+.1});tick(r,{},.016);assert.equal(r.status,'caught');assert.equal(r.caughtBy,'mijke');});
+test('enemy paths use walkable cell edges and catch triggers terminal state',()=>{const r=makeRun(4);r.time=20;r.collected=5;const p=r.player;Object.assign(r.enemies[0],{x:p.x+.1,z:p.z+.1});tick(r,{},.016);assert.equal(r.status,'caught');assert.equal(r.caughtBy,'mijke');});
+
+test('every character can be first, and the shuffled chase order escalates without changing identity',()=>{
+ const firsts=new Map(),orders=new Set();
+ for(let seed=1;seed<=300;seed++){
+  const r=makeRun(seed),ranks=r.enemies.map(e=>e.activationOrder);
+  assert.deepEqual([...ranks].sort(),[0,1,2,3]);
+  assert.deepEqual(ranks,makeRun(seed).enemies.map(e=>e.activationOrder));
+  assert.deepEqual(r.enemies.map(e=>e.id),['mijke','marola','jaap','thomas']);
+  orders.add(ranks.join(','));
+  r.time=r.rules.grace-1;tick(r,{},.01);assert.equal(r.enemies.filter(e=>e.active).length,0);
+  r.time=r.rules.grace+1;tick(r,{},.01);
+  const first=r.enemies.filter(e=>e.active);assert.equal(first.length,1);
+  firsts.set(first[0].id,(firsts.get(first[0].id)||0)+1);
+  for(const [cards,count] of [[1,2],[3,3],[5,4]]){
+   r.collected=cards;tick(r,{},.01);
+   assert.equal(r.enemies.filter(e=>e.active).length,count);
+   assert.ok(first[0].active,'first chaser stays active as the others join');
+  }
+ }
+ assert.equal(firsts.size,4);for(const count of firsts.values())assert.ok(count>40&&count<110);
+ assert.equal(orders.size,24,'all arrival permutations are available');
+});
 test('complete routes collect every pass and reach the exit in all modes and multiple codes',()=>{for(const seed of [42971,51,52])for(const mode of ['rustig','normaal','nachtmerrie']){const r=makeRun(seed,mode);r.rules={...r.rules,grace:Infinity};function walkTo(cell){for(const id of r.map.path(r.map.cellAt(r.player.x,r.player.z),cell)){const goal=r.map.center(id);let attempts=0;while(Math.hypot(goal.x-r.player.x,goal.z-r.player.z)>.08&&attempts++<500){const dx=goal.x-r.player.x,dz=goal.z-r.player.z,d=Math.hypot(dx,dz);r.player.yaw=0;tick(r,{forward:-dz/d,strafe:dx/d},Math.min(.04,d/4.1));}assert.ok(attempts<500,'route segment must not get stuck');}}for(const key of r.keys){walkTo(key.cell);assert.equal(interact(r),true);}walkTo(r.map.start);assert.equal(interact(r),true);assert.equal(r.status,'won');}});
 test('a pursuing face can navigate the maze to the stationary player',()=>{const r=makeRun(42971);r.rules={...r.rules,grace:0};for(let i=0;i<6000&&r.status==='playing';i++)tick(r,{},.05);assert.equal(r.status,'caught');});
 
@@ -100,7 +122,7 @@ test('individual source walls prevent catches and pickups through the model',()=
  const r=makeRun(),wall=r.map.walls.find(w=>w.w<1&&w.x>CELL&&w.z>CELL&&!r.map.blocked(w.x-1,w.z));
  const x=wall.x,z=wall.z;
  Object.assign(r.player,{x:x-.39,z});
- Object.assign(r.enemies[0],{x:x+.39,z});r.rules={...r.rules,grace:0};
+ Object.assign(r.enemies[0],{x:x+.39,z});r.rules={...r.rules,grace:0};r.collected=5;
  r.keys[0]={x:x+.39,z,taken:false};
  assert.equal(interact(r),false);tick(r,{},.001);assert.equal(r.status,'playing');
 });
