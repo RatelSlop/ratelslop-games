@@ -1,0 +1,49 @@
+RATELSLOP POCKET - NUMWORKS EDITION
+Target: NumWorks N0120, standard Epsilon 25.2.0 Python app.
+
+INSTALL ONCE
+1. Unzip ratelslop-numworks.zip on your computer.
+2. Open https://my.numworks.com/python/ in Chrome or Edge.
+3. Create a script named ratelslop.py. Paste the contents of the supplied
+   ratelslop.py file into its editor (or import the file if offered).
+4. Connect the calculator by USB and send this script to the calculator.
+   Keep your existing scripts; this edition needs one script slot and about
+   14 KB of script storage. Free space only if the calculator requests it.
+5. On the calculator open Python, then the Python shell. Enter:
+     from ratelslop import *
+     main()
+   Disable automatic import for other game scripts if they run at startup.
+6. Disconnect USB. Every game works offline on the calculator.
+
+CONTROLS
+Arrows: select / move. OK or EXE: play / interact / retry.
+DEL (the backspace key): return to the launcher, or exit from its menu.
+ALPHA: pause. OK: resume. DEL: leave a paused game.
+Home or Back: the calculator's normal Python exit/interrupt controls.
+
+GAMES
+De Achterkamers: collect 3 amber passes and return to the green exit.
+  Arrows move; SHIFT sprints using stamina; OK switches the flashlight.
+  Four colored chasers start pursuing after a short grace period.
+BouncyKoen: hop up through 40 lanes. Avoid red vehicles; stand on yellow
+  logs in blue water. Arrows move; do not drift off the screen.
+ConciergeDienst: survive 60 seconds. Left/right changes security camera;
+  OK reports an anomaly. Normal rooms have a closed door, one window,
+  two tables and a 12:00 clock. Three simultaneous anomalies or three
+  false reports lose the shift.
+UAVPilot: arrows steer through 20 openings without touching the red bars.
+De Laatste Les: left/right selects a defense pad. OK builds or upgrades
+  a tower; SHIFT starts the next wave. Defend eight waves with ten lives.
+AH Gennep: left/right selects a shelf. OK adds stock. SHIFT serves the
+  next customer if their requested product is available. Serve 20 customers
+  before 90 seconds or five customers leave.
+
+This is a simplified calculator edition, not the browser games. It uses
+drawn 2D graphics without the GLB map, photographs or MP3 playback.
+High scores last for the current Python session; they are not saved to disk.
+No custom firmware, network connection, browser, packages or server are
+needed on the calculator after transfer.
+
+Validation: automated CPython logic tests and official NumWorks emulator
+smoke tests. The currently available official emulator is Epsilon 26.3.0;
+physical N0120 / 25.2.0 execution has not been directly verified.

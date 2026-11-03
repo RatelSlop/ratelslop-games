@@ -7,4 +7,5 @@ node_modules/
 # Game builds are assembled by GitHub Actions.
 dist/games/
 dist/build-info.json
+dist/numworks/
 .impeccable/review/

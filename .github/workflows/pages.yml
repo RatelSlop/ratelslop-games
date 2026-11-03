@@ -29,6 +29,8 @@ jobs:
           node-version: '24'
       - name: Refresh public game builds
         run: node scripts/refresh-games.mjs
+      - name: Build offline NumWorks edition
+        run: python3 ports/numworks/build.py
       - name: Validate packaged game paths
         run: node scripts/verify-site.mjs
       - name: Configure Pages
