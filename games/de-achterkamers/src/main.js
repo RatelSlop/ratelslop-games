@@ -5,16 +5,18 @@ import '@fontsource/manrope/latin-700.css';
 import './style.css';
 import {makeRun,tick,interact,nearby,PEOPLE} from './simulation.js';
 import {CELL} from './map.js';
+import {freshSeed} from './layout.js';
 import {createScene} from './scene.js';
 import {Sound} from './sound.js';
 const $=id=>document.getElementById(id),canvas=$('world');
-const search=new URLSearchParams(location.search);const initialSeed=Math.max(1,Math.min(999999,Number(search.get('seed'))||42971));
+const search=new URLSearchParams(location.search);const rollSeed=previous=>freshSeed(previous,crypto.getRandomValues(new Uint32Array(1))[0]/4294967296);const initialSeed=rollSeed();
 $('seed').value=initialSeed;if(['rustig','normaal','nachtmerrie'].includes(search.get('mode')))$('mode').value=search.get('mode');
 $('reduced').checked=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let run=makeRun(initialSeed,$('mode').value),view=null,screen='menu',ready=false,lookDrag=null,hadLock=false,lastFrame=performance.now(),noticeUntil=0,minimap=false,joystick={x:0,y:0},touchSprint=false;
 const keys=new Set(),visited=new Set(),sound=new Sound();
+let powerChanges=0;
 const fmt=value=>`${String(Math.floor(value/60)).padStart(2,'0')}:${String(Math.floor(value%60)).padStart(2,'0')}`;
-function storedBest(mode){try{const x=Number(localStorage.getItem('achterkamers-maze-v2-best-'+mode));return x>0?x:null;}catch{return null;}}
+function storedBest(mode){try{const x=Number(localStorage.getItem('achterkamers-random-v3-best-'+mode));return x>0?x:null;}catch{return null;}}
 function bestLabel(){const b=storedBest($('mode').value);$('best-menu').textContent=b?'Beste ontsnapping: '+fmt(b):'Nog geen ontsnapping geregistreerd.';}
 bestLabel();$('mode').onchange=bestLabel;
 function notice(text,seconds=3){$('notice').textContent=text;noticeUntil=performance.now()+seconds*1000;$('notice').style.opacity='1';}
@@ -24,19 +26,22 @@ async function lock(){if(matchMedia('(pointer:coarse)').matches)return;try{await
 function setScreen(next){screen=next;$('menu').hidden=next!=='menu';$('hud').hidden=!['playing','paused'].includes(next);$('pause-screen').hidden=next!=='paused';$('result').hidden=next!=='result';if(next==='playing')sound.startMatch();else{clearInput();unlock();if(next==='paused')sound.pause();else sound.stopMatch();}}
 function pause(){if(screen!=='playing')return;setScreen('paused');$('resume').focus();}
 async function start(){
- if(!ready)return;const seed=Math.max(1,Math.min(999999,Math.round(Number($('seed').value)||42971)));const mode=$('mode').value;
+ if(!ready)return;const seed=rollSeed(run.map.seed);const mode=$('mode').value;$('seed').value=seed;
  sound.init();sound.setVolume(Number($('volume').value)/100);sound.stopMatch();
- if(seed!==run.map.seed){ready=false;$('start').disabled=true;$('load-status').textContent='De passen worden klaargelegd.';const old=view;view=null;old?.dispose();run=makeRun(seed,mode);try{view=await createScene(canvas,run.map);}catch(e){fail(e);return;}ready=true;$('start').disabled=false;}
- else run=makeRun(seed,mode);
- visited.clear();minimap=false;$('map').hidden=true;hadLock=false;clearInput();setScreen('playing');history.replaceState(null,'',`?seed=${seed}&mode=${mode}`);notice('Onthoud de uitgang. Verzamel '+run.keys.length+' passen.',5);lock();
+ ready=false;$('start').disabled=true;$('load-status').textContent='Nieuwe kamers worden gebouwd.';
+ const old=view;view=null;old?.dispose();run=makeRun(seed,mode);
+ try{view=await createScene(canvas,run.map);}catch(e){fail(e);return;}
+ ready=true;$('start').disabled=false;$('load-status').textContent='Klaar. Elk spel krijgt een nieuwe kaart.';
+ powerChanges=0;visited.clear();minimap=false;$('map').hidden=true;hadLock=false;clearInput();setScreen('playing');history.replaceState(null,'',`?seed=${seed}&mode=${mode}`);notice('Nieuwe kamers. Verzamel '+run.keys.length+' passen. Let op stroomuitval.',5);lock();
 }
-function finish(){setScreen('result');const won=run.status==='won';let best=storedBest(run.mode);if(won&&(!best||run.time<best)){best=run.time;try{localStorage.setItem('achterkamers-maze-v2-best-'+run.mode,String(best));}catch{}}
+function finish(){setScreen('result');const won=run.status==='won';let best=storedBest(run.mode);if(won&&(!best||run.time<best)){best=run.time;try{localStorage.setItem('achterkamers-random-v3-best-'+run.mode,String(best));}catch{}}
  $('result-title').textContent=won?'Je bent buiten.':'Ingehaald.';$('result-copy').textContent=won?'Voor nu. De kamers zijn er morgen ook nog.':`${PEOPLE.find(p=>p.id===run.caughtBy)?.name||'Iemand'} was je net iets te snel af. De passen lagen er nog. De uitgang ook.`;
  $('result-face').hidden=won;if(!won)$('result-face').src=`faces/${run.caughtBy}.webp`;$('result-time').textContent=fmt(run.time);$('result-cards').textContent=run.collected+' / '+run.keys.length;$('result-best').textContent=best?fmt(best):'—';sound.tone(won?660:56,won?.6:.45,.18);$('again').focus();bestLabel();
 }
 function fail(error){console.error('Game startup failed',error);$('load-status').classList.add('game-error');$('load-status').textContent='De 3D-wereld kon niet laden. Gebruik een recente browser met WebGL en hardwareversnelling.';$('start').textContent='Opnieuw laden';$('start').disabled=false;$('start').onclick=()=>location.reload();}
 function drawMap(){const c=$('map'),x=c.getContext('2d'),size=run.map.size,scale=c.width/size;x.clearRect(0,0,c.width,c.height);x.fillStyle='#11180e';x.fillRect(0,0,c.width,c.height);for(const i of visited){const cell=run.map.cells[i];x.fillStyle='#777b53';x.fillRect(cell.x*scale,cell.z*scale,Math.max(1,scale),Math.max(1,scale));x.strokeStyle='#d7d0a0';x.lineWidth=1;cell.open.forEach((open,d)=>{if(open)return;const a=cell.x*scale,b=cell.z*scale;x.beginPath();if(d===0){x.moveTo(a,b);x.lineTo(a+scale,b);}if(d===1){x.moveTo(a+scale,b);x.lineTo(a+scale,b+scale);}if(d===2){x.moveTo(a,b+scale);x.lineTo(a+scale,b+scale);}if(d===3){x.moveTo(a,b);x.lineTo(a,b+scale);}x.stroke();});}for(const k of run.keys)if(!k.taken&&visited.has(k.cell)){x.fillStyle='#f2ca6d';x.fillRect((k.x/CELL)*scale-2,(k.z/CELL)*scale-2,4,4);}const exit=run.map.center(run.map.start);x.fillStyle='#86cd98';x.fillRect(exit.x/CELL*scale-2,exit.z/CELL*scale-2,4,4);x.fillStyle='#fff4d1';x.beginPath();x.arc(run.player.x/CELL*scale,run.player.z/CELL*scale,3,0,Math.PI*2);x.fill();}
 function updateHUD(){const p=run.player;$('card-count').textContent=run.collected+' / '+run.keys.length;$('objective-copy').textContent=run.collected===run.keys.length?'Terug naar de uitgang':'Zoek toegangspassen';$('timer').textContent=fmt(run.time);$('compass').textContent=['N','O','Z','W'][((Math.round(-p.yaw/(Math.PI/2))%4)+4)%4];$('stamina-fill').style.width=p.stamina+'%';$('stamina-copy').textContent=p.stamina<12?'Kom op adem.':'Shift om te sprinten';
+ if(powerChanges!==run.power.changes){powerChanges=run.power.changes;notice(run.power.blackout?'Stroomuitval. Gebruik je zaklamp (F).':'De verlichting is terug.',5);sound.tone(run.power.blackout?65:220,.18,.08,'triangle');}
  const target=nearby(run);$('hint').hidden=!target;$('interact').hidden=!target;if(target){$('hint-label').textContent=target.label;$('interact').textContent=target.label;}
  const enemies=run.enemies.filter(e=>e.active).map(e=>({...e,distance:Math.hypot(e.x-p.x,e.z-p.z)})).sort((a,b)=>a.distance-b.distance);const nearest=enemies[0];const close=nearest&&nearest.distance<6&&run.map.clearSegment(p,nearest,.05);$('threat').hidden=!close;
  if(close){$('threat-name').textContent=nearest.name;const image='faces/'+nearest.id+'.webp';if($('threat-face').getAttribute('src')!==image)$('threat-face').src=image;}

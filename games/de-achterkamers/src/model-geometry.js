@@ -3,7 +3,7 @@ import {LAYOUT,CELL_SIZE,HEIGHT,TILE_SIZE} from './layout.js';
 
 // Reuse the actual model parts, their UVs, normals and embedded materials.
 // Instancing keeps hundreds of walls and sixteen ceiling sections inexpensive.
-export function buildEnvironment(source){
+export function buildEnvironment(source,layout=LAYOUT){
  source.updateMatrixWorld(true);
  const meshes=[];source.traverse(o=>{if(o.isMesh)meshes.push(o);});
  const select=prefix=>meshes.filter(m=>m.parent.name.startsWith(prefix));
@@ -26,9 +26,14 @@ export function buildEnvironment(source){
    mesh.computeBoundingBox();mesh.computeBoundingSphere();environment.add(mesh);
   }
  }
- instances(wall,bounds(wall),new Vector3(.22,HEIGHT,CELL_SIZE+.22),LAYOUT.walls,'wall');
- instances(pillar,bounds(pillar),new Vector3(1.05,HEIGHT,1.05),LAYOUT.pillars,'pillar');
+ instances(wall,bounds(wall),new Vector3(.22,HEIGHT,CELL_SIZE+.22),layout.walls,'wall');
+ instances(pillar,bounds(pillar),new Vector3(1.05,HEIGHT,1.05),layout.pillars,'pillar');
  const shell=bounds([...floor,...ceiling]);
- instances([...floor,...ceiling,...fixtures],shell,new Vector3(TILE_SIZE,HEIGHT,TILE_SIZE),LAYOUT.tiles,'shell');
+ // Both original Celing meshes are required: tiles and the raised gap/grid mesh.
+ // Share one normalization so their joints and fluorescent openings stay aligned.
+ const shellSize=new Vector3(TILE_SIZE,HEIGHT,TILE_SIZE);
+ instances(floor,shell,shellSize,layout.tiles,'floor');
+ instances(ceiling,shell,shellSize,layout.tiles,'ceiling');
+ instances(fixtures,shell,shellSize,layout.tiles,'fixture');
  return environment;
 }

@@ -5,13 +5,13 @@ import {buildEnvironment} from './model-geometry.js';
 export async function createScene(canvas,map){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
- renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
- const scene=new THREE.Scene();scene.background=new THREE.Color('#020302');scene.fog=new THREE.FogExp2('#040504',.075);
+ renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
+ const scene=new THREE.Scene();scene.background=new THREE.Color('#b5ad7b');scene.fog=new THREE.FogExp2('#b5ad7b',.018);
  const camera=new THREE.PerspectiveCamera(78,innerWidth/innerHeight,.06,75);camera.rotation.order='YXZ';
- const ambient=new THREE.HemisphereLight('#cbd1b5','#050605',.035);scene.add(ambient);
+ const ambient=new THREE.HemisphereLight('#fff3ca','#7c7355',1.65);scene.add(ambient);
  // Preserve the packed model's separate meshes, UVs and embedded textures.
  const gltf=await new GLTFLoader().loadAsync(new URL('models/backrooms.glb',document.baseURI).href);
- const environment=buildEnvironment(gltf.scene);
+ const environment=buildEnvironment(gltf.scene,map.layout),fixtureMaterials=new Set();
  environment.traverse(object=>{
   if(!object.isMesh)return;
   object.receiveShadow=true;object.castShadow=object.name.startsWith('wall_')||object.name.startsWith('pillar_');
@@ -19,12 +19,13 @@ export async function createScene(canvas,map){
   for(const material of materials){
    if(material.map)material.map.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
    material.roughness=Math.max(material.roughness,.8);
-   if(material.name==='Ligts'){material.emissive.set('#b9b583');material.emissiveIntensity=.035;}
+   if(material.name==='Ligts'){material.emissive.set('#fff1bf');material.emissiveIntensity=2;fixtureMaterials.add(material);}
+   if(object.name.startsWith('ceiling_'))material.side=THREE.DoubleSide;
   }
  });
  scene.add(environment);
  const positions=MODEL.lights.map(([x,y,z])=>new THREE.Vector3(x,y-.12,z));
- const pool=Array.from({length:4},()=>{const l=new THREE.PointLight('#b9b583',.12,3.6,2);scene.add(l);return l;});
+ const pool=Array.from({length:6},()=>{const l=new THREE.PointLight('#fff0bc',9,12,2);scene.add(l);return l;});
  const flashlight=new THREE.SpotLight('#fff5d7',65,22,.50,.72,1.5);
  flashlight.castShadow=true;flashlight.shadow.mapSize.set(1024,1024);flashlight.shadow.camera.near=.1;flashlight.shadow.camera.far=22;flashlight.shadow.bias=-.0002;flashlight.shadow.normalBias=.025;
  scene.add(flashlight,flashlight.target);
@@ -37,12 +38,18 @@ export async function createScene(canvas,map){
  const loader=new THREE.TextureLoader();const faces=await Promise.all(['mijke','marola','jaap','thomas'].map(id=>loader.loadAsync(new URL(`faces/${id}.webp`,document.baseURI).href)));
  const enemies=faces.map((texture,i)=>{texture.colorSpace=THREE.SRGBColorSpace;const mat=new THREE.SpriteMaterial({map:texture,transparent:true,alphaTest:.08,depthWrite:false,color:'#ffffff',toneMapped:false});const sprite=new THREE.Sprite(mat);sprite.scale.set(2.18,2.18,1);sprite.visible=false;scene.add(sprite);return sprite;});
  const cards=map.objectives.map((cell,i)=>{const g=new THREE.Group();const p=map.center(cell);g.position.set(p.x,0,p.z);const pedestal=new THREE.Mesh(new THREE.BoxGeometry(.48,.95,.42),new THREE.MeshStandardMaterial({color:'#535744',roughness:.65,metalness:.4}));pedestal.position.y=.475;g.add(pedestal);const card=new THREE.Mesh(new THREE.BoxGeometry(.29,.45,.025),new THREE.MeshStandardMaterial({color:'#f8c75a',emissive:'#9f6d13',emissiveIntensity:.12,roughness:.35,metalness:.35}));card.position.y=1.3;g.add(card);const beacon=new THREE.PointLight('#f4cf75',.4,2.3);beacon.position.y=1.7;g.add(beacon);const tag=new THREE.Mesh(new THREE.PlaneGeometry(.7,.26),label(`PAS ${i+1}`,'#292f26','#f3ca74'));tag.position.set(0,.74,.22);g.add(tag);scene.add(g);return{group:g,card};});
- let previewTime=0;const lookTarget=new THREE.Vector3(),toEnemy=new THREE.Vector3();
+ let previewTime=0,lastBlackout=null;const lookTarget=new THREE.Vector3(),toEnemy=new THREE.Vector3();
  function render(run,{preview=false,reduced=false,behind=false}={}){
   const p=run.player;previewTime+=.016;camera.position.set(p.x,1.63+(reduced||preview?0:Math.sin(run.steps*2.4)*.036),p.z);camera.rotation.y=p.yaw+(behind?Math.PI:0)+(preview?Math.sin(previewTime*.075)*.16:0);camera.rotation.x=p.pitch;
   camera.fov=THREE.MathUtils.lerp(camera.fov,run.sprint?85:78,.08);camera.updateProjectionMatrix();
-  const nearest=positions.map((pos,i)=>({i,d:pos.distanceToSquared(camera.position)})).sort((a,b)=>a.d-b.d).slice(0,4);
-  pool.forEach((l,i)=>{l.visible=!!nearest[i];if(nearest[i])l.position.copy(positions[nearest[i].i]);});
+  const blackout=!preview&&run.power.blackout;
+  if(blackout!==lastBlackout){
+   lastBlackout=blackout;ambient.intensity=blackout?.035:1.65;
+   scene.background.set(blackout?'#020302':'#b5ad7b');scene.fog.color.set(blackout?'#040504':'#b5ad7b');scene.fog.density=blackout?.075:.018;
+   fixtureMaterials.forEach(material=>material.emissiveIntensity=blackout?0:2);
+  }
+  const nearest=positions.map((pos,i)=>({i,d:pos.distanceToSquared(camera.position)})).sort((a,b)=>a.d-b.d).slice(0,pool.length);
+  pool.forEach((l,i)=>{l.visible=!blackout&&!!nearest[i];if(nearest[i])l.position.copy(positions[nearest[i].i]);});
   flashlight.position.copy(camera.position);camera.getWorldDirection(lookTarget);flashlight.target.position.copy(camera.position).add(lookTarget);flashlight.visible=run.torch;
   run.enemies.forEach((e,i)=>{
    const sprite=enemies[i];sprite.visible=e.active;sprite.position.set(e.x,1.55+(reduced?0:Math.sin(run.time*3+i)*.07),e.z);
@@ -52,7 +59,7 @@ export async function createScene(canvas,map){
    const alignment=toEnemy.normalize().dot(lookTarget);
    const beam=run.torch?THREE.MathUtils.smoothstep(alignment,Math.cos(.66),Math.cos(.36))*Math.max(0,1-distance/22):0;
    const close=1-THREE.MathUtils.smoothstep(distance,.85,2.8);
-   sprite.material.color.setScalar(Math.max(.012,beam,close));
+   sprite.material.color.setScalar(blackout?Math.max(.012,beam,close):1);
   });
   cards.forEach((c,i)=>{c.group.visible=i<run.keys.length&&!run.keys[i].taken;c.card.rotation.y=reduced?0:run.time*.65+i;c.card.position.y=1.29+(reduced?0:Math.sin(run.time*2+i)*.04);});
   exitLamp.color.set(run.collected===run.keys.length?'#93dc9e':'#ba7453');renderer.render(scene,camera);
