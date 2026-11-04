@@ -69,7 +69,7 @@ export function tick(run,input,delta){
   const target=e.path.length>1?run.map.center(e.path[1]):goal;
   const dx=target.x-e.x,dz=target.z-e.z,distance=Math.hypot(dx,dz),v=Math.min(6.8,e.speed*run.rules.speed*(run.sprint?1.045:1)*(run.phase==='escape'?1.08:1))*dt;
   if(distance>.03)run.map.move(e,dx/distance*Math.min(v,distance),dz/distance*Math.min(v,distance),.31);
-  const catchRadius=run.hiding===null?.82:1.35;
-  if((run.hiding===null||e.suspiciousLocker===run.hiding)&&Math.hypot(e.x-p.x,e.z-p.z)<catchRadius&&run.map.clearSegment(e,p,.05)){run.status='caught';run.caughtBy=e.id;run.event='caught';break;}
+  // A fully occupied locker always protects the player, including witnessed entry.
+  if(run.hiding===null&&Math.hypot(e.x-p.x,e.z-p.z)<.82&&run.map.clearSegment(e,p,.05)){run.status='caught';run.caughtBy=e.id;run.event='caught';break;}
  }
 }

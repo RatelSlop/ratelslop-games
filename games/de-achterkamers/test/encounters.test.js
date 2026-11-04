@@ -19,12 +19,17 @@ test('a player can hide and leave, cannot walk inside a locker, and retains flas
  assert.equal(nearby(r).kind,'leave');assert.equal(interact(r),true);assert.equal(r.hiding,null);assert.equal(r.event,'leave');
 });
 
-test('unseen hiding conceals the player, but a chaser that witnesses entry can open the locker',()=>{
- for(const witnessed of [false,true]){
+test('lockers protect against every chaser, even witnessed entry during the final escape',()=>{
+ for(const phase of ['collect','escape'])for(const witnessed of [false,true])for(let person=0;person<4;person++){
   const r=makeRun(52),l=r.map.lockers[0];Object.assign(r.player,l.approach);
-  r.enemies=[{...r.enemies[0],...l.approach,activationOrder:0,active:witnessed}];r.rules={...r.rules,grace:0};r.time=2;
+  r.phase=phase;r.power.nextChange=Infinity;
+  r.enemies=[{...r.enemies[person],...l.approach,activationOrder:0,active:witnessed}];r.rules={...r.rules,grace:0};r.time=2;
   assert.ok(interact(r));assert.equal(r.enemies[0].suspiciousLocker,witnessed?l.id:null);
-  tick(r,{},.02);assert.equal(r.status,witnessed?'caught':'playing');
+  for(let frame=0;frame<200;frame++)tick(r,{},.05);
+  assert.equal(r.status,'playing');assert.equal(r.hiding,l.id);
+  // Protection ends on exit, so leaving beside an enemy still carries risk.
+  assert.ok(interact(r));Object.assign(r.enemies[0],r.player);tick(r,{},.02);
+  assert.equal(r.status,'caught');assert.equal(r.caughtBy,r.enemies[0].id);
  }
 });
 

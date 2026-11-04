@@ -48,8 +48,10 @@ Twelve full-height lockers are spread through the maze, with one near the start.
 Press E at a locker (or the touch interaction button) to hide; press E to leave.
 Movement and the flashlight are suppressed while hiding, and the camera looks
 through a vent overlay. Chasers that see entry within twelve metres investigate
-that locker and can catch its occupant. Others search the last known position
-and patrol nearby passages. Hiding does not pause match time.
+that locker and can wait outside, but cannot capture its occupant. Others search
+the last known position and patrol nearby passages. Every locker protects the
+player until they leave; stepping out beside a chaser is dangerous. Hiding does
+not pause match time.
 
 The model is [Changing Locker by 3D Assets](https://3dassets.dev/assets/squash-club-and-racket-workshop-changing-locker-ae30f1aa),
 released under CC0 1.0. The original 6,000-triangle GLB is bundled unchanged, with

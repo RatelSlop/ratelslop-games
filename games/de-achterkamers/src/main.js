@@ -53,7 +53,7 @@ function use(){
  if(screen!=='playing')return;
  if(interact(run)){
   if(run.status==='won'){finish();return;}
-  if(run.event==='hide'){sound.tone(115,.25,.12,'triangle');notice('Stil blijven. Als ze je zagen, vinden ze je. E om te verlaten.',5);}
+  if(run.event==='hide'){sound.tone(115,.25,.12,'triangle');notice('Je bent veilig in de locker. Pas op als je uitstapt. E om te verlaten.',5);}
   else if(run.event==='leave'){sound.tone(140,.2,.1,'triangle');notice('Je bent uit de locker.',2);}
   else{sound.tone(640,.2,.16);notice(run.phase==='escape'?'LAATSTE BEL. Iedereen zoekt je. De uitgang is open!':'Toegangspas '+run.collected+' gevonden.',5);}
  }else if(nearby(run)?.kind==='exit')notice('De uitgang is vergrendeld. Je mist nog passen.');
