@@ -1,0 +1,16 @@
+Changing Locker (Squash Club and Racket Workshop)
+By 3D Assets, published through 3DAssets.dev.
+Source: https://3dassets.dev/assets/squash-club-and-racket-workshop-changing-locker-ae30f1aa
+Download: https://cdn.3dassets.dev/assets/29770/v1/model.glb
+License: CC0 1.0 Universal (Public Domain Dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Retrieved 2026-11-03. Source reports 6,000 triangles, five materials,
+and use of AI tools (GPT-6, contributor-reported). The original GLB is bundled
+unchanged at models/locker.glb. SHA-256:
+5338c68dfb627645f9c89438061d36698d2302858fc79f1bb006d108bc45f604
+
+In-game adaptations: instances scaled to 0.95 x 2.35 x 0.9 metres, rotated
+and placed beside maze walls, with collision and hiding interactions.
+Original materials, vent geometry, hinges and handles are retained.
+The camera's interior vent view is a game overlay, not a model animation.

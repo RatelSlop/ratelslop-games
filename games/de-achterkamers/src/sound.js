@@ -1,5 +1,5 @@
 export class Sound {
- constructor(){this.context=null;this.volume=.45;this.enabled=true;this.nextStep=0;this.music=null;this.matchActive=false;this.mijkeBuffer=null;this.mijkeVoice=null;this.mijkeNear=false;}
+ constructor(){this.context=null;this.volume=.45;this.enabled=true;this.nextStep=0;this.music=null;this.matchActive=false;this.mijkeBuffer=null;this.mijkeVoice=null;this.mijkeNear=false;this.phantomSerial=0;this.nextAlarm=0;this.footsteps=new Set();}
  init(){if(this.context){this.context.resume();return;}const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const c=this.context=new Audio();this.master=c.createGain();this.master.gain.value=this.volume;this.master.connect(c.destination);this.hum=c.createOscillator();this.hum.type='sine';this.hum.frequency.value=58;this.humGain=c.createGain();this.humGain.gain.value=0;this.hum.connect(this.humGain).connect(this.master);this.hum.start();this.chase=c.createOscillator();this.chase.type='sine';this.chase.frequency.value=41;this.chaseGain=c.createGain();this.chaseGain.gain.value=0;this.chase.connect(this.chaseGain).connect(this.master);this.chase.start();}
  setVolume(value){this.volume=Math.max(0,Math.min(1,value));if(this.master)this.master.gain.setTargetAtTime(this.enabled?this.volume:0,this.context.currentTime,.08);if(this.music)this.music.volume=this.enabled?this.volume*.2:0;}
  startMatch(){
@@ -48,7 +48,24 @@ export class Sound {
   const voice=this.mijkeVoice;if(!voice)return;
   const t=this.context.currentTime;voice.gain.gain.setTargetAtTime(0,t,.03);voice.source.stop(t+fade);this.mijkeVoice=null;
  }
- update(run,distance){if(!this.context)return;this.updateMijke(run);const t=this.context.currentTime;this.chaseGain.gain.setTargetAtTime(run.status==='playing'?Math.max(0,1-distance/19)*.10:0,t,.2);if(run.status==='playing'&&run.noise>.1&&t>this.nextStep){this.nextStep=t+(run.sprint?.27:.45);this.tone(90+Math.random()*14,.055,.065,'triangle');}}
- pause(){this.matchActive=false;this.mijkeNear=false;this.stopMijke();this.music?.pause();if(this.humGain)this.humGain.gain.setTargetAtTime(0,this.context.currentTime,.1);if(this.chaseGain)this.chaseGain.gain.setTargetAtTime(0,this.context.currentTime,.1);}
- stopMatch(){this.pause();if(this.music)this.music.currentTime=0;}
+ phantomStep(run){
+  const c=this.context,t=c.currentTime,f=run.phantom,p=run.player;
+  if(!this.footBuffer){this.footBuffer=c.createBuffer(1,Math.floor(c.sampleRate*.16),c.sampleRate);const data=this.footBuffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*Math.exp(-i/data.length*5);}
+  const source=c.createBufferSource(),gain=c.createGain(),pan=c.createStereoPanner(),filter=c.createBiquadFilter();
+  source.buffer=this.footBuffer;filter.type='lowpass';filter.frequency.value=run.map.clearSegment(p,f,.05)?600:230;
+  gain.gain.setValueAtTime(.001,t);gain.gain.linearRampToValueAtTime(.42,t+.012);gain.gain.exponentialRampToValueAtTime(.001,t+.15);
+  const dx=f.x-p.x,dz=f.z-p.z;pan.pan.value=Math.max(-1,Math.min(1,(dx*Math.cos(p.yaw)-dz*Math.sin(p.yaw))/Math.max(.01,Math.hypot(dx,dz))));
+  source.connect(filter).connect(pan).connect(gain).connect(this.master);this.footsteps.add(source);
+  source.onended=()=>{this.footsteps.delete(source);source.disconnect();filter.disconnect();pan.disconnect();gain.disconnect();};source.start();source.stop(t+.16);
+ }
+ update(run,distance){
+  if(!this.context)return;this.updateMijke(run);const t=this.context.currentTime;
+  this.chaseGain.gain.setTargetAtTime(run.status==='playing'?Math.max(0,1-distance/19)*.10:0,t,.2);
+  if(!this.matchActive||run.status!=='playing')return;
+  if(run.phantom.serial!==this.phantomSerial){this.phantomSerial=run.phantom.serial;this.phantomStep(run);}
+  if(run.phase==='escape'&&run.time>=this.nextAlarm){this.nextAlarm=run.time+2.4;this.tone(440,.28,.08,'triangle');}
+  if(run.noise>.1&&t>this.nextStep){this.nextStep=t+(run.sprint?.27:.45);this.tone(90+Math.random()*14,.055,.065,'triangle');}
+ }
+ pause(){this.matchActive=false;this.mijkeNear=false;this.stopMijke();for(const source of this.footsteps)source.stop();this.footsteps.clear();this.music?.pause();if(this.humGain)this.humGain.gain.setTargetAtTime(0,this.context.currentTime,.1);if(this.chaseGain)this.chaseGain.gain.setTargetAtTime(0,this.context.currentTime,.1);}
+ stopMatch(){this.pause();this.phantomSerial=0;this.nextAlarm=0;if(this.music)this.music.currentTime=0;}
 }

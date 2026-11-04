@@ -14,7 +14,7 @@ $('seed').value=initialSeed;if(['rustig','normaal','nachtmerrie'].includes(searc
 $('reduced').checked=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let run=makeRun(initialSeed,$('mode').value),view=null,screen='menu',ready=false,lookDrag=null,hadLock=false,lastFrame=performance.now(),noticeUntil=0,minimap=false,joystick={x:0,y:0},touchSprint=false;
 const keys=new Set(),visited=new Set(),sound=new Sound();
-let powerChanges=0;
+let powerChanges=0,mapRevision=0;
 const fmt=value=>`${String(Math.floor(value/60)).padStart(2,'0')}:${String(Math.floor(value%60)).padStart(2,'0')}`;
 function storedBest(mode){try{const x=Number(localStorage.getItem('achterkamers-random-v3-best-'+mode));return x>0?x:null;}catch{return null;}}
 function bestLabel(){const b=storedBest($('mode').value);$('best-menu').textContent=b?'Beste ontsnapping: '+fmt(b):'Nog geen ontsnapping geregistreerd.';}
@@ -23,7 +23,7 @@ function notice(text,seconds=3){$('notice').textContent=text;noticeUntil=perform
 function clearInput(){keys.clear();joystick={x:0,y:0};touchSprint=false;lookDrag=null;$('joystick').firstElementChild.style.transform='translate(0,0)';}
 function unlock(){if(document.pointerLockElement===canvas)document.exitPointerLock();}
 async function lock(){if(matchMedia('(pointer:coarse)').matches)return;try{await canvas.requestPointerLock();}catch{notice('Sleep met de muis om rond te kijken.',4);}}
-function setScreen(next){screen=next;$('menu').hidden=next!=='menu';$('hud').hidden=!['playing','paused'].includes(next);$('pause-screen').hidden=next!=='paused';$('result').hidden=next!=='result';if(next==='playing')sound.startMatch();else{clearInput();unlock();if(next==='paused')sound.pause();else sound.stopMatch();}}
+function setScreen(next){screen=next;$('menu').hidden=next!=='menu';$('hud').hidden=!['playing','paused'].includes(next);$('locker-view').hidden=run.hiding===null||!['playing','paused'].includes(next);$('pause-screen').hidden=next!=='paused';$('result').hidden=next!=='result';if(next==='playing')sound.startMatch();else{clearInput();unlock();if(next==='paused')sound.pause();else sound.stopMatch();}}
 function pause(){if(screen!=='playing')return;setScreen('paused');$('resume').focus();}
 async function start(){
  if(!ready)return;const seed=rollSeed(run.map.seed);const mode=$('mode').value;$('seed').value=seed;
@@ -32,7 +32,7 @@ async function start(){
  const old=view;view=null;old?.dispose();run=makeRun(seed,mode);
  try{view=await createScene(canvas,run.map);}catch(e){fail(e);return;}
  ready=true;$('start').disabled=false;$('load-status').textContent='Klaar. Elk spel krijgt een nieuwe kaart.';
- powerChanges=0;visited.clear();minimap=false;$('map').hidden=true;hadLock=false;clearInput();setScreen('playing');history.replaceState(null,'',`?seed=${seed}&mode=${mode}`);notice('Nieuwe kamers. Verzamel '+run.keys.length+' passen. Let op stroomuitval.',5);lock();
+ powerChanges=0;mapRevision=0;visited.clear();minimap=false;$('map').hidden=true;hadLock=false;clearInput();setScreen('playing');history.replaceState(null,'',`?seed=${seed}&mode=${mode}`);notice('Verzamel '+run.keys.length+' passen. E bij een locker om te schuilen.',5);lock();
 }
 function finish(){setScreen('result');const won=run.status==='won';let best=storedBest(run.mode);if(won&&(!best||run.time<best)){best=run.time;try{localStorage.setItem('achterkamers-random-v3-best-'+run.mode,String(best));}catch{}}
  $('result-title').textContent=won?'Je bent buiten.':'Ingehaald.';$('result-copy').textContent=won?'Voor nu. De kamers zijn er morgen ook nog.':`${PEOPLE.find(p=>p.id===run.caughtBy)?.name||'Iemand'} was je net iets te snel af. De passen lagen er nog. De uitgang ook.`;
@@ -41,14 +41,24 @@ function finish(){setScreen('result');const won=run.status==='won';let best=stor
 function fail(error){console.error('Game startup failed',error);$('load-status').classList.add('game-error');$('load-status').textContent='De 3D-wereld kon niet laden. Gebruik een recente browser met WebGL en hardwareversnelling.';$('start').textContent='Opnieuw laden';$('start').disabled=false;$('start').onclick=()=>location.reload();}
 function drawMap(){const c=$('map'),x=c.getContext('2d'),size=run.map.size,scale=c.width/size;x.clearRect(0,0,c.width,c.height);x.fillStyle='#11180e';x.fillRect(0,0,c.width,c.height);for(const i of visited){const cell=run.map.cells[i];x.fillStyle='#777b53';x.fillRect(cell.x*scale,cell.z*scale,Math.max(1,scale),Math.max(1,scale));x.strokeStyle='#d7d0a0';x.lineWidth=1;cell.open.forEach((open,d)=>{if(open)return;const a=cell.x*scale,b=cell.z*scale;x.beginPath();if(d===0){x.moveTo(a,b);x.lineTo(a+scale,b);}if(d===1){x.moveTo(a+scale,b);x.lineTo(a+scale,b+scale);}if(d===2){x.moveTo(a,b+scale);x.lineTo(a+scale,b+scale);}if(d===3){x.moveTo(a,b);x.lineTo(a,b+scale);}x.stroke();});}for(const k of run.keys)if(!k.taken&&visited.has(k.cell)){x.fillStyle='#f2ca6d';x.fillRect((k.x/CELL)*scale-2,(k.z/CELL)*scale-2,4,4);}const exit=run.map.center(run.map.start);x.fillStyle='#86cd98';x.fillRect(exit.x/CELL*scale-2,exit.z/CELL*scale-2,4,4);x.fillStyle='#fff4d1';x.beginPath();x.arc(run.player.x/CELL*scale,run.player.z/CELL*scale,3,0,Math.PI*2);x.fill();}
 function updateHUD(){const p=run.player;$('card-count').textContent=run.collected+' / '+run.keys.length;$('objective-copy').textContent=run.collected===run.keys.length?'Terug naar de uitgang':'Zoek toegangspassen';$('timer').textContent=fmt(run.time);$('compass').textContent=['N','O','Z','W'][((Math.round(-p.yaw/(Math.PI/2))%4)+4)%4];$('stamina-fill').style.width=p.stamina+'%';$('stamina-copy').textContent=p.stamina<12?'Kom op adem.':'Shift om te sprinten';
- if(powerChanges!==run.power.changes){powerChanges=run.power.changes;notice(run.power.blackout?'Stroomuitval. Gebruik je zaklamp (F).':'De verlichting is terug.',5);sound.tone(run.power.blackout?65:220,.18,.08,'triangle');}
+ $('locker-view').hidden=run.hiding===null;$('escape-banner').hidden=run.phase!=='escape';
+ if(mapRevision!==run.map.revision){mapRevision=run.map.revision;for(const cell of run.map.changedCells)visited.delete(cell);}
+ if(powerChanges!==run.power.changes){powerChanges=run.power.changes;if(run.phase!=='escape'){notice(run.power.blackout?'Stroomuitval. De gangen verschuiven. Zaklamp: F.':'De verlichting is terug.',5);sound.tone(run.power.blackout?65:220,.18,.08,'triangle');}}
  const target=nearby(run);$('hint').hidden=!target;$('interact').hidden=!target;if(target){$('hint-label').textContent=target.label;$('interact').textContent=target.label;}
  const enemies=run.enemies.filter(e=>e.active).map(e=>({...e,distance:Math.hypot(e.x-p.x,e.z-p.z)})).sort((a,b)=>a.distance-b.distance);const nearest=enemies[0];const close=nearest&&nearest.distance<6&&run.map.clearSegment(p,nearest,.05);$('threat').hidden=!close;
  if(close){$('threat-name').textContent=nearest.name;const image='faces/'+nearest.id+'.webp';if($('threat-face').getAttribute('src')!==image)$('threat-face').src=image;}
  $('danger').style.opacity=close?String(Math.max(0,(5.5-nearest.distance)/7)):'0';sound.update(run,nearest?.distance||100);if(minimap)drawMap();if(performance.now()>noticeUntil)$('notice').style.opacity='0';
 }
-function use(){if(screen!=='playing')return;if(interact(run)){if(run.status==='won'){finish();return;}sound.tone(640,.2,.16);notice(run.collected===run.keys.length?'Alle passen gevonden. Terug naar de uitgang.':'Toegangspas '+run.collected+' gevonden.');}else if(nearby(run)?.kind==='exit')notice('De uitgang is vergrendeld. Je mist nog passen.');}
-function toggleTorch(){if(screen!=='playing')return;run.torch=!run.torch;sound.tone(180,.045,.05,'triangle');notice(run.torch?'Zaklamp aan.':'Zaklamp uit.',1.2);}
+function use(){
+ if(screen!=='playing')return;
+ if(interact(run)){
+  if(run.status==='won'){finish();return;}
+  if(run.event==='hide'){sound.tone(115,.25,.12,'triangle');notice('Stil blijven. Als ze je zagen, vinden ze je. E om te verlaten.',5);}
+  else if(run.event==='leave'){sound.tone(140,.2,.1,'triangle');notice('Je bent uit de locker.',2);}
+  else{sound.tone(640,.2,.16);notice(run.phase==='escape'?'LAATSTE BEL. Iedereen zoekt je. De uitgang is open!':'Toegangspas '+run.collected+' gevonden.',5);}
+ }else if(nearby(run)?.kind==='exit')notice('De uitgang is vergrendeld. Je mist nog passen.');
+}
+function toggleTorch(){if(screen!=='playing')return;if(run.hiding!==null){notice('De zaklamp blijft uit terwijl je schuilt.',2);return;}run.torch=!run.torch;sound.tone(180,.045,.05,'triangle');notice(run.torch?'Zaklamp aan.':'Zaklamp uit.',1.2);}
 function toggleMap(){if(screen!=='playing')return;minimap=!minimap;$('map').hidden=!minimap;}
 $('start').onclick=start;$('again').onclick=start;$('result-menu').onclick=$('quit').onclick=()=>{setScreen('menu');run=makeRun(run.map.seed,$('mode').value);$('start').focus();};$('pause').onclick=pause;$('resume').onclick=()=>{setScreen('playing');lock();};$('volume').oninput=()=>sound.setVolume(Number($('volume').value)/100);$('interact').onclick=use;$('touch-map').onclick=toggleMap;$('touch-torch').onclick=toggleTorch;
 addEventListener('keydown',event=>{if(event.code==='Escape'){if(screen==='playing')pause();else if(screen==='paused'){$('resume').click();}return;}if(screen!=='playing')return;if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','ShiftLeft','ShiftRight','KeyE','KeyF','KeyM'].includes(event.code))event.preventDefault();keys.add(event.code);if(!event.repeat){if(event.code==='KeyE')use();if(event.code==='KeyF')toggleTorch();if(event.code==='KeyM')toggleMap();}});

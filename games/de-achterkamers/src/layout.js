@@ -3,6 +3,16 @@ export const GRID=24,CELL_SIZE=4.4,HEIGHT=3.15,TILE_SIZE=CELL_SIZE*6;
 export const LENGTH=GRID*CELL_SIZE;
 export const DIRECTIONS=[[0,-1],[1,0],[0,1],[-1,0]];
 
+export function wallsForCells(cells){
+ const walls=[];
+ for(const c of cells)for(let d=0;d<4;d++){
+  if(c.open[d]||(d===0&&c.z>0)||(d===3&&c.x>0))continue;
+  const vertical=d===1||d===3;
+  walls.push({x:(c.x+.5)*CELL_SIZE+DIRECTIONS[d][0]*CELL_SIZE/2,z:(c.z+.5)*CELL_SIZE+DIRECTIONS[d][1]*CELL_SIZE/2,w:vertical?.22:CELL_SIZE+.22,d:vertical?CELL_SIZE+.22:.22,vertical});
+ }
+ return walls;
+}
+
 export function freshSeed(previous,entropy=Math.random()){
  const seed=1+Math.floor(entropy*999999);
  return seed===previous?seed%999999+1:seed;
@@ -41,12 +51,7 @@ export function makeLayout(seed=42971){
   if(z<room.z+room.h-1)connect(i,index(x,z+1));
  }
  const start=index(1,0);connect(start,index(1,1));
- const walls=[];
- for(const c of cells)for(let d=0;d<4;d++){
-  if(c.open[d]||(d===0&&c.z>0)||(d===3&&c.x>0))continue;
-  const vertical=d===1||d===3;
-  walls.push({x:(c.x+.5)*CELL_SIZE+DIRECTIONS[d][0]*CELL_SIZE/2,z:(c.z+.5)*CELL_SIZE+DIRECTIONS[d][1]*CELL_SIZE/2,w:vertical?.22:CELL_SIZE+.22,d:vertical?CELL_SIZE+.22:.22,vertical});
- }
+ const walls=wallsForCells(cells);
  const pillars=[];
  rooms.forEach((room,r)=>{
   for(let z=1;z<room.h;z++)for(let x=1;x<room.w;x++)if((x+z+r)%2===0)pillars.push({x:(room.x+x)*CELL_SIZE,z:(room.z+z)*CELL_SIZE,w:1.05,d:1.05});

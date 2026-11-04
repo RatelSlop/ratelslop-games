@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Sound} from '../src/sound.js';
 
+test('phantom steps pan spatially, do not repeat a cue, and stop on pause',()=>{
+ const sources=[],param=()=>({value:0,setTargetAtTime(v){this.value=v;},setValueAtTime(v){this.value=v;},linearRampToValueAtTime(){},exponentialRampToValueAtTime(){}}),node=()=>({connect(other){return other;},disconnect(){}});
+ const c={currentTime:5,sampleRate:8000,createBuffer:(_,length)=>({getChannelData:()=>new Float32Array(length)}),createGain:()=>({...node(),gain:param()}),createStereoPanner:()=>({...node(),pan:param()}),createBiquadFilter:()=>({...node(),frequency:param()}),createBufferSource:()=>{const s={...node(),start(){},stop(time){this.stoppedAt=time??0;}};sources.push(s);return s;}};
+ const sound=new Sound();sound.context=c;sound.master=c.createGain();sound.chaseGain=c.createGain();sound.matchActive=true;
+ const run={status:'playing',time:1,phase:'collect',noise:0,player:{x:0,z:0,yaw:0},enemies:[],phantom:{serial:1,x:4,z:3},map:{clearSegment:()=>true}};
+ sound.update(run,100);assert.equal(sources.length,1);assert.equal(sources[0].stoppedAt,5.16);
+ sound.update(run,100);assert.equal(sources.length,1);
+ sound.pause();assert.equal(sources[0].stoppedAt,0);assert.equal(sound.footsteps.size,0);
+ run.phantom.serial++;sound.update(run,100);assert.equal(sources.length,1,'pause cannot emit a new footstep');
+});
+
 test('match music is lazy, loops, pauses and resumes, and restarts after leaving a match',t=>{
  const previousWindow=globalThis.window,previousDocument=globalThis.document,created=[];
  class FakeAudio{

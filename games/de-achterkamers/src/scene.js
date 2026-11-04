@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MODEL} from './map.js';
 import {buildEnvironment} from './model-geometry.js';
+import {buildLockers} from './lockers.js';
 export async function createScene(canvas,map){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
@@ -11,8 +12,8 @@ export async function createScene(canvas,map){
  const ambient=new THREE.HemisphereLight('#fff3ca','#7c7355',1.65);scene.add(ambient);
  // Preserve the packed model's separate meshes, UVs and embedded textures.
  const gltf=await new GLTFLoader().loadAsync(new URL('models/backrooms.glb',document.baseURI).href);
- const environment=buildEnvironment(gltf.scene,map.layout),fixtureMaterials=new Set();
- environment.traverse(object=>{
+ let environment=buildEnvironment(gltf.scene,map.layout),environmentRevision=map.revision;const fixtureMaterials=new Set();
+ function configureEnvironment(group){group.traverse(object=>{
   if(!object.isMesh)return;
   object.receiveShadow=true;object.castShadow=object.name.startsWith('wall_')||object.name.startsWith('pillar_');
   const materials=Array.isArray(object.material)?object.material:[object.material];
@@ -22,8 +23,11 @@ export async function createScene(canvas,map){
    if(material.name==='Ligts'){material.emissive.set('#fff1bf');material.emissiveIntensity=2;fixtureMaterials.add(material);}
    if(object.name.startsWith('ceiling_'))material.side=THREE.DoubleSide;
   }
- });
+ });}
+ configureEnvironment(environment);
  scene.add(environment);
+ const lockerAsset=await new GLTFLoader().loadAsync(new URL('models/locker.glb',document.baseURI).href);
+ const lockers=buildLockers(lockerAsset.scene,map.lockers);lockers.forEach(locker=>scene.add(locker));
  const positions=MODEL.lights.map(([x,y,z])=>new THREE.Vector3(x,y-.12,z));
  const pool=Array.from({length:6},()=>{const l=new THREE.PointLight('#fff0bc',9,12,2);scene.add(l);return l;});
  const flashlight=new THREE.SpotLight('#fff5d7',65,22,.50,.72,1.5);
@@ -38,19 +42,26 @@ export async function createScene(canvas,map){
  const loader=new THREE.TextureLoader();const faces=await Promise.all(['mijke','marola','jaap','thomas'].map(id=>loader.loadAsync(new URL(`faces/${id}.webp`,document.baseURI).href)));
  const enemies=faces.map((texture,i)=>{texture.colorSpace=THREE.SRGBColorSpace;const mat=new THREE.SpriteMaterial({map:texture,transparent:true,alphaTest:.08,depthWrite:false,color:'#ffffff',toneMapped:false});const sprite=new THREE.Sprite(mat);sprite.scale.set(2.18,2.18,1);sprite.visible=false;scene.add(sprite);return sprite;});
  const cards=map.objectives.map((cell,i)=>{const g=new THREE.Group();const p=map.center(cell);g.position.set(p.x,0,p.z);const pedestal=new THREE.Mesh(new THREE.BoxGeometry(.48,.95,.42),new THREE.MeshStandardMaterial({color:'#535744',roughness:.65,metalness:.4}));pedestal.position.y=.475;g.add(pedestal);const card=new THREE.Mesh(new THREE.BoxGeometry(.29,.45,.025),new THREE.MeshStandardMaterial({color:'#f8c75a',emissive:'#9f6d13',emissiveIntensity:.12,roughness:.35,metalness:.35}));card.position.y=1.3;g.add(card);const beacon=new THREE.PointLight('#f4cf75',.4,2.3);beacon.position.y=1.7;g.add(beacon);const tag=new THREE.Mesh(new THREE.PlaneGeometry(.7,.26),label(`PAS ${i+1}`,'#292f26','#f3ca74'));tag.position.set(0,.74,.22);g.add(tag);scene.add(g);return{group:g,card};});
- let previewTime=0,lastBlackout=null;const lookTarget=new THREE.Vector3(),toEnemy=new THREE.Vector3();
+ let previewTime=0,lastLighting=null;const lookTarget=new THREE.Vector3(),toEnemy=new THREE.Vector3();
  function render(run,{preview=false,reduced=false,behind=false}={}){
+  if(environmentRevision!==map.revision){
+   const previous=environment;scene.remove(previous);environment=buildEnvironment(gltf.scene,map.layout);configureEnvironment(environment);scene.add(environment);environmentRevision=map.revision;lastLighting=null;
+   previous.traverse(o=>{if(o.isMesh){o.geometry.dispose();o.dispose?.();}});
+  }
   const p=run.player;previewTime+=.016;camera.position.set(p.x,1.63+(reduced||preview?0:Math.sin(run.steps*2.4)*.036),p.z);camera.rotation.y=p.yaw+(behind?Math.PI:0)+(preview?Math.sin(previewTime*.075)*.16:0);camera.rotation.x=p.pitch;
+  if(run.hiding!==null){const locker=map.lockers[run.hiding];camera.position.set(locker.x+locker.front.x*.5,1.7,locker.z+locker.front.z*.5);camera.rotation.y=p.yaw;}
+  lockers.forEach((locker,i)=>locker.visible=run.hiding!==i);
   camera.fov=THREE.MathUtils.lerp(camera.fov,run.sprint?85:78,.08);camera.updateProjectionMatrix();
-  const blackout=!preview&&run.power.blackout;
-  if(blackout!==lastBlackout){
-   lastBlackout=blackout;ambient.intensity=blackout?.035:1.65;
-   scene.background.set(blackout?'#020302':'#b5ad7b');scene.fog.color.set(blackout?'#040504':'#b5ad7b');scene.fog.density=blackout?.075:.018;
-   fixtureMaterials.forEach(material=>material.emissiveIntensity=blackout?0:2);
+  const escape=!preview&&run.phase==='escape',blackout=!preview&&!escape&&run.power.blackout,lighting=`${blackout}:${escape}`;
+  if(lighting!==lastLighting){
+   lastLighting=lighting;ambient.intensity=blackout?.035:escape?.95:1.65;ambient.color.set(escape?'#ff8b79':'#fff3ca');ambient.groundColor.set(escape?'#491e20':'#7c7355');
+   scene.background.set(blackout?'#020302':escape?'#271316':'#b5ad7b');scene.fog.color.copy(scene.background);scene.fog.density=blackout?.075:.018;
+   fixtureMaterials.forEach(material=>{material.emissiveIntensity=blackout?0:2;material.emissive.set(escape?'#ff263a':'#fff1bf');});
+   pool.forEach(light=>light.color.set(escape?'#ff3445':'#fff0bc'));
   }
   const nearest=positions.map((pos,i)=>({i,d:pos.distanceToSquared(camera.position)})).sort((a,b)=>a.d-b.d).slice(0,pool.length);
   pool.forEach((l,i)=>{l.visible=!blackout&&!!nearest[i];if(nearest[i])l.position.copy(positions[nearest[i].i]);});
-  flashlight.position.copy(camera.position);camera.getWorldDirection(lookTarget);flashlight.target.position.copy(camera.position).add(lookTarget);flashlight.visible=run.torch;
+  flashlight.position.copy(camera.position);camera.getWorldDirection(lookTarget);flashlight.target.position.copy(camera.position).add(lookTarget);flashlight.visible=run.torch&&run.hiding===null;
   run.enemies.forEach((e,i)=>{
    const sprite=enemies[i];sprite.visible=e.active;sprite.position.set(e.x,1.55+(reduced?0:Math.sin(run.time*3+i)*.07),e.z);
    // Sprites are unlit: explicitly let the flashlight reveal them, with a

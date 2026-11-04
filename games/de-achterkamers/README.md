@@ -42,6 +42,39 @@ The user-supplied **Charlie's Inferno** MP3 is bundled at `public/audio/charlies
 
 Mijke's **Mijn Meubilair** proximity clip at `public/audio/mijke-meubilair.mp3` loops within 10 metres, gets louder as she approaches, pans with her position and stops beyond 12 metres. Pause, capture, win and quit stop it immediately. The shared volume control applies to it.
 
+## Lockers, shifting corridors and the final escape
+
+Twelve full-height lockers are spread through the maze, with one near the start.
+Press E at a locker (or the touch interaction button) to hide; press E to leave.
+Movement and the flashlight are suppressed while hiding, and the camera looks
+through a vent overlay. Chasers that see entry within twelve metres investigate
+that locker and can catch its occupant. Others search the last known position
+and patrol nearby passages. Hiding does not pause match time.
+
+The model is [Changing Locker by 3D Assets](https://3dassets.dev/assets/squash-club-and-racket-workshop-changing-locker-ae30f1aa),
+released under CC0 1.0. The original 6,000-triangle GLB is bundled unchanged, with
+vents, hinges, handles and five materials. Instances are resized for hiding.
+Provenance, source-reported AI use and SHA-256 are recorded in
+`public/licenses/locker-CC0.txt`. The hiding view is a game overlay; the source
+model has no door-opening animation.
+
+At each new blackout, up to four distant corridor connections swap. Each swap
+opens a connection and closes an edge on its old route, keeping every cell,
+objective and exit reachable. Rooms stay intact. Changes keep clear of players,
+chasers, passes and lockers. Rendering, collision, navigation and explored-map
+changes update together; enemies replan their routes. Corridors do not shift
+during the final escape.
+
+The final pass triggers **LAATSTE BEL**: red emergency lighting, a persistent
+escape announcement, a repeating bell and all four chasers. Pursuit speeds rise
+slightly, capped below sprint speed. The exit stays open until reached; blackouts
+cannot extinguish emergency lighting.
+
+Occasional synthesized, spatially panned footsteps come from behind the player
+without spawning a face or proximity warning. A burst stops when the player turns
+around. Its schedule uses match time; pause/quit stop the sound. The existing
+quiet music and louder Mijke proximity mix remain in place.
+
 ## Character artwork
 
 Thomas uses the user's supplied photograph. Mijke, Marola and Jaap originate from the existing SchoolControl portrait assets. Head extraction was performed with the built-in image-generation tool; exact edit prompts are recorded in `public/faces/provenance.json` and WebP metadata. These are fictional game chasers; no real voices are used. The map license does not grant rights over these portraits. See the SchoolControl reference notes for the original portrait provenance: https://github.com/RatelSlop/SchoolControl/blob/main/references/sources.md.
