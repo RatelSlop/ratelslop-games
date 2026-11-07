@@ -57,7 +57,7 @@ components:
     rounded: "{rounded.poster}"
 ---
 ## Overview
-The browser hub keeps its cinematic feature, charcoal surfaces, coral actions and four landscape game posters. Interface text stays quiet around the game artwork. This is an extension of the established visual system.
+The browser hub keeps its cinematic feature, charcoal surfaces, coral actions and five portrait game posters. Interface text stays quiet around the game artwork. This is an extension of the established visual system.
 
 Each game now has a distinct generated cover illustration and an image-led game page. The player takes over the page when a game launches. The official Ratel Slop Studios identity anchors the header, studio section, footer, game covers and thumbnails.
 
@@ -75,7 +75,7 @@ Barlow Condensed supplies game titles at weight 800. The desktop feature title i
 ## Layout
 The desktop header is 90px high and page gutters are 4.3%. Four game columns become two at 800px and below. Poster gaps are 22px on desktop and 23px vertically / 15px horizontally below 800px. Mobile navigation wraps below the brand and search.
 
-Posters use a 16:10 frame, changing to 16:11 at 450px and below. The feature image fills its section, with a dark directional overlay behind the title and actions.
+Posters use a 4:5 portrait frame at every viewport width. The feature image fills its section, with a dark directional overlay behind the title and actions.
 
 Direct game pages use `#game/<id>`. Their cover is 76vh, constrained to 560–850px on desktop; wide screens at 1600px use 78vh. Below 800px it is 68vh constrained to 550–750px; at 450px and below it is 650px high. About and controls sit in two columns below the cover, then stack below 800px. Related games use three columns on desktop and two on mobile.
 

@@ -2,7 +2,7 @@
 
 Use the **Big Picture** button in the launcher's header to enter the TV-style
 library. It shares the catalog, favorites, recent games and embedded player with
-the normal launcher. Poster cards have a 3:4 portrait aspect ratio and crop existing artwork
+the normal launcher. Poster cards have a 4:5 portrait aspect ratio and crop existing artwork
 without stretching it. Selecting a poster updates the large game preview.
 
 - Arrows move between posters and controls; Enter launches the focused game.
