@@ -31,6 +31,7 @@
 .poster-achterkamers .poster-title { font-size: clamp(14px, 12cqi, 38px); }
 /* Keep the subjects of wide cover art visible in portrait crops. */
 .poster-achterkamers > img:first-child { object-position: 66% center; }
+.poster-barkfart > img:first-child { object-position: 65% center; }
 .poster-uav > img:first-child { object-position: 73% center; }
 .poster-school > img:first-child { object-position: 67% center; }
 .badge{background:#101114c9;color:#fff;font-size:9px;top:12px;left:12px}

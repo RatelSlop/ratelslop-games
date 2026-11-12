@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Bark Fart Clicker — RatelSlop Games</title>
+  <meta name="description" content="Elke blaf een scheet. De meest verslavende en hilarische Cookie Clicker parody vol windjes, upgrades en gouden honden!">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐶</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-app">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-emoji">🐶💨</span>
+        <div class="brand-text">
+          <h1>Bark Fart Clicker</h1>
+          <span class="subbrand">RatelSlop Studios</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <!-- Audio controls -->
+        <button id="btn-audio-toggle" class="icon-btn" title="Geluid aan/uit" aria-label="Geluid aan of uit">
+          <span id="audio-icon">🔊</span>
+        </button>
+        <div class="volume-slider-wrap">
+          <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8" title="Volume" aria-label="Volume">
+        </div>
+
+        <!-- Navigation Tabs for mobile/desktop -->
+        <div class="nav-tabs" role="tablist">
+          <button class="tab-btn active" data-tab="shop" role="tab" aria-selected="true">🏪 Winkel</button>
+          <button class="tab-btn" data-tab="upgrades" role="tab" aria-selected="false">⚡ Upgrades <span id="badge-upgrades" class="badge-count" hidden>0</span></button>
+          <button class="tab-btn" data-tab="achievements" data-tab-name="Prestaties" role="tab" aria-selected="false">🏆 <span class="tab-label">Prestaties</span> <span id="badge-achievements" class="badge-count">0/20</span></button>
+          <button class="tab-btn" data-tab="stats" role="tab" aria-selected="false">📊 Stats</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="game-main">
+      <!-- Left Panel: Clicker & Dog Area -->
+      <section class="stage-section">
+        <!-- Floating Active Buffs -->
+        <div id="active-buffs" class="active-buffs"></div>
+
+        <!-- Scoreboard -->
+        <div class="scoreboard">
+          <div class="score-display">
+            <span id="bark-count" class="score-number">0</span>
+            <span class="score-label">Blaf-Scheten</span>
+          </div>
+          <div class="rates-display">
+            <span class="rate-item">per seconde: <strong id="bfps-rate">0.0</strong></span>
+            <span class="rate-separator">•</span>
+            <span class="rate-item">per klik: <strong id="bfpc-rate">+1</strong></span>
+          </div>
+        </div>
+
+        <!-- Atmosphere Fart-O-Meter -->
+        <div class="atmosphere-meter" title="Stankniveau van de kamer">
+          <div class="meter-info">
+            <span class="meter-title">Luchtkwaliteit: <strong id="atmosphere-name">Frisse Huiskamer</strong></span>
+            <span id="atmosphere-desc" class="meter-desc">Alles is nog veilig...</span>
+          </div>
+          <div class="meter-bar-track">
+            <div id="meter-bar-fill" class="meter-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Interactive Dog Clicker Arena -->
+        <div class="dog-arena" id="dog-arena">
+          <!-- Background Ripple & Aura Effects -->
+          <div class="dog-aura" id="dog-aura"></div>
+          <div class="dog-backdrop-glow"></div>
+
+          <!-- The Clickable Dog Button -->
+          <button id="dog-button" class="dog-button" aria-label="Klik op de hond om een blaf-scheet te maken!" tabindex="0">
+            <!-- Dog SVG Graphic -->
+            <svg class="dog-svg" id="dog-svg" viewBox="0 0 400 400" width="100%" height="100%">
+              <defs>
+                <!-- Gradients -->
+                <radialGradient id="fartGasGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#bbf7d0" stop-opacity="0.95" />
+                  <stop offset="60%" stop-color="#86efac" stop-opacity="0.8" />
+                  <stop offset="100%" stop-color="#4ade80" stop-opacity="0" />
+                </radialGradient>
+                <radialGradient id="goldenGasGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#fef08a" stop-opacity="0.95" />
+                  <stop offset="70%" stop-color="#facc15" stop-opacity="0.8" />
+                  <stop offset="100%" stop-color="#ca8a04" stop-opacity="0" />
+                </radialGradient>
+                <linearGradient id="furGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#f5d0a9" />
+                  <stop offset="100%" stop-color="#d49b6a" />
+                </linearGradient>
+                <linearGradient id="furDarkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#54382b" />
+                  <stop offset="100%" stop-color="#382218" />
+                </linearGradient>
+                <linearGradient id="collarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ef4444" />
+                  <stop offset="100%" stop-color="#b91c1c" />
+                </linearGradient>
+                <filter id="shadowFilter" x="-10%" y="-10%" width="120%" height="120%">
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.25" />
+                </filter>
+              </defs>
+
+              <!-- Soundwaves (Burst forward on click) -->
+              <g id="soundwaves" class="soundwaves-group">
+                <path class="sw sw-1" d="M 120 180 A 50 50 0 0 0 120 240" fill="none" stroke="#facc15" stroke-width="7" stroke-linecap="round" />
+                <path class="sw sw-2" d="M 95 160 A 80 80 0 0 0 95 260" fill="none" stroke="#facc15" stroke-width="8" stroke-linecap="round" />
+                <path class="sw sw-3" d="M 70 140 A 110 110 0 0 0 70 280" fill="none" stroke="#f59e0b" stroke-width="9" stroke-linecap="round" />
+                <!-- Cartoon BARK text burst -->
+                <text class="bark-text" x="40" y="145" font-family="'Impact', 'Arial Black', sans-serif" font-size="28" fill="#facc15" stroke="#78350f" stroke-width="2">BARK!</text>
+              </g>
+
+              <!-- Fart Cloud (Bursts backward on click) -->
+              <g id="fart-cloud" class="fart-cloud-group">
+                <circle class="fc-puff fc-p1" cx="310" cy="220" r="38" fill="url(#fartGasGrad)" />
+                <circle class="fc-puff fc-p2" cx="345" cy="200" r="44" fill="url(#fartGasGrad)" />
+                <circle class="fc-puff fc-p3" cx="355" cy="245" r="42" fill="url(#fartGasGrad)" />
+                <circle class="fc-puff fc-p4" cx="380" cy="215" r="32" fill="url(#goldenGasGrad)" />
+                <!-- Comic stink swirl lines -->
+                <path class="fc-line" d="M 315 205 Q 345 180 375 190" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" />
+                <path class="fc-line" d="M 320 240 Q 360 255 385 240" fill="none" stroke="#84cc16" stroke-width="4" stroke-linecap="round" />
+                <!-- Little stars -->
+                <text class="fc-star" x="325" y="180" font-size="20" fill="#facc15">✨</text>
+                <text class="fc-star" x="365" y="270" font-size="18" fill="#4ade80">💨</text>
+              </g>
+
+              <!-- Main Dog Body Group -->
+              <g id="dog-character" class="dog-character-group" filter="url(#shadowFilter)">
+                <!-- Tail (Wags in idle, straight up on click) -->
+                <path id="dog-tail" class="dog-tail" d="M 275 235 Q 315 230 305 195 Q 295 185 285 210 Z" fill="url(#furGrad)" stroke="#382218" stroke-width="3" />
+
+                <!-- Back Legs -->
+                <ellipse cx="265" cy="275" rx="35" ry="28" fill="url(#furGrad)" stroke="#382218" stroke-width="3" />
+                <ellipse cx="280" cy="295" rx="20" ry="12" fill="#d49b6a" stroke="#382218" stroke-width="3" />
+
+                <!-- Chubby Body -->
+                <ellipse id="dog-torso" class="dog-torso" cx="215" cy="240" rx="75" ry="60" fill="url(#furGrad)" stroke="#382218" stroke-width="4" />
+                <!-- Tummy patch -->
+                <ellipse cx="205" cy="255" rx="48" ry="36" fill="#fae8d4" opacity="0.9" />
+
+                <!-- Front Paws -->
+                <ellipse cx="165" cy="285" rx="18" ry="14" fill="#fae8d4" stroke="#382218" stroke-width="3" />
+                <ellipse cx="215" cy="288" rx="18" ry="14" fill="#fae8d4" stroke="#382218" stroke-width="3" />
+
+                <!-- Collar & Shiny Bone Tag -->
+                <path d="M 148 198 Q 185 220 220 198" fill="none" stroke="url(#collarGrad)" stroke-width="12" stroke-linecap="round" />
+                <!-- Golden Bone Tag -->
+                <g transform="translate(185, 212)">
+                  <circle cx="0" cy="0" r="10" fill="#facc15" stroke="#78350f" stroke-width="2" />
+                  <path d="M -5 -3 L 5 -3 Q 7 -6 9 -3 Q 7 0 5 0 L -5 0 Q -7 0 -9 -3 Q -7 -6 -5 -3 Z" fill="#fff" transform="scale(0.8) translate(-1, 2)" />
+                </g>
+
+                <!-- Dog Head -->
+                <g id="dog-head" class="dog-head">
+                  <!-- Floppy Ears -->
+                  <path class="dog-ear ear-left" d="M 130 115 C 95 105 85 155 105 175 C 120 190 140 170 140 150 Z" fill="url(#furDarkGrad)" stroke="#22140d" stroke-width="3" />
+                  <path class="dog-ear ear-right" d="M 225 115 C 260 105 270 155 250 175 C 235 190 215 170 215 150 Z" fill="url(#furDarkGrad)" stroke="#22140d" stroke-width="3" />
+
+                  <!-- Head Shape -->
+                  <circle cx="178" cy="150" r="56" fill="url(#furGrad)" stroke="#382218" stroke-width="4" />
+                  <!-- Wrinkles on forehead -->
+                  <path d="M 160 115 Q 178 122 196 115" fill="none" stroke="#b47b4e" stroke-width="3" stroke-linecap="round" />
+                  <path d="M 165 125 Q 178 130 191 125" fill="none" stroke="#b47b4e" stroke-width="3" stroke-linecap="round" />
+
+                  <!-- Dark Pug Muzzle / Snout -->
+                  <ellipse cx="175" cy="172" rx="34" ry="24" fill="url(#furDarkGrad)" stroke="#22140d" stroke-width="3" />
+
+                  <!-- Big Glossy Eyes (Idle state) -->
+                  <g id="eyes-idle" class="eyes-idle">
+                    <circle cx="152" cy="142" r="14" fill="#1e130d" />
+                    <circle cx="149" cy="138" r="5" fill="#ffffff" />
+                    <circle cx="156" cy="145" r="2.5" fill="#ffffff" />
+
+                    <circle cx="198" cy="142" r="14" fill="#1e130d" />
+                    <circle cx="195" cy="138" r="5" fill="#ffffff" />
+                    <circle cx="202" cy="145" r="2.5" fill="#ffffff" />
+                  </g>
+
+                  <!-- Squinting Eyes (Barking / Farting state) -->
+                  <g id="eyes-squint" class="eyes-squint">
+                    <path d="M 140 142 L 152 136 L 140 148" fill="none" stroke="#1e130d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M 210 142 L 198 136 L 210 148" fill="none" stroke="#1e130d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                  </g>
+
+                  <!-- Cute Black Nose -->
+                  <path d="M 167 162 C 167 159 183 159 183 162 C 183 169 175 174 175 174 C 175 174 167 169 167 162 Z" fill="#0f0906" />
+
+                  <!-- Mouth - Idle State (Happy tongue) -->
+                  <g id="mouth-idle" class="mouth-idle">
+                    <path d="M 163 175 Q 175 182 187 175" fill="none" stroke="#0f0906" stroke-width="3.5" stroke-linecap="round" />
+                    <!-- Tiny tongue sticking out -->
+                    <path d="M 171 178 C 171 187 179 187 179 178 Z" fill="#f43f5e" />
+                  </g>
+
+                  <!-- Mouth - Bark State (Wide open barking!) -->
+                  <g id="mouth-bark" class="mouth-bark">
+                    <ellipse cx="175" cy="180" rx="16" ry="12" fill="#450a0a" stroke="#0f0906" stroke-width="3" />
+                    <!-- Teeth -->
+                    <path d="M 166 170 L 169 174 L 172 170" fill="#fff" />
+                    <path d="M 178 170 L 181 174 L 184 170" fill="#fff" />
+                    <!-- Big tongue -->
+                    <path d="M 167 184 Q 175 194 183 184" fill="#f43f5e" />
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </button>
+
+          <!-- Particle & Floating Number Layer -->
+          <div id="particle-container" class="particle-container" aria-hidden="true"></div>
+        </div>
+
+        <div class="click-tip">
+          <span>💡 Tip: Klik snel of druk op <kbd>Spatie</kbd> / <kbd>Enter</kbd>!</span>
+        </div>
+      </section>
+
+      <!-- Right Panel: Shop, Upgrades, Achievements, Stats -->
+      <aside class="panel-section">
+        <!-- Shop Tab -->
+        <div id="tab-shop" class="tab-pane active" role="tabpanel">
+          <div class="pane-header">
+            <div class="pane-title-group">
+              <h2>🏪 Honden & Scheet-Fabrieken</h2>
+              <span class="pane-subtitle">Huur helpers in om automatisch barks & farts te genereren</span>
+            </div>
+            <!-- Buy Amount Switcher: 1x, 10x, 100x -->
+            <div class="buy-multipliers" role="group" aria-label="Aankoop aantal">
+              <button class="buy-mult-btn active" data-mult="1">1x</button>
+              <button class="buy-mult-btn" data-mult="10">10x</button>
+              <button class="buy-mult-btn" data-mult="100">100x</button>
+            </div>
+          </div>
+
+          <div id="buildings-list" class="buildings-list">
+            <!-- Buildings dynamically rendered here -->
+          </div>
+        </div>
+
+        <!-- Upgrades Tab -->
+        <div id="tab-upgrades" class="tab-pane" role="tabpanel">
+          <div class="pane-header">
+            <div class="pane-title-group">
+              <h2>⚡ Scheet-Verbeteringen</h2>
+              <span class="pane-subtitle">Krachtige permanente boosts voor je kliks en helpers</span>
+            </div>
+          </div>
+
+          <div id="upgrades-list" class="upgrades-grid">
+            <!-- Upgrades dynamically rendered here -->
+          </div>
+          <div id="no-upgrades-msg" class="empty-state" hidden>
+            <p>Geen upgrades beschikbaar op dit moment. Koop meer gebouwen om nieuwe innovaties te ontdekken!</p>
+          </div>
+        </div>
+
+        <!-- Achievements Tab -->
+        <div id="tab-achievements" class="tab-pane" role="tabpanel">
+          <div class="pane-header">
+            <div class="pane-title-group">
+              <h2>🏆 Prestaties & Medailles</h2>
+              <span class="pane-subtitle">Ontgrendel alle 20 hilarische trofeeën</span>
+            </div>
+            <span id="achievements-summary" class="summary-badge">0 / 20</span>
+          </div>
+
+          <div id="achievements-list" class="achievements-grid">
+            <!-- Achievements dynamically rendered here -->
+          </div>
+        </div>
+
+        <!-- Stats & Settings Tab -->
+        <div id="tab-stats" class="tab-pane" role="tabpanel">
+          <div class="pane-header">
+            <div class="pane-title-group">
+              <h2>📊 Statistieken & Opslag</h2>
+              <span class="pane-subtitle">Bekijk je voortgang en beheer je savegame</span>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-title">Totaal Geklikt</span>
+              <span id="stat-total-clicks" class="stat-val">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Handmatige Blaf-Scheten</span>
+              <span id="stat-manual-bf" class="stat-val">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Totaal Ooit Geproduceerd</span>
+              <span id="stat-alltime-bf" class="stat-val">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Gouden Scheten Gevangen</span>
+              <span id="stat-golden-clicks" class="stat-val">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Prestaties Behaald</span>
+              <span id="stat-achievements-count" class="stat-val">0 / 20</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-title">Speeltijd</span>
+              <span id="stat-playtime" class="stat-val">0m</span>
+            </div>
+          </div>
+
+          <div class="save-controls">
+            <h3>Spelbestand Beheer</h3>
+            <div class="btn-row">
+              <button id="btn-save" class="btn secondary">💾 Handmatig Opslaan</button>
+              <button id="btn-export" class="btn secondary">📋 Exporteer Save</button>
+              <button id="btn-import" class="btn secondary">📥 Importeer Save</button>
+              <button id="btn-wipe" class="btn danger">🗑️ Reset Alles</button>
+            </div>
+            <p class="save-notice">Je spel wordt automatisch elke 5 seconden lokaal opgeslagen.</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Golden Fart / Dog Event (Spawns randomly) -->
+    <div id="golden-fart" class="golden-fart" hidden aria-label="Gouden Scheet! Klik hierop voor een enorme bonus!">
+      <div class="golden-fart-glow"></div>
+      <div class="golden-fart-icon">🐕✨</div>
+      <span class="golden-fart-shimmer"></span>
+    </div>
+
+    <!-- Notification Toasts -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+  </div>
+
+  <!-- Audio source and game script -->
+  <script src="assets/sound_data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

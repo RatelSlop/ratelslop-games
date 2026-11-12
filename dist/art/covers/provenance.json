@@ -26,5 +26,12 @@
     "source": "OpenAI built-in image generation",
     "prompt": "Use case: stylized-concept. Asset type: wide landscape 16:9 browser game cover artwork for School Control \u2014 De laatste bel, a quirky Dutch school adventure. Polished stylized low-poly 3D key art, two teenage schoolboy adventurers at foreground right entering an imposing contemporary Dutch school campus, one brown-haired boy holding an oversized yellow pencil with a friendly small brown dog, the other short-haired boy holding two chopsticks with a small white chicken companion. No real faces or photographs, original simplified modeled characters. Glass school facade, central staircase glimpsed through entrance, school clock, brick exterior, mathematics and chemistry rooms hinted in windows. A stern director silhouette stands behind distant reception desk. Warm gold afternoon light, cobalt blue school windows, coral backpack accents, playful adventure story mood. Characters large enough to read as thumbnail, distinct companions. Left quarter relatively calm school architecture for real HTML title. No text, no logos, no UI, no watermark. Promotional concept illustration not actual gameplay screenshot.",
     "kind": "Promotional cover illustration, not a gameplay screenshot"
+  },
+  {
+    "game": "bark-fart-clicker",
+    "file": "art/covers/bark-fart-clicker.webp",
+    "source": "Antigravity AI Image Generation",
+    "prompt": "Polished 3D animated movie style key visual game artwork in vibrant 16:9 landscape. A comical, lovable chubby French bulldog pug mix with an adorable wrinkled snout, wide hilarious silly googly eyes, and floppy ears. The dog is positioned slightly towards the center-right of the frame. Facing towards the left, its mouth is happily open barking cheerfully, with stylized dynamic golden cartoon soundwave ripples and sound vibration arcs radiating forward. From the dog's rear on the right side, joyful puffy cartoon emerald-green and luminous golden gas clouds burst outward filled with magical sparkles, floating crunchy bone biscuits, and glowing dog treats. Bright cheerful color palette with warm studio arcade lighting, glossy textures, subtle depth of field with the left side composed with softer open space. Absolutely no text, no letters, no typography, no watermarks, no user interface elements.",
+    "kind": "Promotional cover illustration, not a gameplay screenshot"
   }
 ]

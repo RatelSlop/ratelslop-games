@@ -44,6 +44,12 @@ try {
   await mkdir(localTarget, { recursive: true });
   await cp(join(localGame, 'dist'), localTarget, { recursive: true });
   revisions['De Achterkamers'] = 'bundled with launcher';
+  const barkFartSource = join(root, 'games', 'bark-fart-clicker');
+  const barkFartTarget = join(root, 'dist', 'games', 'bark-fart-clicker');
+  await mkdir(barkFartTarget, { recursive: true });
+  await cp(barkFartSource, barkFartTarget, { recursive: true });
+  await readFile(join(barkFartTarget, 'index.html'));
+  revisions['Bark Fart Clicker'] = 'bundled with launcher';
   await writeFile(join(root, 'dist', 'build-info.json'), JSON.stringify({ builtAt: new Date().toISOString(), revisions }, null, 2) + '\n');
 } finally {
   // scratch is a newly created directory under the OS temporary directory.
