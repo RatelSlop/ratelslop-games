@@ -3,6 +3,7 @@
 GitHub Pages is the selected host. See `GITHUB-PAGES.md` for setup and automatic game-push updates. `.github/workflows/pages.yml` builds the latest three public games, tests and builds De Achterkamers from this repository, and deploys `dist/`. For a local preview run `python -m http.server 4174 --directory dist` and visit http://localhost:4174. Earlier optional Cloudflare configuration remains available separately.
 
 ## Games
+- Fortnite Pirate Token: local `games/fortnite-pirate-token` source; Fortnite Treasure Hunters mini-season simulator with live Item Shop API integration, 1-in-137,500 chest drop sequence, free 14-day plunder mechanics, and full Locker loadout customization.
 - Bark Fart Clicker: local `games/bark-fart-clicker` source; hilarious dog clicker game with custom audio, animations, building upgrades, golden fart events, and local save support.
 - De Achterkamers: local `games/de-achterkamers` source; Three.js face-chase horror with local assets, touch controls and a seeded procedural map. See its README for controls and MIT map attribution.
 - BouncyKoen: public `RatelSlop/BouncyKoen`, docs build, static browser build.
@@ -12,4 +13,4 @@ GitHub Pages is the selected host. See `GITHUB-PAGES.md` for setup and automatic
 
 All game sources: https://github.com/RatelSlop. Local game progress belongs to this launcher's origin and is separate from progress on the games' existing domains. BouncyKoen bundles Three.js locally with an optional CDN fallback; fonts load from Google Fonts. On the selected host, game assets are served by GitHub Pages. Playing does not require GitHub REST API requests.
 
-Artwork: six promotional cover illustrations in `dist/art/covers/`. Official Ratel Slop Studios logo files are in `dist/brand/`. See `ARTWORK.md`. Each game has a shareable cover page at `#game/<id>`, and a large player at `#play/<id>`.
+Artwork: seven promotional cover illustrations in `dist/art/covers/`. Official Ratel Slop Studios logo files are in `dist/brand/`. See `ARTWORK.md`. Each game has a shareable cover page at `#game/<id>`, and a large player at `#play/<id>`.

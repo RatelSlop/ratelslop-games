@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fortnite Pirate Token Item Shop Simulator — Gratis Item Shop</title>
+  <meta name="description" content="Fortnite Pirate Token Item Shop Simulator: Open schatkisten (1 op 137.500 kans) of plunder direct de gehele live Item Shop 100% gratis!">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏴‍☠️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="fn-header">
+      <div class="header-top">
+        <div class="brand-section">
+          <div class="brand-logo-badge">🏴‍☠️</div>
+          <div class="brand-titles">
+            <h1>Fortnite Pirate Shop</h1>
+            <span class="brand-subtitle">Treasure Hunters Mini-Season Simulator</span>
+          </div>
+        </div>
+
+        <div class="header-stats">
+          <div class="stat-pill tokens" title="Beschikbare Pirate Tokens">
+            <span>🪙</span>
+            <span>Tokens: <strong id="stat-tokens-count">2</strong> (2026 &amp; 2027)</span>
+          </div>
+          <div class="stat-pill vbucks" title="Totaal bespaarde V-Bucks door gratis plunderen">
+            <span>💎</span>
+            <span>Bespaard: <strong id="stat-vbucks-saved">0</strong> V-Bucks</span>
+          </div>
+          <div class="stat-pill plundered" title="Items in je Locker">
+            <span>🎒</span>
+            <span>Locker: <strong id="stat-locker-count">0</strong> items</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation & Quick Controls -->
+      <div class="header-nav">
+        <nav class="nav-tabs" role="tablist">
+          <button class="tab-btn active" data-tab="shop" role="tab" aria-selected="true">
+            🛒 Item Shop (<span id="nav-shop-count">300+</span>)
+          </button>
+          <button class="tab-btn" data-tab="locker" role="tab" aria-selected="false">
+            🎒 Locker &amp; Loadout
+          </button>
+          <button class="tab-btn" data-tab="chests" role="tab" aria-selected="false">
+            📦 Schatkist Simulator (1/137.500)
+          </button>
+          <button class="tab-btn" data-tab="info" role="tab" aria-selected="false">
+            📜 Pirate Token Info
+          </button>
+        </nav>
+
+        <div class="nav-controls">
+          <button id="btn-audio-toggle" class="icon-button" title="Geluid aan/uit">
+            <span id="audio-icon">🔊</span> Geluid
+          </button>
+          <button id="btn-reset-data" class="icon-button" title="Reset alle voortgang">
+            🔄 Reset
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Global Plunder Alert Banner -->
+    <section class="plunder-alert-banner" id="plunder-banner">
+      <div class="plunder-banner-left">
+        <span class="plunder-icon-pulse">☠️</span>
+        <div>
+          <span>PLUNDER THE ITEM SHOP ACTIEF!</span>
+          <span style="font-weight: 400; opacity: 0.9; margin-left: 6px;">
+            Je Pirate Token is actief. Alle items in de Item Shop kosten <strong>0 V-Bucks</strong> (100% Gratis)!
+          </span>
+        </div>
+        <div class="plunder-timer" id="plunder-countdown" title="Resterende tijd van de 14-dagen Plunder periode">
+          13d 23u 59m 59s
+        </div>
+      </div>
+      <div>
+        <button class="banner-action-btn" id="btn-banner-plunder-all">
+          ⚡ Plunder Direct Alles
+        </button>
+      </div>
+    </section>
+
+    <!-- VIEW 1: ITEM SHOP -->
+    <main class="view-panel active" id="view-shop">
+      <div class="shop-toolbar">
+        <div class="toolbar-primary">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="shop-search" placeholder="Zoek outfit, emote, pickaxe, set...">
+          </div>
+
+          <div class="quick-actions">
+            <button class="btn-plunder-all" id="btn-shop-plunder-all">
+              🏴‍☠️ Plunder Hele Winkel (Claim Alles)
+            </button>
+            <button class="icon-button" id="btn-refresh-shop" title="Ververs winkel via live Fortnite API">
+              🔄 Live Verversen
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Pills: Categories -->
+        <div class="filter-pills-row" id="category-filters">
+          <button class="filter-pill active" data-category="ALL">Alle Categorieën</button>
+          <!-- Injected via JS from live shop -->
+        </div>
+
+        <!-- Filter Pills: Rarities -->
+        <div class="filter-pills-row" id="rarity-filters">
+          <button class="filter-pill active" data-rarity="ALL">Alle Rarity's</button>
+          <button class="filter-pill" data-rarity="marvel">Marvel</button>
+          <button class="filter-pill" data-rarity="starwars">Star Wars</button>
+          <button class="filter-pill" data-rarity="icon">Icon Series</button>
+          <button class="filter-pill" data-rarity="gaminglegends">Gaming Legends</button>
+          <button class="filter-pill" data-rarity="legendary">Legendary</button>
+          <button class="filter-pill" data-rarity="epic">Epic</button>
+          <button class="filter-pill" data-rarity="rare">Rare</button>
+          <button class="filter-pill" data-rarity="uncommon">Uncommon</button>
+        </div>
+      </div>
+
+      <!-- Shop Sections Container -->
+      <div id="shop-sections-container">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </main>
+
+    <!-- VIEW 2: LOCKER -->
+    <section class="view-panel" id="view-locker">
+      <div class="locker-container">
+        <!-- Active Equipped Loadout -->
+        <div class="shop-section">
+          <div class="section-header">
+            <h2 class="section-title">Uitgeruste Loadout (Actief)</h2>
+            <span class="section-count">Klik op een slot om te wijzigen</span>
+          </div>
+
+          <div class="loadout-slots-row">
+            <div class="loadout-slot" id="slot-outfit" data-type="outfit">
+              <img src="" class="slot-icon-img" alt="Outfit" style="display:none;">
+              <span class="slot-type">Outfit (Skin)</span>
+              <span class="slot-name">Niet uitgerust</span>
+            </div>
+            <div class="loadout-slot" id="slot-backbling" data-type="backbling">
+              <img src="" class="slot-icon-img" alt="Back Bling" style="display:none;">
+              <span class="slot-type">Back Bling</span>
+              <span class="slot-name">Niet uitgerust</span>
+            </div>
+            <div class="loadout-slot" id="slot-pickaxe" data-type="pickaxe">
+              <img src="" class="slot-icon-img" alt="Pickaxe" style="display:none;">
+              <span class="slot-type">Harvesting Tool</span>
+              <span class="slot-name">Niet uitgerust</span>
+            </div>
+            <div class="loadout-slot" id="slot-glider" data-type="glider">
+              <img src="" class="slot-icon-img" alt="Glider" style="display:none;">
+              <span class="slot-type">Glider</span>
+              <span class="slot-name">Niet uitgerust</span>
+            </div>
+            <div class="loadout-slot" id="slot-emote" data-type="emote">
+              <img src="" class="slot-icon-img" alt="Emote" style="display:none;">
+              <span class="slot-type">Emote</span>
+              <span class="slot-name">Niet uitgerust</span>
+            </div>
+            <div class="loadout-slot" id="slot-track" data-type="track">
+              <img src="" class="slot-icon-img" alt="Jam Track" style="display:none;">
+              <span class="slot-type">Jam Track / Muziek</span>
+              <span class="slot-name">Niet uitgerust</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Locker Inventory Filters -->
+        <div class="shop-toolbar">
+          <div class="toolbar-primary">
+            <div class="search-box">
+              <span>🔍</span>
+              <input type="text" id="locker-search" placeholder="Zoek in je locker items...">
+            </div>
+            <div class="stat-pill plundered">
+              <span>Totaal Items in Locker: <strong id="locker-total-display">0</strong></span>
+            </div>
+          </div>
+
+          <div class="filter-pills-row" id="locker-type-filters">
+            <button class="filter-pill active" data-lockertype="ALL">Alle Items</button>
+            <button class="filter-pill" data-lockertype="outfit">Outfits</button>
+            <button class="filter-pill" data-lockertype="backpack">Back Bling</button>
+            <button class="filter-pill" data-lockertype="pickaxe">Pickaxes</button>
+            <button class="filter-pill" data-lockertype="glider">Gliders</button>
+            <button class="filter-pill" data-lockertype="emote">Emotes</button>
+            <button class="filter-pill" data-lockertype="track">Jam Tracks</button>
+            <button class="filter-pill" data-lockertype="car">Cars</button>
+          </div>
+        </div>
+
+        <!-- Locker Grid -->
+        <div class="locker-items-grid" id="locker-grid">
+          <!-- Filled via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: CHEST SIMULATOR -->
+    <section class="view-panel" id="view-chests">
+      <div class="chest-arena-container">
+        <!-- Stage -->
+        <div class="chest-stage">
+          <div class="chest-box-visual" id="chest-interactive" title="Klik om de schatkist te openen!">
+            <svg class="chest-svg" viewBox="0 0 300 240">
+              <defs>
+                <linearGradient id="chestWood" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#92400e" />
+                  <stop offset="50%" stop-color="#78350f" />
+                  <stop offset="100%" stop-color="#451a03" />
+                </linearGradient>
+                <linearGradient id="chestGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fef08a" />
+                  <stop offset="40%" stop-color="#facc15" />
+                  <stop offset="100%" stop-color="#ca8a04" />
+                </linearGradient>
+                <radialGradient id="chestGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ffd700" stop-opacity="0.8" />
+                  <stop offset="100%" stop-color="#ffd700" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+              <!-- Ambient Glow -->
+              <circle cx="150" cy="120" r="100" fill="url(#chestGlow)" opacity="0.3" />
+              <!-- Chest Base -->
+              <rect x="40" y="110" width="220" height="90" rx="8" fill="url(#chestWood)" stroke="#271003" stroke-width="4"/>
+              <!-- Base Bands -->
+              <rect x="50" y="110" width="24" height="90" fill="url(#chestGold)" />
+              <rect x="226" y="110" width="24" height="90" fill="url(#chestGold)" />
+              <rect x="138" y="110" width="24" height="90" fill="url(#chestGold)" />
+              <!-- Chest Lid -->
+              <path d="M 36 112 C 36 60, 264 60, 264 112 Z" fill="url(#chestWood)" stroke="#271003" stroke-width="4"/>
+              <path d="M 48 112 C 48 70, 72 70, 72 112 Z" fill="url(#chestGold)" />
+              <path d="M 228 112 C 228 70, 252 70, 252 112 Z" fill="url(#chestGold)" />
+              <path d="M 138 112 C 138 65, 162 65, 162 112 Z" fill="url(#chestGold)" />
+              <!-- Lock / Latch -->
+              <rect x="135" y="100" width="30" height="34" rx="4" fill="url(#chestGold)" stroke="#78350f" stroke-width="3" />
+              <circle cx="150" cy="114" r="4" fill="#1e1005" />
+              <polygon points="148,116 152,116 151,124 149,124" fill="#1e1005" />
+              <!-- Skull Emblem -->
+              <text x="150" y="86" font-size="20" text-anchor="middle" dominant-baseline="middle">☠️</text>
+            </svg>
+          </div>
+
+          <div class="chest-stage-controls">
+            <div class="chest-btn-group">
+              <button class="chest-action-btn btn-open-chest" id="btn-open-1-chest">
+                📦 Open 1 Kist
+              </button>
+              <button class="chest-action-btn btn-open-multi" id="btn-open-10-chests">
+                ⚡ Open 10 Kisten
+              </button>
+              <button class="chest-action-btn btn-open-multi" id="btn-open-100-chests">
+                💥 Open 100
+              </button>
+            </div>
+
+            <!-- Boosters & Test Controls -->
+            <div class="odds-enhancer-bar">
+              <div class="toggle-switch-wrap">
+                <input type="checkbox" id="toggle-treasure-hour">
+                <label for="toggle-treasure-hour"><strong>Treasure Hour Mode</strong> (100x Boost: 1 op 1.375)</label>
+              </div>
+              <button class="banner-action-btn" id="btn-force-pirate-token" title="Gegarandeerde Pirate Token drop bij de volgende kist">
+                🏴‍☠️ Instant Pirate Drop
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Stats -->
+        <div class="chest-stats-sidebar">
+          <h3 class="sidebar-title">Schatkist Statistieken</h3>
+
+          <div class="stat-row">
+            <span class="stat-label">Kisten geopend:</span>
+            <span class="stat-val" id="stat-chests-opened">0</span>
+          </div>
+
+          <div class="stat-row">
+            <span class="stat-label">Pirate Tokens gevonden:</span>
+            <span class="stat-val" id="stat-tokens-found" style="color:var(--gold-primary);">0</span>
+          </div>
+
+          <div class="stat-row">
+            <span class="stat-label">Huidige Drop Chance:</span>
+            <span class="stat-val" id="stat-current-odds">1 op 137.500 (0.00073%)</span>
+          </div>
+
+          <div class="stat-row">
+            <span class="stat-label">Geschatte chests per drop:</span>
+            <span class="stat-val">~137.500</span>
+          </div>
+
+          <h4 style="font-size: 13px; text-transform: uppercase; color: #94a3b8; margin-top: 8px;">Recente Kist Loot:</h4>
+          <div class="chest-history-log" id="chest-loot-log">
+            <div class="log-entry">Klik op een knop om schatkisten te openen...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: LORE & RULES -->
+    <section class="view-panel" id="view-info">
+      <div class="info-card-deck">
+        <div class="info-box">
+          <h2>Wat is de Fortnite Pirate Token?</h2>
+          <p>
+            Tijdens het <strong>Fortnite Treasure Hunters</strong> mini-seizoen introduceerde Epic Games de uiterst zeldzame <strong>Pirate Token</strong> (ook wel <em>Pirate Shop Access</em> genoemd).
+          </p>
+          <p>
+            Spelers die zo'n token uit een normale Battle Royale schatkist wisten te halen, kregen een spectaculaire animatie waarin de kist hevig trilde, gouden stralen uitzond en explodeerde met de banner:
+          </p>
+          <div style="background: rgba(255,215,0,0.15); border-left: 4px solid var(--gold-primary); padding: 10px; font-weight: 800; color: #fef08a; text-transform: uppercase;">
+            "YOU FOUND PIRATE SHOP ACCESS"
+          </div>
+        </div>
+
+        <div class="info-box">
+          <h2>Wat doet "Plunder the Item Shop"?</h2>
+          <p>
+            Zodra geactiveerd in de Item Shop of Lobby, start een <strong>14-dagen gratis shopping periode</strong>:
+          </p>
+          <ul>
+            <li><strong>Alle Item Shop cosmetica kosten 0 V-Bucks</strong> (Outfits, Pickaxes, Gliders, Emotes, Jam Tracks, Cars, Wraps).</li>
+            <li>Inclusief grote samenwerkingen (zoals <em>One Piece, Marvel, Star Wars, Icon Series</em>).</li>
+            <li>Elke gelukkige vinder ontvangt <strong>2 Pirate Tokens</strong>: één voor 2026 en één voor 2027.</li>
+            <li>Je mag zelf bepalen wanneer je jouw 14 dagen activeert (bijv. als er skins zijn die je écht wilt).</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <h2>Wat zijn de kansen &amp; beperkingen?</h2>
+          <p>
+            Epic Games en dataminers bevestigden dat de basis drop-rate ongeveer <strong>1 op 137.500</strong> per kist is (0,00073%).
+          </p>
+          <ul>
+            <li><strong>Treasure Hours:</strong> Tijdens speciale evenementen verhoogt Epic Games de kans aanzienlijk.</li>
+            <li><strong>Niet inbegrepen:</strong> Real-money starter packs (echt geld), Battle Pass tiers en gifting naar vrienden.</li>
+            <li><strong>In deze simulator:</strong> Je kunt schatkisten openen met de echte kansen, Treasure Hour inschakelen, of direct de hele live Item Shop plunderen!</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ITEM DETAIL MODAL -->
+    <div class="modal-overlay" id="item-modal">
+      <div class="item-modal-content">
+        <button class="modal-close-btn" id="btn-modal-close" title="Sluiten">&times;</button>
+        <div class="modal-body">
+          <div class="modal-image-col">
+            <img src="" id="modal-img" class="modal-preview-img" alt="Item Preview">
+          </div>
+          <div class="modal-details-col">
+            <div>
+              <span class="modal-type-tag" id="modal-type">OUTFIT</span>
+              <h2 class="modal-item-title" id="modal-title">Item Naam</h2>
+              <p class="modal-item-desc" id="modal-desc">Beschrijving van het item...</p>
+              
+              <div class="modal-meta-box">
+                <div class="modal-meta-row" id="modal-meta-set">
+                  Set: <strong>-</strong>
+                </div>
+                <div class="modal-meta-row" id="modal-meta-intro">
+                  Geïntroduceerd: <strong>-</strong>
+                </div>
+                <div class="modal-meta-row" id="modal-meta-price">
+                  Originele Prijs: <strong>1.500 V-Bucks</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-action-row">
+              <button class="btn-modal-plunder" id="btn-modal-action">
+                🏴‍☠️ Plunder Gratis (0 V-Bucks)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JACKPOT OVERLAY: "YOU FOUND PIRATE SHOP ACCESS" -->
+    <div class="jackpot-overlay" id="jackpot-modal">
+      <div class="jackpot-burst-rays"></div>
+      <div class="jackpot-chest-exploded">💥🪙🏴‍☠️</div>
+      <h1 class="jackpot-banner-text">YOU FOUND PIRATE SHOP ACCESS</h1>
+      <p class="jackpot-subtitle">
+        Ongelofelijk! Je hebt de ultra-zeldzame Pirate Token gevonden (1 op 137.500 kans)! 
+        Je hebt nu 14 dagen lang 100% gratis toegang tot alles in de Fortnite Item Shop!
+      </p>
+
+      <div class="jackpot-rewards-cards">
+        <div class="jackpot-token-pill">🪙 Pirate Shop Access Token #1 (2026)</div>
+        <div class="jackpot-token-pill">🪙 Pirate Shop Access Token #2 (2027)</div>
+      </div>
+
+      <button class="btn-activate-plunder" id="btn-jackpot-activate">
+        🏴‍☠️ Activeer Plunder Mode &amp; Open Item Shop!
+      </button>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="shop_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

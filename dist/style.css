@@ -32,6 +32,8 @@
 /* Keep the subjects of wide cover art visible in portrait crops. */
 .poster-achterkamers > img:first-child { object-position: 66% center; }
 .poster-barkfart > img:first-child { object-position: 65% center; }
+.poster-pirateshop > img:first-child { object-position: 50% center; }
+.poster-pirateshop .poster-title { font-size: clamp(14px, 11cqi, 34px); color: #ffd700; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
 .poster-uav > img:first-child { object-position: 73% center; }
 .poster-school > img:first-child { object-position: 67% center; }
 .badge{background:#101114c9;color:#fff;font-size:9px;top:12px;left:12px}

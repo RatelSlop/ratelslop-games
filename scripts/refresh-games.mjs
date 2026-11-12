@@ -50,6 +50,12 @@ try {
   await cp(barkFartSource, barkFartTarget, { recursive: true });
   await readFile(join(barkFartTarget, 'index.html'));
   revisions['Bark Fart Clicker'] = 'bundled with launcher';
+  const pirateTokenSource = join(root, 'games', 'fortnite-pirate-token');
+  const pirateTokenTarget = join(root, 'dist', 'games', 'fortnite-pirate-token');
+  await mkdir(pirateTokenTarget, { recursive: true });
+  await cp(pirateTokenSource, pirateTokenTarget, { recursive: true });
+  await readFile(join(pirateTokenTarget, 'index.html'));
+  revisions['Fortnite Pirate Token'] = 'bundled with launcher';
   await writeFile(join(root, 'dist', 'build-info.json'), JSON.stringify({ builtAt: new Date().toISOString(), revisions }, null, 2) + '\n');
 } finally {
   // scratch is a newly created directory under the OS temporary directory.
