@@ -53,12 +53,9 @@ the last known position and patrol nearby passages. Every locker protects the
 player until they leave; stepping out beside a chaser is dangerous. Hiding does
 not pause match time.
 
-The model is [Changing Locker by 3D Assets](https://3dassets.dev/assets/squash-club-and-racket-workshop-changing-locker-ae30f1aa),
-released under CC0 1.0. The original 6,000-triangle GLB is bundled unchanged, with
-vents, hinges, handles and five materials. Instances are resized for hiding.
-Provenance, source-reported AI use and SHA-256 are recorded in
-`public/licenses/locker-CC0.txt`. The hiding view is a game overlay; the source
-model has no door-opening animation.
+The locker uses [VENT – Perforated Locker by Innerscene](https://www.innerscene.com/tools/library/3d-parts/vent-perforated-locker-f5acf922) (CC0), with rusted painted steel, a numbered plate and the interior shelves removed. It keeps the original hiding footprint.
+
+The Ultra rendering uses photographed carpet and steel maps with the original fluorescent ceiling. The fixtures glow and light nearby surfaces throughout the maze from the start of a match. Only match events change their brightness or colour. See `public/licenses/locker-CC0.txt` for the model and material sources.
 
 At each new blackout, up to four distant corridor connections swap. Each swap
 opens a connection and closes an edge on its old route, keeping every cell,

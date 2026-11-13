@@ -51,13 +51,13 @@ test('randomized rendered wall and pillar bounds agree with their live collision
 });
 
 test('the downloaded CC0 locker retains detailed geometry and fits its collision footprint',async()=>{
- const asset=await readFile(new URL('../public/models/locker.glb',import.meta.url));
- assert.equal(createHash('sha256').update(asset).digest('hex'),'5338c68dfb627645f9c89438061d36698d2302858fc79f1bb006d108bc45f604');
+ const asset=await readFile(new URL('../public/models/vent-locker.glb',import.meta.url));
+ assert.equal(createHash('sha256').update(asset).digest('hex'),'cf7ed36d76b4a6edcce4b9d2a6d787ffe605160e0f7b2e6e8cbfa71ec5f34c8a');
  const length=asset.readUInt32LE(12),data=JSON.parse(asset.subarray(20,20+length));data.buffers[0].uri='data:application/octet-stream;base64,'+asset.subarray(28+length).toString('base64');
  for(const material of data.materials){delete material.pbrMetallicRoughness?.baseColorTexture;delete material.pbrMetallicRoughness?.metallicRoughnessTexture;delete material.normalTexture;delete material.occlusionTexture;}
  delete data.images;delete data.textures;
  const {scene:source}=await new GLTFLoader().parseAsync(JSON.stringify(data),'');
- let triangles=0;source.traverse(o=>{if(o.isMesh)triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;});assert.ok(triangles>=5000);
+ let triangles=0;source.traverse(o=>{if(o.isMesh)triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;});assert.ok(triangles>=20000);
  const map=generateMap(51),lockers=buildLockers(source,map.lockers);
  lockers.forEach((object,i)=>{const box=new Box3().setFromObject(object),size=box.getSize(new Vector3()),l=map.lockers[i];assert.ok(Math.abs(size.x-l.w)<.001);assert.ok(Math.abs(size.z-l.d)<.001);assert.ok(Math.abs(size.y-2.35)<.001);});
 });
