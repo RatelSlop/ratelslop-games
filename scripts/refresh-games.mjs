@@ -44,6 +44,15 @@ try {
   await mkdir(localTarget, { recursive: true });
   await cp(join(localGame, 'dist'), localTarget, { recursive: true });
   revisions['De Achterkamers'] = 'bundled with launcher';
+  const beeSource = join(root, 'games', 'bjommelhommel');
+  for (const args of [['ci', '--no-audit', '--no-fund'], ['run', 'build']]) {
+    execFileSync(npm, args, { cwd: beeSource, stdio: 'inherit', shell: process.platform === 'win32' });
+  }
+  const beeTarget = join(root, 'dist', 'games', 'bjommelhommel');
+  await mkdir(beeTarget, { recursive: true });
+  await cp(join(beeSource, 'dist'), beeTarget, { recursive: true });
+  await readFile(join(beeTarget, 'index.html'));
+  revisions.BjommelHommel = 'bundled with launcher';
   const barkFartSource = join(root, 'games', 'bark-fart-clicker');
   const barkFartTarget = join(root, 'dist', 'games', 'bark-fart-clicker');
   await mkdir(barkFartTarget, { recursive: true });

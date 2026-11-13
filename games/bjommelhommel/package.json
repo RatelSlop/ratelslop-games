@@ -1,0 +1,1 @@
+{"name":"bjommelhommel","private":true,"type":"module","scripts":{"dev":"vite --host 127.0.0.1","build":"vite build --base ./"},"dependencies":{"three":"0.186.1","@fontsource/barlow-condensed":"5.2.8","@fontsource/dm-sans":"5.2.8"},"devDependencies":{"vite":"7.3.6"}}

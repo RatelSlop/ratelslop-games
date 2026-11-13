@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#243321">
+  <title>BjommelHommel | RatelSlop Games</title>
+</head>
+<body>
+  <canvas id="world" aria-label="3D-fietspad van BjommelHommel"></canvas>
+  <header class="topbar">
+    <span class="brand"><img src="./studio.png" alt=""> RatelSlop Games</span>
+    <button id="mute" class="quiet" type="button" aria-pressed="false">Geluid uit</button>
+  </header>
+  <audio id="music" src="./audio/koning-van-dit-fietspad.mp3" preload="none" loop></audio>
+  <main>
+    <section id="menu" class="menu" aria-labelledby="title">
+      <div class="intro">
+        <h1 id="title">Bjommel<span>Hommel</span></h1>
+        <p>Zoem over het fietspad, ontwijk fietsers en obstakels en verzamel stuifmeel.</p>
+        <div class="launch">
+          <button class="primary" id="start" disabled>Start vlucht <span aria-hidden="true">▶</span></button>
+        </div>
+        <p id="loading" role="status">Bomen, fietsen en het parcours laden…</p>
+        <div id="menu-music">
+          <fieldset id="music-controls" class="music-controls">
+            <legend>Achtergrondmuziek</legend>
+            <label class="music-toggle"><input id="music-enabled" type="checkbox" checked> Aan</label>
+            <label class="music-volume"><span>Volume</span><input id="music-volume" type="range" min="0" max="100" value="35"></label>
+            <output id="music-level" for="music-volume">35%</output>
+          </fieldset>
+        </div>
+      </div>
+      <div class="instructions">
+        <span><kbd>←</kbd> <kbd>→</kbd> Stuur</span>
+        <span><kbd>↑</kbd> Vlieg omhoog</span>
+        <span><kbd>↓</kbd> Duik</span>
+        <span class="swipe">Veeg om te sturen</span>
+      </div>
+    </section>
+    <section id="hud" hidden aria-label="Vluchtstatus">
+      <div class="meters"><div><small>Afstand</small><strong id="distance">0 m</strong></div><div><small>Stuifmeel</small><strong id="pollen">0</strong></div><div><small>Record</small><strong id="best">0 m</strong></div></div>
+      <span id="district" class="district"></span>
+      <button id="pause" class="quiet">Pauze</button>
+    </section>
+    <div id="touch" hidden aria-label="Vluchtbesturing">
+      <button data-action="left" aria-label="Links">←</button>
+      <button data-action="right" aria-label="Rechts">→</button>
+      <button data-action="rise" aria-label="Omhoog">↑</button>
+      <button data-action="dive" aria-label="Duiken">↓</button>
+    </div>
+    <section id="overlay" hidden aria-labelledby="result-title">
+      <div class="panel">
+        <h2 id="result-title"></h2>
+        <p id="result-text"></p>
+        <div id="overlay-music"></div>
+        <button id="resume" class="primary"></button>
+        <button id="back" class="quiet">Naar menu</button>
+      </div>
+    </section>
+  </main>
+  <footer id="credits"><a href="./credits.html" target="_blank" rel="noopener">Credits ↗</a></footer>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
