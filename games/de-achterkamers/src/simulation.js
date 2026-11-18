@@ -1,7 +1,8 @@
 import {generateMap} from './map.js';
 import {makePower,updatePower} from './power.js';
 import {makePhantom,updatePhantom} from './phantom.js';
-export const PEOPLE=[{id:'mijke',name:'Mijke',speed:3.2},{id:'marola',name:'Marola',speed:4},{id:'jaap',name:'Jaap',speed:4.75},{id:'thomas',name:'Thomas',speed:5.8}];
+export const PEOPLE=[{id:'mijke',name:'Mijke',speed:3.2},{id:'marola',name:'Marola',speed:4},{id:'jaap',name:'Jaap',speed:4.75},{id:'thomas',name:'Thomas',speed:5.8},{id:'kanye',name:'Kanye',speed:4.5},{id:'frank',name:'Frank',speed:4.2},{id:'ivo',name:'Ivo',speed:4.9}];
+export const facePath=id=>`faces/${id}.${['kanye','frank','ivo'].includes(id)?'png':'webp'}`;
 export const MODES={rustig:{cards:3,speed:.77,grace:22},normaal:{cards:5,speed:1,grace:15},nachtmerrie:{cards:7,speed:1.12,grace:8}};
 function chaseOrder(seed){
  const order=PEOPLE.map((_,i)=>i);let state=Math.imul(seed^0x9e3779b9,0x85ebca6b)>>>0;
@@ -53,7 +54,7 @@ export function tick(run,input,delta){
  if(run.sprint){p.stamina=Math.max(0,p.stamina-20*dt);run.regenDelay=1.1;}else{run.regenDelay=Math.max(0,run.regenDelay-dt);if(!run.regenDelay)p.stamina=Math.min(100,p.stamina+14*dt);}
  if(moving){len=Math.max(1,len);const dx=(-Math.sin(p.yaw)*f+Math.cos(p.yaw)*s)/len*speed*dt;const dz=(-Math.cos(p.yaw)*f-Math.sin(p.yaw)*s)/len*speed*dt;const x=p.x,z=p.z;run.map.move(p,dx,dz);run.steps+=Math.hypot(p.x-x,p.z-z);}
  run.noise=run.sprint?1:moving?.3:0;
- const count=run.phase==='escape'?4:Math.min(4,1+Math.floor((run.collected+1)/2));
+ const count=run.phase==='escape'?PEOPLE.length:Math.min(PEOPLE.length,1+Math.floor((run.collected+1)/2));
  for(let i=0;i<run.enemies.length;i++){
   const e=run.enemies[i];e.active=(run.phase==='escape'||run.time>run.rules.grace)&&e.activationOrder<count;if(!e.active)continue;
   let goal=p;

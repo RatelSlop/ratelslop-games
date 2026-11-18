@@ -1,5 +1,5 @@
 export class Sound {
- constructor(){this.context=null;this.volume=.45;this.enabled=true;this.nextStep=0;this.music=null;this.matchActive=false;this.mijkeBuffer=null;this.mijkeVoice=null;this.mijkeNear=false;this.phantomSerial=0;this.nextAlarm=0;this.footsteps=new Set();}
+ constructor(){this.context=null;this.volume=.45;this.enabled=true;this.musicEnabled=true;this.nextStep=0;this.music=null;this.matchActive=false;this.mijkeBuffer=null;this.mijkeVoice=null;this.mijkeNear=false;this.phantomSerial=0;this.nextAlarm=0;this.footsteps=new Set();}
  init(){if(this.context){this.context.resume();return;}const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const c=this.context=new Audio();this.master=c.createGain();this.master.gain.value=this.volume;this.master.connect(c.destination);this.hum=c.createOscillator();this.hum.type='sine';this.hum.frequency.value=58;this.humGain=c.createGain();this.humGain.gain.value=0;this.hum.connect(this.humGain).connect(this.master);this.hum.start();this.chase=c.createOscillator();this.chase.type='sine';this.chase.frequency.value=41;this.chaseGain=c.createGain();this.chaseGain.gain.value=0;this.chase.connect(this.chaseGain).connect(this.master);this.chase.start();}
  setVolume(value){this.volume=Math.max(0,Math.min(1,value));if(this.master)this.master.gain.setTargetAtTime(this.enabled?this.volume:0,this.context.currentTime,.08);if(this.music)this.music.volume=this.enabled?this.volume*.2:0;}
  startMatch(){
@@ -11,12 +11,17 @@ export class Sound {
     .then(buffer=>{this.mijkeBuffer=buffer;})
     .catch(error=>console.warn('Mijke proximity audio could not load',error));
   }
+  if(this.humGain)this.humGain.gain.setTargetAtTime(.01,this.context.currentTime,.1);
+  this.playMusic();
+ }
+ setMusicEnabled(enabled){this.musicEnabled=!!enabled;if(!this.musicEnabled)this.music?.pause();else if(this.matchActive)this.playMusic();}
+ playMusic(){
+  if(!this.musicEnabled||!this.matchActive)return;
   if(!this.music){
    this.music=new window.Audio(new URL('audio/charlies-inferno.mp3',document.baseURI).href);
    this.music.id='match-music';this.music.hidden=true;this.music.loop=true;this.music.preload='metadata';document.body.append(this.music);
   }
   this.setVolume(this.volume);
-  if(this.humGain)this.humGain.gain.setTargetAtTime(.01,this.context.currentTime,.1);
   // Browser audio restrictions or an interrupted load must not break gameplay.
   this.music.play()?.catch(()=>{});
  }

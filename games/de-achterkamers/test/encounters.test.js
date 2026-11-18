@@ -20,7 +20,7 @@ test('a player can hide and leave, cannot walk inside a locker, and retains flas
 });
 
 test('lockers protect against every chaser, even witnessed entry during the final escape',()=>{
- for(const phase of ['collect','escape'])for(const witnessed of [false,true])for(let person=0;person<4;person++){
+ for(const phase of ['collect','escape'])for(const witnessed of [false,true])for(let person=0;person<7;person++){
   const r=makeRun(52),l=r.map.lockers[0];Object.assign(r.player,l.approach);
   r.phase=phase;r.power.nextChange=Infinity;
   r.enemies=[{...r.enemies[person],...l.approach,activationOrder:0,active:witnessed}];r.rules={...r.rules,grace:0};r.time=2;
@@ -60,7 +60,7 @@ test('the last pass starts the final escape and activates every chaser before th
   const r=makeRun(43,mode);assert.equal(r.phase,'collect');
   for(const k of r.keys){Object.assign(r.player,{x:k.x,z:k.z});assert.ok(interact(r));}
   assert.equal(r.phase,'escape');assert.equal(r.event,'escape');assert.equal(r.status,'playing');
-  tick(r,{},.01);assert.equal(r.enemies.filter(e=>e.active).length,4);
+  tick(r,{},.01);assert.equal(r.enemies.filter(e=>e.active).length,7);
   Object.assign(r.player,r.map.center(r.map.start));assert.ok(interact(r));assert.equal(r.status,'won');
  }
 });

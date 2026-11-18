@@ -14,5 +14,26 @@
   {
     "id": "jaap",
     "prompt": "Use case: background-extraction, identity-preserve. Edit target: the single attached original photograph. Make a faithful game sprite consisting ONLY of this exact person's photographic head, including the entire hair silhouette, ears, face and chin. Remove every pixel of the background, furniture, clothing, shoulders and neck below the jaw. Preserve the person's facial identity, exact facial proportions, skin texture, expression, hairstyle, eye direction and original photographic lighting. Do not redraw, beautify, age, stylize, add a smile, change hair or invent features. Keep any earbud or glasses visible in the source. Clean natural alpha edges with no white fringe, no outline, no shadow, no colored rim. Center the isolated photographic head large in a square canvas with modest transparent padding. The background must be genuinely transparent alpha, including the region under the jaw. No text or logos."
+  },
+  {
+    "id": "kanye",
+    "source": "User-supplied photograph, 2026-11-18",
+    "tool": "Built-in image_gen",
+    "prompt": "Background extraction: isolate only the photographic head, preserve identity, expression, hair and glasses; remove background, neck and clothing; genuine alpha, no outline or shadow.",
+    "asset": "kanye.png"
+  },
+  {
+    "id": "frank",
+    "source": "User-supplied photograph, 2026-11-18",
+    "tool": "Built-in image_gen",
+    "prompt": "Background extraction: isolate only the photographic head, preserve identity, expression, hair and glasses; remove background, neck and clothing; genuine alpha, no outline or shadow.",
+    "asset": "frank.png"
+  },
+  {
+    "id": "ivo",
+    "source": "User-supplied photograph, 2026-11-18",
+    "tool": "Built-in image_gen",
+    "prompt": "Background extraction: isolate only the photographic head, preserve identity, expression, hair and glasses; remove background, neck and clothing; genuine alpha, no outline or shadow.",
+    "asset": "ivo.png"
   }
 ]

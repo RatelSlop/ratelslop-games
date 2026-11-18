@@ -7,7 +7,7 @@ import {makePower,updatePower} from '../src/power.js';
 test('objectives and enemies stay reachable on the model for every room code',()=>{
  for(let seed=1;seed<=35;seed++){
   const map=generateMap(seed);assert.ok(map.distances(map.start).every(Number.isFinite));
-  assert.equal(new Set([...map.objectives,...map.spawns]).size,11);
+  assert.equal(new Set([...map.objectives,...map.spawns]).size,14);
   for(const id of [...map.objectives,...map.spawns]){
    assert.ok(map.path(map.start,id).length>1);
    const p=map.center(id);assert.equal(map.blocked(p.x,p.z,.7),false);
@@ -27,9 +27,9 @@ test('every new match rolls a seed different from the last, even with repeated e
  for(const previous of [1,42971,999999])assert.notEqual(freshSeed(previous,(previous-1)/999999),previous);
  assert.equal(freshSeed(99,0),1);assert.equal(freshSeed(99,.99999999),999999);
 });
-test('the assembled maze covers over 11000 square metres with multiple rooms and long routes',()=>{
+test('the assembled maze covers over 25000 square metres with multiple rooms and long routes',()=>{
  const map=generateMap();
- assert.equal(map.cells.length,576);assert.ok(map.length**2>11000);assert.equal(MODEL.rooms,9);
+ assert.equal(map.cells.length,1296);assert.ok(map.length**2>25000);assert.equal(MODEL.rooms,16);
  assert.ok(Math.max(...map.objectives.map(i=>map.path(map.start,i).length*CELL))>150);
  assert.ok(map.cells.filter(c=>c.open.filter(Boolean).length===1).length>20);
 });
@@ -85,9 +85,9 @@ test('every character can be first, and the shuffled chase order escalates witho
  const firsts=new Map(),orders=new Set();
  for(let seed=1;seed<=300;seed++){
   const r=makeRun(seed),ranks=r.enemies.map(e=>e.activationOrder);
-  assert.deepEqual([...ranks].sort(),[0,1,2,3]);
+  assert.deepEqual([...ranks].sort(),[0,1,2,3,4,5,6]);
   assert.deepEqual(ranks,makeRun(seed).enemies.map(e=>e.activationOrder));
-  assert.deepEqual(r.enemies.map(e=>e.id),['mijke','marola','jaap','thomas']);
+  assert.deepEqual(r.enemies.map(e=>e.id),['mijke','marola','jaap','thomas','kanye','frank','ivo']);
   orders.add(ranks.join(','));
   r.time=r.rules.grace-1;tick(r,{},.01);assert.equal(r.enemies.filter(e=>e.active).length,0);
   r.time=r.rules.grace+1;tick(r,{},.01);
@@ -99,8 +99,8 @@ test('every character can be first, and the shuffled chase order escalates witho
    assert.ok(first[0].active,'first chaser stays active as the others join');
   }
  }
- assert.equal(firsts.size,4);for(const count of firsts.values())assert.ok(count>40&&count<110);
- assert.equal(orders.size,24,'all arrival permutations are available');
+ assert.equal(firsts.size,7);for(const count of firsts.values())assert.ok(count>15&&count<80);
+ assert.ok(orders.size>200,'arrival order varies across the enlarged cast');
 });
 test('complete routes collect every pass and reach the exit in all modes and multiple codes',()=>{for(const seed of [42971,51,52])for(const mode of ['rustig','normaal','nachtmerrie']){const r=makeRun(seed,mode);r.rules={...r.rules,grace:Infinity};r.enemies=[];r.power.nextChange=Infinity;function walkTo(cell){for(const id of r.map.path(r.map.cellAt(r.player.x,r.player.z),cell)){const goal=r.map.center(id);let attempts=0;while(Math.hypot(goal.x-r.player.x,goal.z-r.player.z)>.08&&attempts++<500){const dx=goal.x-r.player.x,dz=goal.z-r.player.z,d=Math.hypot(dx,dz);r.player.yaw=0;tick(r,{forward:-dz/d,strafe:dx/d},Math.min(.04,d/4.1));}assert.ok(attempts<500,'route segment must not get stuck');}}for(const key of r.keys){walkTo(key.cell);assert.equal(interact(r),true);}walkTo(r.map.start);assert.equal(interact(r),true);assert.equal(r.status,'won');}});
 test('a pursuing face can navigate the maze to the stationary player',()=>{const r=makeRun(42971);r.rules={...r.rules,grace:0};for(let i=0;i<6000&&r.status==='playing';i++)tick(r,{},.05);assert.equal(r.status,'caught');});
@@ -108,7 +108,7 @@ test('a pursuing face can navigate the maze to the stationary player',()=>{const
 test('Thomas outruns walking but leaves a sprint escape, and difficulty scales his actual movement',()=>{
  for(const mode of ['rustig','normaal','nachtmerrie']){
   const r=makeRun(42971,mode),enemy=r.enemies.find(e=>e.id==='thomas');
-  r.time=30;r.collected=5;
+  r.time=30;r.collected=5;enemy.activationOrder=0;
   const neighbor=r.map.neighbors(r.map.start)[0];Object.assign(enemy,r.map.center(neighbor));
   const before={x:enemy.x,z:enemy.z};tick(r,{},.05);
   const moved=Math.hypot(enemy.x-before.x,enemy.z-before.z)/.05;

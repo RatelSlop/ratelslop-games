@@ -1,5 +1,5 @@
 // Assemble the packed model's separate pieces into a full-size Backrooms maze.
-export const GRID=24,CELL_SIZE=4.4,HEIGHT=3.15,TILE_SIZE=CELL_SIZE*6;
+export const GRID=36,CELL_SIZE=4.4,HEIGHT=3.15,TILE_SIZE=CELL_SIZE*6;
 export const LENGTH=GRID*CELL_SIZE;
 export const DIRECTIONS=[[0,-1],[1,0],[0,1],[-1,0]];
 
@@ -41,9 +41,9 @@ export function makeLayout(seed=42971){
  }
  // One room per sector, with new dimensions and offsets each match.
  const rooms=[];
- for(let rz=0;rz<3;rz++)for(let rx=0;rx<3;rx++){
+ for(let rz=0;rz<4;rz++)for(let rx=0;rx<4;rx++){
   const w=2+Math.floor(random()*3),h=2+Math.floor(random()*3);
-  rooms.push({x:rx*8+1+Math.floor(random()*(7-w)),z:rz*8+1+Math.floor(random()*(7-h)),w,h});
+  rooms.push({x:rx*9+1+Math.floor(random()*(8-w)),z:rz*9+1+Math.floor(random()*(8-h)),w,h});
  }
  for(const room of rooms)for(let z=room.z;z<room.z+room.h;z++)for(let x=room.x;x<room.x+room.w;x++){
   const i=index(x,z);cells[i].kind='room';
@@ -57,7 +57,7 @@ export function makeLayout(seed=42971){
   for(let z=1;z<room.h;z++)for(let x=1;x<room.w;x++)if((x+z+r)%2===0)pillars.push({x:(room.x+x)*CELL_SIZE,z:(room.z+z)*CELL_SIZE,w:1.05,d:1.05});
  });
  const tiles=[];
- for(let z=0;z<4;z++)for(let x=0;x<4;x++)tiles.push({x:(x+.5)*TILE_SIZE,z:(z+.5)*TILE_SIZE});
+ for(let z=0;z<GRID/6;z++)for(let x=0;x<GRID/6;x++)tiles.push({x:(x+.5)*TILE_SIZE,z:(z+.5)*TILE_SIZE});
  return{cells,walls,pillars,tiles,rooms,start,exit:{x:1.5*CELL_SIZE,z:.16,yaw:0}};
 }
 export const LAYOUT=makeLayout();

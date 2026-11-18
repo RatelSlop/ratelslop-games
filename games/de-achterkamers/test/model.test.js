@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {Box3,Matrix4,Vector3} from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {buildEnvironment} from '../src/model-geometry.js';
+import {buildEnvironment,updateEnvironmentWalls} from '../src/model-geometry.js';
 import {generateMap,MODEL,HEIGHT} from '../src/map.js';
 import {buildLockers} from '../src/lockers.js';
 
@@ -16,6 +16,20 @@ delete data.images;delete data.textures;
 globalThis.ProgressEvent??=class{};
 const {scene}=await new GLTFLoader().parseAsync(JSON.stringify(data),'');
 
+test('corridor updates reuse GPU geometry and match a freshly built environment',()=>{
+ const map=generateMap(52),environment=buildEnvironment(scene,map.layout);
+ const geometry=environment.children.map(o=>o.geometry);
+ for(let n=0;n<4;n++){
+  assert.ok(map.shiftCorridors([map.center(map.start)]));
+  updateEnvironmentWalls(environment,map.layout.walls);
+  const rebuilt=buildEnvironment(scene,map.layout);
+  environment.children.forEach((mesh,i)=>{
+   assert.equal(mesh.geometry,geometry[i]);
+   assert.deepEqual(mesh.instanceMatrix.array,rebuilt.children[i].instanceMatrix.array);
+  });
+ }
+});
+
 test('the original packed ceiling tiles, raised grid and lights cover the randomized maze',()=>{
  assert.equal(createHash('sha256').update(bytes).digest('hex'),MODEL.sha256);
  for(const seed of [51,52]){
@@ -23,13 +37,13 @@ test('the original packed ceiling tiles, raised grid and lights cover the random
   const ceilings=environment.children.filter(m=>m.name.startsWith('ceiling_'));
   assert.deepEqual(ceilings.map(m=>m.material.name).sort(),['Celing_Gaps','Celing_Tiles']);
   for(const ceiling of ceilings){
-   assert.equal(ceiling.count,16);assert.ok(ceiling.geometry.attributes.position.count>100);
+   assert.equal(ceiling.count,36);assert.ok(ceiling.geometry.attributes.position.count>100);
    const bounds=new Box3().setFromObject(ceiling);
    assert.ok(Math.abs(bounds.min.x)<.001&&Math.abs(bounds.min.z)<.001);
    assert.ok(Math.abs(bounds.max.x-map.length)<.001&&Math.abs(bounds.max.z-map.length)<.001);
    assert.ok(bounds.min.y>HEIGHT-.02&&bounds.max.y<=HEIGHT+.001);
   }
-  assert.ok(environment.children.some(m=>m.name==='fixture_Ligts'&&m.count===16));
+  assert.ok(environment.children.some(m=>m.name==='fixture_Ligts'&&m.count===36));
  }
 });
 

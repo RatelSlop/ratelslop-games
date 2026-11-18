@@ -66,19 +66,19 @@ export function generateMap(seed=42971){
  let state=seed>>>0;const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
  const jitter=cells.map(()=>random()),safe=centers.map((p,i)=>!blocked(p.x,p.z,.7)?i:-1).filter(i=>i>=0);
  const selected=[start],nearest=distances(start);
- for(let n=0;n<11;n++){
+ for(let n=0;n<14;n++){
   let best=-1,score=-1;
   for(const i of safe){const value=nearest[i]*(.8+jitter[i]*.4);if(!selected.includes(i)&&Number.isFinite(value)&&value>score){best=i;score=value;}}
   if(best<0)throw new Error('Not enough safe objective locations in model.');
   selected.push(best);const dist=distances(best);dist.forEach((d,i)=>nearest[i]=Math.min(nearest[i],d));
  }
- const map={seed,size,cells,start,exit,center,cellAt,neighbors,distances,path,move,blocked,clearSegment,objectives:selected.slice(1,8),spawns:selected.slice(8,12),walls:layout.walls,pillars:layout.pillars,layout,length:model.length,revision:0,changedCells:[],lockers:[]};
+ const map={seed,size,cells,start,exit,center,cellAt,neighbors,distances,path,move,blocked,clearSegment,objectives:selected.slice(1,8),spawns:selected.slice(8,15),walls:layout.walls,pillars:layout.pillars,layout,length:model.length,revision:0,changedCells:[],lockers:[]};
  const candidates=[];
  for(let i=0;i<cells.length;i++)if(!selected.includes(i))for(let d=0;d<4;d++)if(!cells[i].open[d]){
   const [dx,dz]=DIRS[d],p=center(i),x=p.x+dx*1.63,z=p.z+dz*1.63;
   if(!blocked(x,z,.46))candidates.push({cell:i,x,z,front:{x:-dx,z:-dz},yaw:Math.atan2(-dx,-dz),w:dx?.9:.95,d:dx?.95:.9});
  }
- for(let n=0;n<12&&candidates.length;n++){
+ for(let n=0;n<20&&candidates.length;n++){
   let best=0,value=-Infinity;
   for(let i=0;i<candidates.length;i++){const c=candidates[i],score=n?Math.min(...map.lockers.map(l=>Math.hypot(c.x-l.x,c.z-l.z))):-Math.hypot(c.x-center(start).x,c.z-center(start).z);if(score>value){value=score;best=i;}}
   const locker=candidates.splice(best,1)[0];locker.id=n;locker.approach={x:locker.x+locker.front.x*.9,z:locker.z+locker.front.z*.9};

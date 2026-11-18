@@ -67,3 +67,17 @@ test('Mijke proximity audio follows her distance and direction and stops outside
  mijke.active=true;sound.updateMijke(run);assert.equal(sources.length,3);
  run.status='caught';sound.updateMijke(run);assert.equal(sound.mijkeVoice,null);assert.equal(sources[2].stoppedAt,5);
 });
+
+test('music can stay off across matches and resume independently of effects and pause',t=>{
+ const previousWindow=globalThis.window,previousDocument=globalThis.document,created=[];
+ globalThis.window={Audio:class{constructor(){this.currentTime=0;created.push(this);}play(){this.paused=false;return Promise.resolve();}pause(){this.paused=true;}}};
+ globalThis.document={baseURI:'https://example.test/',body:{append(){}}};
+ t.after(()=>{globalThis.window=previousWindow;globalThis.document=previousDocument;});
+ const sound=new Sound();sound.setMusicEnabled(false);sound.startMatch();
+ assert.equal(created.length,0,'disabled music is not downloaded');assert.equal(sound.enabled,true);
+ sound.setMusicEnabled(true);const music=created[0];assert.equal(music.paused,false);
+ music.currentTime=21;sound.setMusicEnabled(false);assert.equal(music.paused,true);assert.equal(sound.matchActive,true);
+ sound.pause();sound.setMusicEnabled(true);assert.equal(music.paused,true,'enabling from pause cannot start music');
+ sound.startMatch();assert.equal(music.paused,false);assert.equal(music.currentTime,21);
+ sound.setMusicEnabled(false);sound.stopMatch();sound.startMatch();assert.equal(music.paused,true);assert.equal(sound.enabled,true);
+});

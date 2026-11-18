@@ -13,7 +13,7 @@ test('the repeating ceiling layout represents every original fixture', () => {
   if (!sections.has(key)) sections.set(key, []);
   sections.get(key).push([x - sx*TILE_SIZE,z - sz*TILE_SIZE]);
  }
- assert.equal(sections.size,16);
+ assert.equal(sections.size,36);
  const first = sections.get('0,0');
  assert.equal(first.length,48);
  for (const fixtures of sections.values()) {

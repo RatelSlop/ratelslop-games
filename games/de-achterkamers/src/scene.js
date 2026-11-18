@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
-import {buildEnvironment} from './model-geometry.js';
+import {PEOPLE,facePath} from './simulation.js';
+import {buildEnvironment,updateEnvironmentWalls} from './model-geometry.js';
 import {buildLockers,weatherLocker} from './lockers.js';
 import {createCeilingLighting} from './lighting.js';
 import {addSurfaceWear} from './surfaces.js';
@@ -81,8 +82,8 @@ export async function createScene(canvas,map){
  const sign=new THREE.Mesh(new THREE.PlaneGeometry(1.65,.62),label('UITGANG'));sign.position.set(0,2.82,.12);exit.add(sign);
  const doorStripe=new THREE.Mesh(new THREE.BoxGeometry(1.25,.12,.08),new THREE.MeshStandardMaterial({color:'#a6a68d',metalness:.7,roughness:.3}));doorStripe.position.set(0,1.2,.13);exit.add(doorStripe);
  const exitLamp=new THREE.PointLight('#7ba37e',.35,2.8);exitLamp.position.set(start.x,2.5,start.z);scene.add(exitLamp);
- const faces=await Promise.all(['mijke','marola','jaap','thomas'].map(id=>loader.loadAsync(new URL(`faces/${id}.webp`,document.baseURI).href)));
- const enemies=faces.map((texture,i)=>{texture.colorSpace=THREE.SRGBColorSpace;const mat=new THREE.SpriteMaterial({map:texture,transparent:true,alphaTest:.08,depthWrite:false,color:'#ffffff',toneMapped:false});const sprite=new THREE.Sprite(mat);sprite.scale.set(2.18,2.18,1);sprite.visible=false;scene.add(sprite);return sprite;});
+ const faces=await Promise.all(PEOPLE.map(({id})=>loader.loadAsync(new URL(facePath(id),document.baseURI).href)));
+ const enemies=faces.map((texture,i)=>{texture.colorSpace=THREE.SRGBColorSpace;const mat=new THREE.SpriteMaterial({map:texture,transparent:true,alphaTest:.08,depthWrite:false,color:'#ffffff',toneMapped:false});const sprite=new THREE.Sprite(mat);sprite.scale.set(2.18*texture.image.width/texture.image.height,2.18,1);sprite.visible=false;scene.add(sprite);return sprite;});
  const passWidth=.52;
  const passGeometry=new THREE.BoxGeometry(passWidth,passWidth*passTexture.image.height/passTexture.image.width,.018);
  const passEdge=new THREE.MeshStandardMaterial({color:'#260d25',roughness:.65});
@@ -108,8 +109,7 @@ export async function createScene(canvas,map){
  let previewTime=0,lastLighting=null;const lookTarget=new THREE.Vector3(),toEnemy=new THREE.Vector3();
  function render(run,{preview=false,reduced=false,behind=false}={}){
   if(environmentRevision!==map.revision){
-   const previous=environment;scene.remove(previous);environment=makeEnvironment();configureEnvironment(environment);scene.add(environment);environmentRevision=map.revision;lastLighting=null;
-   previous.traverse(o=>{if(o.isMesh){o.geometry.dispose();o.dispose?.();}});
+   updateEnvironmentWalls(environment,map.layout.walls);environmentRevision=map.revision;
   }
   const p=run.player;previewTime+=.016;camera.position.set(p.x,1.63+(reduced||preview?0:Math.sin(run.steps*2.4)*.036),p.z);camera.rotation.y=p.yaw+(behind?Math.PI:0)+(preview?Math.sin(previewTime*.075)*.16:0);camera.rotation.x=p.pitch;
   if(run.hiding!==null){const locker=map.lockers[run.hiding];camera.position.set(locker.x+locker.front.x*.5,1.7,locker.z+locker.front.z*.5);camera.rotation.y=p.yaw;}

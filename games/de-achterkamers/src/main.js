@@ -3,7 +3,7 @@ import '@fontsource/manrope/latin-400.css';
 import '@fontsource/manrope/latin-600.css';
 import '@fontsource/manrope/latin-700.css';
 import './style.css';
-import {makeRun,tick,interact,nearby,PEOPLE} from './simulation.js';
+import {makeRun,tick,interact,nearby,PEOPLE,facePath} from './simulation.js';
 import {CELL} from './map.js';
 import {freshSeed} from './layout.js';
 import {createScene} from './scene.js';
@@ -14,9 +14,14 @@ $('seed').value=initialSeed;if(['rustig','normaal','nachtmerrie'].includes(searc
 $('reduced').checked=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let run=makeRun(initialSeed,$('mode').value),view=null,screen='menu',ready=false,lookDrag=null,hadLock=false,lastFrame=performance.now(),noticeUntil=0,minimap=false,joystick={x:0,y:0},touchSprint=false;
 const keys=new Set(),visited=new Set(),sound=new Sound();
-let powerChanges=0,mapRevision=0;
+let powerChanges=0,mapRevision=0,lastHUD=0,lastIdleFrame=0;
+try{sound.setMusicEnabled(localStorage.getItem('achterkamers-music')!=='off');}catch{}
+function syncMusic(enabled){sound.setMusicEnabled(enabled);$('music').checked=$('pause-music').checked=enabled;try{localStorage.setItem('achterkamers-music',enabled?'on':'off');}catch{}}
+$('music').checked=$('pause-music').checked=sound.musicEnabled;
+$('music').onchange=event=>syncMusic(event.target.checked);
+$('pause-music').onchange=event=>syncMusic(event.target.checked);
 const fmt=value=>`${String(Math.floor(value/60)).padStart(2,'0')}:${String(Math.floor(value%60)).padStart(2,'0')}`;
-function storedBest(mode){try{const x=Number(localStorage.getItem('achterkamers-random-v3-best-'+mode));return x>0?x:null;}catch{return null;}}
+function storedBest(mode){try{const x=Number(localStorage.getItem('achterkamers-random-v4-best-'+mode));return x>0?x:null;}catch{return null;}}
 function bestLabel(){const b=storedBest($('mode').value);$('best-menu').textContent=b?'Beste ontsnapping: '+fmt(b):'Nog geen ontsnapping geregistreerd.';}
 bestLabel();$('mode').onchange=bestLabel;
 function notice(text,seconds=3){$('notice').textContent=text;noticeUntil=performance.now()+seconds*1000;$('notice').style.opacity='1';}
@@ -34,9 +39,9 @@ async function start(){
  ready=true;$('start').disabled=false;$('load-status').textContent='Klaar. Elk spel krijgt een nieuwe kaart.';
  powerChanges=0;mapRevision=0;visited.clear();minimap=false;$('map').hidden=true;hadLock=false;clearInput();setScreen('playing');history.replaceState(null,'',`?seed=${seed}&mode=${mode}`);notice('Verzamel '+run.keys.length+' passen. E bij een locker om te schuilen.',5);lock();
 }
-function finish(){setScreen('result');const won=run.status==='won';let best=storedBest(run.mode);if(won&&(!best||run.time<best)){best=run.time;try{localStorage.setItem('achterkamers-random-v3-best-'+run.mode,String(best));}catch{}}
+function finish(){setScreen('result');const won=run.status==='won';let best=storedBest(run.mode);if(won&&(!best||run.time<best)){best=run.time;try{localStorage.setItem('achterkamers-random-v4-best-'+run.mode,String(best));}catch{}}
  $('result-title').textContent=won?'Je bent buiten.':'Ingehaald.';$('result-copy').textContent=won?'Voor nu. De kamers zijn er morgen ook nog.':`${PEOPLE.find(p=>p.id===run.caughtBy)?.name||'Iemand'} was je net iets te snel af. De passen lagen er nog. De uitgang ook.`;
- $('result-face').hidden=won;if(!won)$('result-face').src=`faces/${run.caughtBy}.webp`;$('result-time').textContent=fmt(run.time);$('result-cards').textContent=run.collected+' / '+run.keys.length;$('result-best').textContent=best?fmt(best):'—';sound.tone(won?660:56,won?.6:.45,.18);$('again').focus();bestLabel();
+ $('result-face').hidden=won;if(!won)$('result-face').src=facePath(run.caughtBy);$('result-time').textContent=fmt(run.time);$('result-cards').textContent=run.collected+' / '+run.keys.length;$('result-best').textContent=best?fmt(best):'—';sound.tone(won?660:56,won?.6:.45,.18);$('again').focus();bestLabel();
 }
 function fail(error){console.error('Game startup failed',error);$('load-status').classList.add('game-error');$('load-status').textContent='De 3D-wereld kon niet laden. Gebruik een recente browser met WebGL en hardwareversnelling.';$('start').textContent='Opnieuw laden';$('start').disabled=false;$('start').onclick=()=>location.reload();}
 function drawMap(){const c=$('map'),x=c.getContext('2d'),size=run.map.size,scale=c.width/size;x.clearRect(0,0,c.width,c.height);x.fillStyle='#11180e';x.fillRect(0,0,c.width,c.height);for(const i of visited){const cell=run.map.cells[i];x.fillStyle='#777b53';x.fillRect(cell.x*scale,cell.z*scale,Math.max(1,scale),Math.max(1,scale));x.strokeStyle='#d7d0a0';x.lineWidth=1;cell.open.forEach((open,d)=>{if(open)return;const a=cell.x*scale,b=cell.z*scale;x.beginPath();if(d===0){x.moveTo(a,b);x.lineTo(a+scale,b);}if(d===1){x.moveTo(a+scale,b);x.lineTo(a+scale,b+scale);}if(d===2){x.moveTo(a,b+scale);x.lineTo(a+scale,b+scale);}if(d===3){x.moveTo(a,b);x.lineTo(a,b+scale);}x.stroke();});}for(const k of run.keys)if(!k.taken&&visited.has(k.cell)){x.fillStyle='#f2ca6d';x.fillRect((k.x/CELL)*scale-2,(k.z/CELL)*scale-2,4,4);}const exit=run.map.center(run.map.start);x.fillStyle='#86cd98';x.fillRect(exit.x/CELL*scale-2,exit.z/CELL*scale-2,4,4);x.fillStyle='#fff4d1';x.beginPath();x.arc(run.player.x/CELL*scale,run.player.z/CELL*scale,3,0,Math.PI*2);x.fill();}
@@ -46,7 +51,7 @@ function updateHUD(){const p=run.player;$('card-count').textContent=run.collecte
  if(powerChanges!==run.power.changes){powerChanges=run.power.changes;if(run.phase!=='escape'){notice(run.power.blackout?'Stroomuitval. De gangen verschuiven. Zaklamp: F.':'De verlichting is terug.',5);sound.tone(run.power.blackout?65:220,.18,.08,'triangle');}}
  const target=nearby(run);$('hint').hidden=!target;$('interact').hidden=!target;if(target){$('hint-label').textContent=target.label;$('interact').textContent=target.label;}
  const enemies=run.enemies.filter(e=>e.active).map(e=>({...e,distance:Math.hypot(e.x-p.x,e.z-p.z)})).sort((a,b)=>a.distance-b.distance);const nearest=enemies[0];const close=nearest&&nearest.distance<6&&run.map.clearSegment(p,nearest,.05);$('threat').hidden=!close;
- if(close){$('threat-name').textContent=nearest.name;const image='faces/'+nearest.id+'.webp';if($('threat-face').getAttribute('src')!==image)$('threat-face').src=image;}
+ if(close){$('threat-name').textContent=nearest.name;const image=facePath(nearest.id);if($('threat-face').getAttribute('src')!==image)$('threat-face').src=image;}
  $('danger').style.opacity=close?String(Math.max(0,(5.5-nearest.distance)/7)):'0';sound.update(run,nearest?.distance||100);if(minimap)drawMap();if(performance.now()>noticeUntil)$('notice').style.opacity='0';
 }
 function use(){
@@ -76,8 +81,11 @@ $('touch-sprint').onpointerdown=e=>{e.preventDefault();e.currentTarget.setPointe
 function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-lastFrame)/1000,.2);lastFrame=now;if(!view)return;
  if(screen==='playing'){if(keys.has('ArrowLeft'))run.player.yaw+=1.7*dt;if(keys.has('ArrowRight'))run.player.yaw-=1.7*dt;
  const input={forward:(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0)-joystick.y,strafe:(keys.has('KeyD')?1:0)-(keys.has('KeyA')?1:0)+joystick.x,sprint:touchSprint||keys.has('ShiftLeft')||keys.has('ShiftRight')};
- let remaining=dt;while(remaining>0&&run.status==='playing'){const step=Math.min(.05,remaining);tick(run,input,step);remaining-=step;}for(const [i,cell] of run.map.cells.entries()){const p=run.map.center(i);if(Math.hypot(p.x-run.player.x,p.z-run.player.z)<3.5)visited.add(i);}updateHUD();if(run.status!=='playing')finish();}
+ let remaining=dt;while(remaining>0&&run.status==='playing'){const step=Math.min(.05,remaining);tick(run,input,step);remaining-=step;}const cx=Math.floor(run.player.x/CELL),cz=Math.floor(run.player.z/CELL);
+ for(let z=Math.max(0,cz-1);z<=Math.min(run.map.size-1,cz+1);z++)for(let x=Math.max(0,cx-1);x<=Math.min(run.map.size-1,cx+1);x++){const i=z*run.map.size+x,p=run.map.center(i);if((p.x-run.player.x)**2+(p.z-run.player.z)**2<12.25)visited.add(i);}
+ if(now-lastHUD>=100){updateHUD();lastHUD=now;}if(run.status!=='playing')finish();}
  else{$('danger').style.opacity='0';}
+ if(screen!=='playing'){if(document.hidden||now-lastIdleFrame<100)return;lastIdleFrame=now;}
  view.render(run,{preview:screen==='menu',reduced:$('reduced').checked,behind:screen==='playing'&&keys.has('Space')});
 }
 requestAnimationFrame(frame);

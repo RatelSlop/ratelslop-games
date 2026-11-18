@@ -1,6 +1,18 @@
 import {Box3,Group,InstancedMesh,Matrix4,Object3D,Vector3} from 'three';
 import {LAYOUT,CELL_SIZE,HEIGHT,TILE_SIZE} from './layout.js';
 
+// Corridor swaps preserve the wall count. Update instance transforms rather than
+// rebuilding and uploading every floor, ceiling and wall geometry during play.
+export function updateEnvironmentWalls(environment,walls){
+ const meshes=environment.children.filter(o=>o.name.startsWith('wall_'));
+ if(meshes.some(o=>o.count!==walls.length))throw new Error('Corridor swap changed wall count');
+ const transform=new Object3D();
+ for(const mesh of meshes){
+  walls.forEach((p,i)=>{transform.position.set(p.x,0,p.z);transform.rotation.set(0,p.vertical===false?Math.PI/2:0,0);transform.updateMatrix();mesh.setMatrixAt(i,transform.matrix);});
+  mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingBox();mesh.computeBoundingSphere();
+ }
+}
+
 // Reuse the actual model parts, their UVs, normals and embedded materials.
 // Instancing keeps hundreds of walls and sixteen ceiling sections inexpensive.
 export function buildEnvironment(source,layout=LAYOUT){
