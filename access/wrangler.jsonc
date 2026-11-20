@@ -1,0 +1,30 @@
+{
+  "name": "ratelslop-games-access",
+  "account_id": "406ff4f141984d82d15003ffb7543b23",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-20",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "../dist",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ratelslop-games-access",
+      "database_id": "fe296d6d-0372-4830-97e4-684d7fc652dd"
+    }
+  ],
+  "vars": {
+    "ORIGIN": "https://games.ratelslop.studio",
+    "BRIDGE_ORIGIN": "https://ratelslop-games-access.dhooijmaijers.workers.dev",
+    "FROM": "RatelSlop Games <toegang@games.ratelslop.studio>"
+  },
+  "triggers": {
+    "crons": [
+      "*/5 * * * *"
+    ]
+  }
+}

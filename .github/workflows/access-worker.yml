@@ -1,0 +1,40 @@
+name: Deploy protected game hub
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [game-updated]
+
+permissions:
+  contents: read
+concurrency:
+  group: protected-hub
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: vars.PROTECTED_HUB_ENABLED == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      D1_DATABASE_ID: ${{ vars.D1_DATABASE_ID }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build and check game hub
+        run: |
+          node scripts/refresh-games.mjs
+          python3 ports/numworks/build.py
+          node scripts/verify-site.mjs
+      - name: Prepare Cloudflare configuration
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          node --input-type=module -e "import fs from 'node:fs'; const id=process.env.D1_DATABASE_ID; if (!/^[a-f0-9-]{36}$/.test(id)) throw new Error('Set D1_DATABASE_ID'); const config=JSON.parse(fs.readFileSync('access/wrangler.jsonc')); config.d1_databases[0].database_id=id; fs.writeFileSync('access/wrangler.deploy.json',JSON.stringify(config));"
+      - name: Deploy Cloudflare Worker
+        run: npx --yes wrangler@4.166.0 deploy --config access/wrangler.deploy.json

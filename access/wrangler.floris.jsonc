@@ -1,0 +1,15 @@
+{
+  "name": "ratelslop-games-access",
+  "account_id": "4db7ba24b7ece7bbd04d7f2dccd11ef4",
+  "main": "bridge.js",
+  "compatibility_date": "2026-11-20",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {"pattern": "games.ratelslop.studio/*", "zone_name": "ratelslop.studio"}
+  ],
+  "vars": {
+    "PUBLIC_ORIGIN": "https://games.ratelslop.studio",
+    "UPSTREAM": "https://ratelslop-games-access.dhooijmaijers.workers.dev"
+  }
+}

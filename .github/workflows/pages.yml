@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   build:
+    if: vars.PROTECTED_HUB_ENABLED != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
