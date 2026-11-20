@@ -34,7 +34,7 @@ const rawCode = async (env,id) => (await sign(env,'code:'+id)).slice(0,24).toUpp
 
 function html(body,status=200) {
  return new Response(body,{status,headers:{
-  'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Referrer-Policy':'no-referrer',
+  'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Referrer-Policy':'same-origin',
   'X-Content-Type-Options':'nosniff',
   'Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
  }});
