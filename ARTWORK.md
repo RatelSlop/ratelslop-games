@@ -14,3 +14,5 @@ Official logo: https://github.com/RatelSlop/ratelslop.studio/blob/main/logo.png
 Official favicon/mark: https://github.com/RatelSlop/ratelslop.studio/blob/main/favicon.svg
 
 The original logo artwork is preserved unchanged (PNG source metadata is embedded), with files copied into `dist/brand/`. The logo is used in the header, studio section, footer, cover pages and thumbnails.
+
+AH Gennep: `dist/art/covers/ah-gennep.svg` is an original code-drawn supermarket illustration, with no third-party reference photos embedded. Product packaging and the AH navigation logo in `games/ah-gennep/assets/` come from ah.nl; provenance is recorded in its catalog and RESEARCH.md.

@@ -3,6 +3,7 @@
 GitHub Pages is the selected host. See `GITHUB-PAGES.md` for setup and automatic game-push updates. `.github/workflows/pages.yml` builds the latest three public games, tests and builds De Achterkamers from this repository, and deploys `dist/`. For a local preview run `python -m http.server 4174 --directory dist` and visit http://localhost:4174. Earlier optional Cloudflare configuration remains available separately.
 
 ## Games
+- Albert Heijn Gennep: local `games/ah-gennep` source; Dutch 3D supermarket simulator with 24 real AH products, shelf stocking, orders, staffed checkout and selfscan assistance. Run `npm run dev` in its folder (port 4176). Store reconstruction and source limits are documented in `games/ah-gennep/RESEARCH.md`. The Pages refresh script tests and packages it automatically.
 - Fortnite Pirate Token: local `games/fortnite-pirate-token` source; Fortnite Treasure Hunters mini-season simulator with live Item Shop API integration, 1-in-137,500 chest drop sequence, free 14-day plunder mechanics, and full Locker loadout customization.
 - Bark Fart Clicker: local `games/bark-fart-clicker` source; hilarious dog clicker game with custom audio, animations, building upgrades, golden fart events, and local save support.
 - De Achterkamers: local `games/de-achterkamers` source; Three.js face-chase horror with local assets, touch controls and a seeded procedural map. See its README for controls and MIT map attribution.

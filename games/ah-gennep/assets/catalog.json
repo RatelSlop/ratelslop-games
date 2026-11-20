@@ -1,0 +1,270 @@
+{
+  "source": "https://www.ah.nl/shop/prijsfavorieten",
+  "fetchedAt": "2026-11-02T13:00:16.758Z",
+  "pricing": "Momentopname ah.nl; spelprijzen, geen garantie voor vestiging Gennep.",
+  "products": [
+    {
+      "name": "AH Mozzarella",
+      "price": 86,
+      "unit": "200 gram",
+      "url": "https://www.ah.nl/producten/product/wi506235/ah-mozzarella",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130313835313636?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "zuivel",
+      "id": "wi506235",
+      "image": "assets/products/wi506235.webp",
+      "color": "#2ba1dc"
+    },
+    {
+      "name": "AH Zuivelspread naturel",
+      "price": 136,
+      "unit": "200 gram",
+      "url": "https://www.ah.nl/producten/product/wi506228/ah-zuivelspread-naturel",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_7948494577777039514c6d435a7952756c4548773467?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "zuivel",
+      "id": "wi506228",
+      "image": "assets/products/wi506228.webp",
+      "color": "#e1ba69"
+    },
+    {
+      "name": "De Zaanse Hoeve Roeryoghurt naturel",
+      "price": 76,
+      "unit": "500 gram",
+      "url": "https://www.ah.nl/producten/product/wi182727/de-zaanse-hoeve-roeryoghurt-naturel",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_43545239393239303938?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "zuivel",
+      "id": "wi182727",
+      "image": "assets/products/wi182727.webp",
+      "color": "#4f9f70"
+    },
+    {
+      "name": "De Zaanse Hoeve Vanille vla",
+      "price": 89,
+      "unit": "1 liter",
+      "url": "https://www.ah.nl/producten/product/wi1510/de-zaanse-hoeve-vanille-vla",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_7a6f41795038585353634756466c6568373249456351?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "zuivel",
+      "id": "wi1510",
+      "image": "assets/products/wi1510.webp",
+      "color": "#db7253"
+    },
+    {
+      "name": "AH Houdbare halfvolle melk 6-pack",
+      "price": 135,
+      "unit": "6 x 200 ml",
+      "url": "https://www.ah.nl/producten/product/wi130270/ah-houdbare-halfvolle-melk-6-pack",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_457a643676666954536e7538466367626c2d76554677?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "zuivel",
+      "id": "wi130270",
+      "image": "assets/products/wi130270.webp",
+      "color": "#6993c2"
+    },
+    {
+      "name": "AH Opschuimmelk",
+      "price": 199,
+      "unit": "1 liter",
+      "url": "https://www.ah.nl/producten/product/wi183173/ah-opschuimmelk",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4a755134694f67495431694e45677a6e4d7868737777?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "zuivel",
+      "id": "wi183173",
+      "image": "assets/products/wi183173.webp",
+      "color": "#ce5368"
+    },
+    {
+      "name": "AH Ice tea green zero zonder koolzuur",
+      "price": 125,
+      "url": "https://www.ah.nl/producten/product/wi553813/ah-ice-tea-green-zero-zonder-koolzuur",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130303737353032?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "kruidenierswaren",
+      "id": "wi553813",
+      "image": "assets/products/wi553813.webp",
+      "color": "#2ba1dc"
+    },
+    {
+      "name": "AH Ginger ale",
+      "price": 109,
+      "unit": "1 liter",
+      "url": "https://www.ah.nl/producten/product/wi476721/ah-ginger-ale",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130303838373137?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "kruidenierswaren",
+      "id": "wi476721",
+      "image": "assets/products/wi476721.webp",
+      "color": "#e1ba69"
+    },
+    {
+      "name": "AH Kokosmelk",
+      "price": 129,
+      "unit": "200 milliliter",
+      "url": "https://www.ah.nl/producten/product/wi161932/ah-kokosmelk",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_3462626452364d5751634b764e30455a43324a332d41?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "kruidenierswaren",
+      "id": "wi161932",
+      "image": "assets/products/wi161932.webp",
+      "color": "#4f9f70"
+    },
+    {
+      "name": "AH Rozijnen zongedroogd",
+      "price": 369,
+      "unit": "750 gram",
+      "url": "https://www.ah.nl/producten/product/wi396924/ah-rozijnen-zongedroogd",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130313833343032?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "kruidenierswaren",
+      "id": "wi396924",
+      "image": "assets/products/wi396924.webp",
+      "color": "#db7253"
+    },
+    {
+      "name": "AH Tarwebloem",
+      "price": 81,
+      "unit": "1 kilogram",
+      "url": "https://www.ah.nl/producten/product/wi36783/ah-tarwebloem",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_335f49554247394f526a367a4f524c546130646d7551?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "kruidenierswaren",
+      "id": "wi36783",
+      "image": "assets/products/wi36783.webp",
+      "color": "#6993c2"
+    },
+    {
+      "name": "AH Tonic regular",
+      "price": 99,
+      "unit": "1 liter",
+      "url": "https://www.ah.nl/producten/product/wi454527/ah-tonic-regular",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130313930393935?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "kruidenierswaren",
+      "id": "wi454527",
+      "image": "assets/products/wi454527.webp",
+      "color": "#ce5368"
+    },
+    {
+      "name": "AH Kaiserbroodjes",
+      "price": 51,
+      "unit": "4 stuks",
+      "url": "https://www.ah.nl/producten/product/wi569994/ah-kaiserbroodjes",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_597349474b6d6c4651496d5f4c524c59385470564e67?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "bakkerij",
+      "id": "wi569994",
+      "image": "assets/products/wi569994.webp",
+      "color": "#2ba1dc"
+    },
+    {
+      "name": "AH Witte pistolets",
+      "price": 159,
+      "unit": "4 stuks",
+      "url": "https://www.ah.nl/producten/product/wi232390/ah-witte-pistolets",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_43545239383735353931?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "bakkerij",
+      "id": "wi232390",
+      "image": "assets/products/wi232390.webp",
+      "color": "#e1ba69"
+    },
+    {
+      "name": "AH Ciabatta",
+      "price": 99,
+      "unit": "300 gram",
+      "url": "https://www.ah.nl/producten/product/wi627079/ah-ciabatta",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_6e6b5a685447454b54792d5962536532784f34746c51?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "bakkerij",
+      "id": "wi627079",
+      "image": "assets/products/wi627079.webp",
+      "color": "#4f9f70"
+    },
+    {
+      "name": "AH Fries roggebrood kuipje",
+      "price": 135,
+      "unit": "500 gram",
+      "url": "https://www.ah.nl/producten/product/wi485257/ah-fries-roggebrood-kuipje",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130313833353033?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "bakkerij",
+      "id": "wi485257",
+      "image": "assets/products/wi485257.webp",
+      "color": "#db7253"
+    },
+    {
+      "name": "AH Terra Plantaardig 100% pindakaas naturel",
+      "price": 319,
+      "unit": "600 gram",
+      "url": "https://www.ah.nl/producten/product/wi564838/ah-terra-plantaardig-100-pindakaas-naturel",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130303330343934?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "bakkerij",
+      "id": "wi564838",
+      "image": "assets/products/wi564838.webp",
+      "color": "#6993c2"
+    },
+    {
+      "name": "AH Honing",
+      "price": 159,
+      "unit": "350 gram",
+      "url": "https://www.ah.nl/producten/product/wi479788/ah-honing",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_67575a664a557a3951472d71545437707846746a5867?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "bakkerij",
+      "id": "wi479788",
+      "image": "assets/products/wi479788.webp",
+      "color": "#ce5368"
+    },
+    {
+      "name": "AH Mandarijnen",
+      "price": 229,
+      "unit": "1 kilogram",
+      "url": "https://www.ah.nl/producten/product/wi94782/ah-mandarijnen",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_66667448393941685341694c736a5342796f66317477?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "versplein",
+      "id": "wi94782",
+      "image": "assets/products/wi94782.webp",
+      "color": "#2ba1dc"
+    },
+    {
+      "name": "AH Bananen tros",
+      "price": 119,
+      "unit": "Tros",
+      "url": "https://www.ah.nl/producten/product/wi197393/ah-bananen-tros",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130323033323134?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "versplein",
+      "id": "wi197393",
+      "image": "assets/products/wi197393.webp",
+      "color": "#e1ba69"
+    },
+    {
+      "name": "AH Pitloze witte druiven",
+      "price": 269,
+      "unit": "500 gram",
+      "url": "https://www.ah.nl/producten/product/wi80585/ah-pitloze-witte-druiven",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_5f774358334657725176323959323531433465527567?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "versplein",
+      "id": "wi80585",
+      "image": "assets/products/wi80585.webp",
+      "color": "#4f9f70"
+    },
+    {
+      "name": "AH Ananasstukjes op sap",
+      "price": 125,
+      "unit": "227 gram",
+      "url": "https://www.ah.nl/producten/product/wi56754/ah-ananasstukjes-op-sap",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4354523130313837313631?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "versplein",
+      "id": "wi56754",
+      "image": "assets/products/wi56754.webp",
+      "color": "#db7253"
+    },
+    {
+      "name": "AH Knijpfruit appel banaan",
+      "price": 185,
+      "unit": "4 x 90 g",
+      "url": "https://www.ah.nl/producten/product/wi182915/ah-knijpfruit-appel-banaan",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_4a42347034676d6251616d5f76426b54646f6b496177?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "versplein",
+      "id": "wi182915",
+      "image": "assets/products/wi182915.webp",
+      "color": "#6993c2"
+    },
+    {
+      "name": "AH Appelmoes 0% suiker toegevoegd 4-pack",
+      "price": 105,
+      "unit": "400 gram",
+      "url": "https://www.ah.nl/producten/product/wi513596/ah-appelmoes-0-suiker-toegevoegd-4-pack",
+      "remoteImage": "https://static.ah.nl/dam/product/AHI_43545239383932313139?revLabel=1&rendition=200x200_WEBP&fileType=binary",
+      "category": "versplein",
+      "id": "wi513596",
+      "image": "assets/products/wi513596.webp",
+      "color": "#ce5368"
+    }
+  ]
+}

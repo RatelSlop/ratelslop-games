@@ -65,6 +65,10 @@ try {
   await cp(pirateTokenSource, pirateTokenTarget, { recursive: true });
   await readFile(join(pirateTokenTarget, 'index.html'));
   revisions['Fortnite Pirate Token'] = 'bundled with launcher';
+  const supermarket = join(root, 'games', 'ah-gennep');
+  execFileSync(process.execPath, ['--test', 'test/engine.test.mjs', 'test/layout.test.mjs'], { cwd: supermarket, stdio: 'inherit' });
+  execFileSync(process.execPath, ['build.mjs'], { cwd: supermarket, stdio: 'inherit' });
+  revisions['AH Gennep'] = 'bundled with launcher';
   await writeFile(join(root, 'dist', 'build-info.json'), JSON.stringify({ builtAt: new Date().toISOString(), revisions }, null, 2) + '\n');
 } finally {
   // scratch is a newly created directory under the OS temporary directory.

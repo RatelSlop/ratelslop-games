@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#009fe3"><title>Albert Heijn Gennep — Supermarkt simulator</title><link rel="icon" href="assets/ah-logo.svg"><link rel="stylesheet" href="style.css"></head>
+<body>
+<canvas id="world" aria-label="Driedimensionale supermarkt van Gennep"></canvas>
+<header class="topbar"><a class="brand" href="#" aria-label="Open spelmenu"><img src="assets/ah-logo.svg" alt="Albert Heijn"><span><b>Gennep</b><small>SUPERMARKT SIMULATOR</small></span></a><div class="shift"><i></i><span id="shift-label">Jouw winkel. Jouw werkdag.</span></div><button class="icon-btn" id="menu-button" aria-label="Spelmenu">Ⅱ</button></header>
+<div id="intro" class="intro">
+ <div class="intro-panel"><div class="eyebrow">WILHELMINAPLEIN 4 · GENNEP</div><h1>Een winkel vol<br><em>mogelijkheden.</em></h1><p class="lead">De deuren gaan zo open.<br>Maak er een mooie werkdag van.</p><div class="intro-jobs"><span><b>01</b> Vul de schappen</span><span><b>02</b> Help je klanten</span><span><b>03</b> Run de winkel</span></div><button class="primary start" id="start">Begin je werkdag <span>↗</span></button><button class="text-button" id="new-game" hidden>Opnieuw beginnen</button><div class="intro-foot"><span>3D · Echte AH-producten · Nederlands</span><button class="text-button" id="intro-sources">Over deze reconstructie ↗</button></div></div>
+ <div class="scene-caption"><span class="live-dot"></span> DE ENTREE <small>Geïnspireerd op de vernieuwde winkel uit 2023</small></div>
+</div>
+<main id="hud" hidden>
+ <section class="stats" aria-label="Werkdag"><div><small>WERKDAG</small><strong id="day">01</strong></div><div><small>WINKELTIJD</small><strong id="time">08:00</strong></div><div><small>OMZET</small><strong id="revenue">€ 0,00</strong></div><div><small>KLANTEN</small><strong id="served">0</strong></div><div class="happiness"><small>TEVREDENHEID</small><strong id="happy">100 <span>%</span></strong></div></section>
+ <aside class="task-card"><div class="eyebrow">GOEDEMORGEN, BEDRIJFSLEIDER</div><h2>De winkel draait op jou.</h2><div id="tasks"></div><small class="task-note">Een werkdag duurt 8 minuten.</small></aside>
+ <div id="crosshair" aria-hidden="true">+</div><div id="interaction" class="interaction" hidden><kbd>E</kbd><span></span><button id="interact-touch" class="primary">Openen</button></div>
+ <nav class="toolbar" aria-label="Spelacties"><button id="map-button"><span>▦</span> Winkelkaart <kbd>M</kbd></button><button id="stock-button"><span>▤</span> Bestelterminal <kbd>B</kbd></button><button id="help-button"><span>?</span> Bediening</button><div class="balance"><small>WINKELKAS</small><b id="cash">€ 350,00</b></div></nav>
+ <div class="move-hint" id="move-hint"><kbd>W A S D</kbd> lopen <span>·</span> klik in de winkel om rond te kijken <span>·</span> <kbd>Esc</kbd> pauze</div>
+ <div class="touch-move"><button data-move="w" aria-label="Vooruit">↑</button><div><button data-move="a" aria-label="Links">←</button><button data-move="s" aria-label="Achteruit">↓</button><button data-move="d" aria-label="Rechts">→</button></div></div>
+</main>
+<div class="modal-backdrop" id="modal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><header><div><div class="eyebrow" id="modal-eyebrow">ALBERT HEIJN GENNEP</div><h2 id="modal-title"></h2></div><button class="close" id="close-modal" aria-label="Sluiten">×</button></header><div id="modal-body"></div></section></div>
+<div id="toast" role="status" aria-live="polite"></div><div id="error" hidden></div><script type="module" src="main.js"></script>
+</body></html>
