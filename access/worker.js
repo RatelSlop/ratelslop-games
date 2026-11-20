@@ -1,6 +1,7 @@
 import { escape, gate, page } from './pages.js';
 
 const day = 86_400_000;
+const retention = 30 * day;
 const reviewers = ['dhooij@ratelslop.studio', 'fhorst@ratelslop.studio'];
 const cookie = '__Host-ratelslop';
 const encoder = new TextEncoder();
@@ -69,10 +70,18 @@ async function sendReview(env,row) {
 }
 
 async function sendCode(env,row) {
- const code=(await rawCode(env,row.id)).match(/.{4}/g).join('-');
- const expiry=new Date(row.expires).toLocaleString('nl-NL',{timeZone:'Europe/Amsterdam'});
- await send(env,'code-'+row.id,[row.email],'Je toegangscode voor RatelSlop Games',
-  '<p>Je aanvraag is goedgekeurd. Je code is <strong>'+code+'</strong>.</p><p>Geldig tot '+expiry+' (Nederlandse tijd).</p><p><a href="'+escape(env.ORIGIN)+'/access">Open RatelSlop Games</a></p>');
+ const raw=await rawCode(env,row.id);
+ const code=raw.match(/.{4}/g).join('-');
+ const permanent=row.expires===null;
+ if(!row.code_hash) {
+  await sql(env,"UPDATE requests SET code_hash=? WHERE id=? AND status='approved' AND code_hash IS NULL",await digest(raw),row.id).run();
+ }
+ const validity=permanent
+  ? 'Deze code heeft geen vervaldatum. Bewaar hem om opnieuw te kunnen inloggen.'
+  : 'Geldig tot '+new Date(row.expires).toLocaleString('nl-NL',{timeZone:'Europe/Amsterdam'})+' (Nederlandse tijd).';
+ const subject=permanent?'Je permanente toegangscode voor RatelSlop Games':'Je toegangscode voor RatelSlop Games';
+ await send(env,'code-'+row.id,[row.email],subject,
+  '<p>Je toegangscode is <strong>'+code+'</strong>.</p><p>'+validity+'</p><p><a href="'+escape(env.ORIGIN)+'/access">Open RatelSlop Games</a></p>');
  await sql(env,'UPDATE requests SET code_sent=? WHERE id=?',Date.now(),row.id).run();
 }
 
@@ -111,10 +120,12 @@ async function review(env,url,method,fields) {
 async function login(env,fields,ip) {
  if(await limited(env,'login:'+ip,20,900000)) return html(gate('Te veel pogingen. Probeer het over 15 minuten opnieuw.'),429);
  const code=(fields.get('code')||'').replace(/[\s-]/g,'').toUpperCase();
- const row=/^[A-F0-9]{24}$/.test(code) && await sql(env,"SELECT id,expires FROM requests WHERE status='approved' AND code_hash=? AND expires>?",await digest(code),Date.now()).first();
+ const now=Date.now();
+ const row=/^[A-F0-9]{24}$/.test(code) && await sql(env,"SELECT id,expires FROM requests WHERE status='approved' AND code_hash=? AND (expires IS NULL OR expires>?)",await digest(code),now).first();
  if(!row) return html(gate('Deze code is ongeldig of verlopen.'),401);
- const session=row.id+'.'+row.expires;
- const remaining=Math.max(0,Math.floor((row.expires-Date.now())/1000));
+ const sessionExpiry=row.expires ?? nextMonth(now);
+ const session=row.id+'.'+sessionExpiry;
+ const remaining=Math.max(0,Math.floor((sessionExpiry-Date.now())/1000));
  return redirect('/',cookie+'='+session+'.'+await sign(env,'session:'+session)+'; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age='+remaining);
 }
 
@@ -130,6 +141,9 @@ export default {
   const viaBridge=url.origin===env.BRIDGE_ORIGIN && env.BRIDGE_SECRET?.length>=32 &&
    equal(request.headers.get('X-RatelSlop-Bridge'),env.BRIDGE_SECRET);
   if(url.origin!==env.ORIGIN && !viaBridge) return new Response(null,{status:403});
+  if(['GET','HEAD'].includes(request.method) && ['/privacy','/privacy.html'].includes(url.pathname)) {
+   return env.ASSETS.fetch(request);
+  }
   if(env.ACCESS_SECRET?.length<32 || !env.ACCESS_SECRET || !env.RESEND_API_KEY) return html(page('Toegang tijdelijk niet beschikbaar',''),503);
   try {
    const post=request.method==='POST';
@@ -161,8 +175,12 @@ export default {
  async scheduled(event,env) {
   const now=Date.now(), since=now-23*3600000;
   const reviews=await sql(env,"SELECT * FROM requests WHERE status='pending' AND review_sent IS NULL AND created>? LIMIT 10",since).all();
-  const codes=await sql(env,"SELECT * FROM requests WHERE status='approved' AND code_sent IS NULL AND decided>? AND expires>? LIMIT 10",since,now).all();
+  const codes=await sql(env,"SELECT * FROM requests WHERE status='approved' AND code_sent IS NULL AND decided>? AND (expires IS NULL OR expires>?) LIMIT 10",since,now).all();
   await Promise.allSettled([...reviews.results.map(row=>sendReview(env,row)),...codes.results.map(row=>sendCode(env,row))]);
   await sql(env,'DELETE FROM limits WHERE expires<=?',now).run();
+  await sql(env,`DELETE FROM requests WHERE
+   (status='approved' AND expires<=?) OR
+   (status='denied' AND decided<=?) OR
+   (status='pending' AND created<=?)`,now-retention,now-retention,now-retention-7*day).run();
  },
 };

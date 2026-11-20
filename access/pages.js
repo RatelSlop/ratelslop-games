@@ -12,5 +12,5 @@ export function gate(message = '') {
  <form method="post" action="/access/login"><label for="code">Toegangscode</label><input id="code" name="code" required maxlength="40" autocomplete="one-time-code"><button>Open de gamehub</button></form>
  <h2>Vraag toegang aan</h2><p>Na goedkeuring krijg je een code die één maand geldig is.</p>
  <form method="post" action="/access/request"><label for="email">E-mailadres</label><input id="email" name="email" type="email" required maxlength="254" autocomplete="email"><button>Toegang aanvragen</button></form>
- <p><small>Je e-mailadres wordt gedeeld met de twee beheerders om je aanvraag te beoordelen.</small></p>`);
+ <p><small>Je e-mailadres wordt gedeeld met de twee beheerders om je aanvraag te beoordelen. <a href="/privacy">Privacyverklaring</a>.</small></p>`);
 }
